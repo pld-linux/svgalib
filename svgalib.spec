@@ -17,6 +17,9 @@ Group(de):	Libraries
 Group(es):	Bibliotecas
 Group(fr):	Librairies
 Group(pl):	Biblioteki
+Group(pt_BR):	Bibliotecas
+Group(ru):	Библиотеки
+Group(uk):	Б╕бл╕отеки
 Source0:	http://www.cs.bgu.ac.il/~zivav/svgalib/%{name}-%{version}.tar.gz
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
@@ -89,8 +92,12 @@ Summary(pl):	Pliki nagЁСwkowe i dokumentacja dla [S]VGA
 Summary(tr):	[S]VGA grafikleri iГin geliЧtirme kitaplЩklarЩ ve baЧlЩk dosyalarЩ
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Разработка/Библиотеки
+Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name} = %{version}
 
 %description devel
@@ -121,8 +128,12 @@ Summary:	Static [S]VGA graphics librarires
 Summary(pl):	Biblioteki statyczne [S]VGA
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Разработка/Библиотеки
+Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name}-devel = %{version}
 
 %description static
@@ -174,7 +185,7 @@ install -d $RPM_BUILD_ROOT/var/lib/svgalib
 
 %if %{_kernel24}
     install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/char
-    install -m644 kernel/svgalib_helper/svgalib_helper.o \
+    cp kernel/svgalib_helper/svgalib_helper.o \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/char
 %else
     %{__make} install -C kernel/svgalib_helper \
