@@ -30,20 +30,17 @@ Patch3:		%{name}-smp.patch
 Patch4:		%{name}-threeDKit-make.patch
 Patch5:		%{name}-svgalib_helper_Makefile.patch
 Patch6:		%{name}-link.patch
-# needs update
 Patch7:		%{name}-module-alias.patch
-# probably obsolete (after switch to Makefile w/kernel-module-build)
-#Patch8:		%{name}-linux26-minor.patch
-#Patch9:		%{name}-kernel2.4.24.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
-BuildRequires:	kernel-headers
+BuildRequires:	kernel-headers >= 2.4.0
 %if %{kernel26}
 BuildRequires:	kernel-module-build >= 2.6.0
 %endif
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.118
-ExclusiveArch:	%{ix86} alpha
+ExclusiveArch:	%{ix86} alpha arm hppa m68k mips
+# check amd64, ppc, sparc/sparcv9 build (sparc64 not yet)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
@@ -256,7 +253,7 @@ opartych na svgalib.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-#%patch7 -p1
+%patch7 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -302,25 +299,48 @@ rm -f src/svgalib_helper.h
 %endif
 
 %if %{with kernel}
-if grep '^#define CONFIG_REGPARM 1' %{_kernelsrcdir}/include/linux/autoconf*.h ; then
-	CREGPARM="-mregparm=3"
-else
-	CREGPARM=""
-fi
+%if %{kernel26}
+cd kernel/svgalib_helper
+ln -sf %{_kernelsrcdir}/config-up .config
+install -d include/{linux,config}
+ln -sf %{_kernelsrcdir}/include/linux/autoconf-up.h include/linux/autoconf.h
+ln -sf %{_kernelsrcdir}/include/asm-%{_arch} include/asm
+touch include/config/MARKER
+%{__make} -C %{_kernelsrcdir} modules \
+	SUBDIRS=`pwd` \
+	O=`pwd` \
+	V=1
+rm -rf .*.cmd include include2 scripts arch
+cd -
+%else
 %{__make} -C kernel/svgalib_helper -f Makefile.alt \
 	CC="%{kgcc}" \
-	COPT="%{rpmcflags} $CREGPARM" \
+	COPT="%{rpmcflags}" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
-
+%endif
 mv -f kernel/svgalib_helper/svgalib_helper.%{kmodext} \
 	 kernel/svgalib_helper-up.%{kmodext}
 rm -f kernel/svgalib_helper/*.*o
 
 %if %{with smp}
+%if %{kernel26}
+cd kernel/svgalib_helper
+ln -sf %{_kernelsrcdir}/config-smp .config
+install -d include/{linux,config}
+ln -sf %{_kernelsrcdir}/include/linux/autoconf-smp.h include/linux/autoconf.h
+ln -sf %{_kernelsrcdir}/include/asm-%{_arch} include/asm
+touch include/config/MARKER
+%{__make} -C %{_kernelsrcdir} modules \
+	SUBDIRS=`pwd` \
+	O=`pwd` \
+	V=1
+cd -
+%else
 %{__make} -C kernel/svgalib_helper -f Makefile.alt \
 	CC="%{kgcc}" \
-	COPT="%{rpmcflags} $CREGPARM -D__SMP__ -DCONFIG_X86_LOCAL_APIC" \
+	COPT="%{rpmcflags} -D__KERNEL_SMP" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
+%endif
 %endif
 %endif
 
