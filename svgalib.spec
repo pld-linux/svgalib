@@ -41,7 +41,7 @@ BuildRequires:	kernel-module-build >= 2.6.0
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.118
 # no sparc64 yet acc. to changelog
-ExclusiveArch:	%{ix86} alpha amd64 arm hppa m68k mips ppc sparc sparcv9
+ExclusiveArch:	%{ix86} alpha amd64 arm hppa ia64 m68k mips ppc sparc sparcv9
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
