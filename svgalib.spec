@@ -1,9 +1,11 @@
 #
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
-%bcond_without	kernel		# without kernel modules
-%bcond_without	userspace	# without userspace packages
+%bcond_without	kernel		# don't build kernel modules
+%bcond_without	smp		# don't build smp module
+%bcond_without	userspace	# don't build userspace packages
 #
+%define kernel26 %(echo %{_kernel_ver} | grep -q '2\.[0-4]\.' ; echo $?)
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library fЭr Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para grАficos en pantalla llena [S]VGA
@@ -14,13 +16,13 @@ Summary(ru):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
-Version:	1.9.18
-%define _rel	2
+Version:	1.9.19
+%define _rel	0.1
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
-# Source0-md5:	5a1dc3dbf3182fb560959678dfba6181
+# Source0-md5:	44e5063c9a22e9554088e125b0df7593
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
@@ -28,12 +30,17 @@ Patch3:		%{name}-smp.patch
 Patch4:		%{name}-threeDKit-make.patch
 Patch5:		%{name}-svgalib_helper_Makefile.patch
 Patch6:		%{name}-link.patch
+# needs update
 Patch7:		%{name}-module-alias.patch
-Patch8:		%{name}-linux26-minor.patch
-Patch9:		%{name}-kernel2.4.24.patch
+# probably obsolete (after switch to Makefile w/kernel-module-build)
+#Patch8:		%{name}-linux26-minor.patch
+#Patch9:		%{name}-kernel2.4.24.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel-headers
+%if %{kernel26}
+BuildRequires:	kernel-module-build >= 2.6.0
+%endif
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.118
 ExclusiveArch:	%{ix86} alpha
@@ -42,7 +49,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir	/etc/vga
 %define		specflags	-fomit-frame-pointer
 
-%if %(echo %{_kernel_ver} | grep -q '2\.[0-4]\.' ; echo $?)
+%if %{kernel26}
 %define	kmodext	ko
 %else
 %define kmodext	o
@@ -122,7 +129,7 @@ Summary(ru):	Файлы для построения программ, использующих SVGAlib
 Summary(tr):	[S]VGA grafikleri iГin geliЧtirme kitaplЩklarЩ ve baЧlЩk dosyalarЩ
 Summary(uk):	Файли для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 The svgalib-devel package contains the libraries and header files
@@ -178,7 +185,7 @@ Summary(pt_BR):	Bibliotecas estАticas para desenvolvimento com SVGAlib
 Summary(ru):	Статические библиотеки для построения программ, использующих SVGAlib
 Summary(uk):	Статичн╕ б╕бл╕отеки для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static [S]VGA graphics librarires.
@@ -211,7 +218,7 @@ Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
 %{?with_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
-Provides:	svgalib-helper = %{version}
+Provides:	svgalib-helper = %{version}-%{release}
 Obsoletes:	svgalib-helper
 
 %description -n kernel-video-svgalib_helper
@@ -229,7 +236,7 @@ Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
 %{?with_dist_kernel:%requires_releq_kernel_smp}
 Requires(post,postun):	/sbin/depmod
-Provides:	svgalib-helper = %{version}
+Provides:	svgalib-helper = %{version}-%{release}
 Obsoletes:	svgalib-helper
 
 %description -n kernel-smp-video-svgalib_helper
@@ -249,9 +256,7 @@ opartych na svgalib.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9
+#%patch7 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -302,7 +307,6 @@ if grep '^#define CONFIG_REGPARM 1' %{_kernelsrcdir}/include/linux/autoconf*.h ;
 else
 	CREGPARM=""
 fi
-# UP
 %{__make} -C kernel/svgalib_helper -f Makefile.alt \
 	CC="%{kgcc}" \
 	COPT="%{rpmcflags} $CREGPARM" \
@@ -312,11 +316,12 @@ mv -f kernel/svgalib_helper/svgalib_helper.%{kmodext} \
 	 kernel/svgalib_helper-up.%{kmodext}
 rm -f kernel/svgalib_helper/*.*o
 
-# SMP
+%if %{with smp}
 %{__make} -C kernel/svgalib_helper -f Makefile.alt \
 	CC="%{kgcc}" \
 	COPT="%{rpmcflags} $CREGPARM -D__SMP__ -DCONFIG_X86_LOCAL_APIC" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
+%endif
 %endif
 
 %install
@@ -335,8 +340,10 @@ install threeDKit/lib3dkit.a $RPM_BUILD_ROOT%{_libdir}
 %if %{with kernel}
 install kernel/svgalib_helper-up.%{kmodext} \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}
+%if %{with smp}
 install kernel/svgalib_helper/svgalib_helper.%{kmodext} \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}
+%endif
 %endif
 
 %clean
@@ -388,7 +395,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}*
 
+%if %{with smp}
 %files -n kernel-smp-video-svgalib_helper
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}*
+%endif
 %endif
