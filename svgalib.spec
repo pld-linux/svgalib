@@ -29,6 +29,7 @@ Patch6:		%{name}-alpha.patch
 Patch7:		%{name}-svgalib_helper_Makefile.patch
 Patch8:		%{name}-link.patch
 Patch9:		%{name}-module-alias.patch
+Patch10:	%{name}-linux26-minor.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 ExclusiveArch:	%{ix86} alpha
 BuildRequires:	rpmbuild(macros) >= 1.118
@@ -248,7 +249,8 @@ Bibliotecas estáticas para desenvolvimento com SVGAlib.
 #%patch6 -p1  -- still neeed? needs update if so
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1 -b .orig
+%patch9 -p1
+%patch10 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*

@@ -1,0 +1,18 @@
+--- svgalib-1.9.18/kernel/svgalib_helper/kernel26compat.h.orig	2003-10-04 15:42:01.000000000 +0200
++++ svgalib-1.9.18/kernel/svgalib_helper/kernel26compat.h	2003-10-08 20:25:50.435308104 +0200
+@@ -44,10 +44,10 @@
+ #endif
+ 
+ 
+-/* Our main.c really do not like MINOR from 2.6 kernels ... */
+-#if (defined MINOR) && (!defined KERNEL_2_6)
+-# define my_minor(x) MINOR(x)
+-#else
++/* Our main.c really do not like MINOR from early 2.6.0-test kernels ... */
++#if (defined minor) && (defined KERNEL_2_6)
+ # define my_minor(x) minor(x)
++#else
++# define my_minor(x) MINOR(x)
+ #endif
+-	
++
