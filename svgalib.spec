@@ -12,8 +12,8 @@ Summary(ru):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
-Version:	1.9.17
-%define _rel	0.1
+Version:	1.9.14
+%define _rel	8
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -257,7 +257,6 @@ ln -sf libvgagl.so.%{version} sharedlib/libvgagl.so
 %{__make} CC=%{__cc} CFLAGS="$LDFLAGS $MOPT" -C lrmi-0.6m
 %endif
 %{__make} CC="%{__cc} -L../sharedlib $LDFLAGS $MOPT" -C threeDKit
-rm -f src/svgalib_helper.h
 %{__make} CC=%{__cc} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
 %{__make} CC="%{__cc} $MOPT" -C threeDKit lib3dkit.a
 
