@@ -1,0 +1,4226 @@
+diff -Nur svgalib-1.9.13.orig/src/ali.c svgalib-1.9.13/src/ali.c
+--- svgalib-1.9.13.orig/src/ali.c	Sat Jun 23 13:10:42 2001
++++ svgalib-1.9.13/src/ali.c	Mon Apr  8 23:33:37 2002
+@@ -381,7 +381,7 @@
+ 	ali_memory = ali_memorydetect();
+     }
+     if (__svgalib_driver_report) {
+-	printf("Using ALI driver (ALI2301, %dK).\n", ali_memory);
++	fprintf(stderr,"Using ALI driver (ALI2301, %dK).\n", ali_memory);
+     }
+     __svgalib_driverspecs = &__svgalib_ali_driverspecs;
+ 
+@@ -415,7 +415,7 @@
+     case 3:
+ 	return 2048;
+     default:
+-	printf("ALI driver: More than 2MB installed. Using 2MB.\n");
++	fprintf(stderr,"ALI driver: More than 2MB installed. Using 2MB.\n");
+ 	return 2048;
+     }
+ }
+diff -Nur svgalib-1.9.13.orig/src/apm.c svgalib-1.9.13/src/apm.c
+--- svgalib-1.9.13.orig/src/apm.c	Sat Jun 23 13:10:11 2001
++++ svgalib-1.9.13/src/apm.c	Mon Apr  8 23:33:37 2002
+@@ -602,7 +602,7 @@
+ 
+     apm_memory=__svgalib_inseq(0x20)*64-34; /* maybe will support accel some day */
+     if (__svgalib_driver_report) {
+-	printf("Using Alliance driver, %.7s, %iKB.\n",idstring, apm_memory);
++	fprintf(stderr,"Using Alliance driver, %.7s, %iKB.\n",idstring, apm_memory);
+     }
+ 
+     apm_xbase= (__svgalib_inseq(0x1f) << 8 ) + __svgalib_inseq(0x1e);
+@@ -675,12 +675,12 @@
+           if (f > 7) f = 7;
+           if (f < 0) f = 0;
+         }
+-/*printf("clock=%i l=%i f=%i m=%i n=%i\n",clock,l,f,m,n);*/
++/*fprintf(stderr,"clock=%i l=%i f=%i m=%i n=%i\n",clock,l,f,m,n);*/
+         return (n << 16) | (m << 8) | (l << 2) | (f << 4);
+       }
+     }
+   }
+-/*printf("Can't do clock=%i\n",clock);*/
++/*fprintf(stderr,"Can't do clock=%i\n",clock);*/
+   return 0;
+ }
+ 
+diff -Nur svgalib-1.9.13.orig/src/ark.c svgalib-1.9.13/src/ark.c
+--- svgalib-1.9.13.orig/src/ark.c	Sat Jul 21 22:18:34 2001
++++ svgalib-1.9.13/src/ark.c	Mon Apr  8 23:33:37 2002
+@@ -876,7 +876,7 @@
+ 	else if ((id == 0x13) || (id == 0x14) || (id == 0x20))
+ 	    ark_chip = ARK2000PV;
+ 	else {
+-	    printf("svgalib: ark: Unknown chiptype %d.\n",
++	    fprintf(stderr,"svgalib: ark: Unknown chiptype %d.\n",
+ 		   id);
+ 	    return -1;
+ 	}
+@@ -912,12 +912,12 @@
+ 
+     if (dac_used == NULL) {
+ 	/* Not supported. */
+-        printf("svgalib: ark: Assuming normal VGA DAC.\n");
++        fprintf(stderr,"svgalib: ark: Assuming normal VGA DAC.\n");
+ 
+ #ifdef INCLUDE_NORMAL_DAC
+         dac_used = &__svgalib_normal_dac_methods;
+ #else
+-        printf("svgalib: Alas, normal VGA DAC support is not compiled in, goodbye.\n");
++        fprintf(stderr,"svgalib: Alas, normal VGA DAC support is not compiled in, goodbye.\n");
+         return 1;
+ #endif
+     }
+@@ -982,13 +982,13 @@
+ 	    ark_baseaddress = (__svgalib_inSR(0x13) << 16) +
+ 		(__svgalib_inSR(0x14) << 24);
+ 	}
+-	printf("svgalib: Using ARK driver (%s, %dK, %s).",
++	fprintf(stderr,"svgalib: Using ARK driver (%s, %dK, %s).",
+ 	       ark_chipname[ark_chip], ark_memory, bustype);
+ #if 0
+ 	if (ark_bus == PCI)
+-	    printf(" Base address = 0x%08X.", ark_baseaddress);
++	    fprintf(stderr," Base address = 0x%08X.", ark_baseaddress);
+ #endif
+-	printf("\n");
++	fprintf(stderr,"\n");
+     }
+     __svgalib_driverspecs = &__svgalib_ark_driverspecs;
+     __svgalib_mmio_base = 0xb8000;
+diff -Nur svgalib-1.9.13.orig/src/ati.c svgalib-1.9.13/src/ati.c
+--- svgalib-1.9.13.orig/src/ati.c	Sat Jun 23 13:10:42 2001
++++ svgalib-1.9.13/src/ati.c	Mon Apr  8 23:33:37 2002
+@@ -73,7 +73,7 @@
+ 
+     /* Have to give ourselves some more permissions -- last port currently used is 0x3df */
+     if (ioperm(MIN(ati_base, 0x3df), ABS(0x3df - ati_base), 1)) {
+-	printf("IOPERM FAILED IN ATI\n");
++	fprintf(stderr,"IOPERM FAILED IN ATI\n");
+ 	exit(-2);
+     }
+     /*
+@@ -96,7 +96,7 @@
+     }
+ 
+     if (__svgalib_driver_report)
+-	printf("Using ATI (mostly VGA) driver, (%s, %dK).\n", ati_name[ati_chiptype], ati_memory);
++	fprintf(stderr,"Using ATI (mostly VGA) driver, (%s, %dK).\n", ati_name[ati_chiptype], ati_memory);
+ 
+     __svgalib_banked_mem_base=0xa0000;
+     __svgalib_banked_mem_size=0x10000;
+diff -Nur svgalib-1.9.13.orig/src/banshee.c svgalib-1.9.13/src/banshee.c
+--- svgalib-1.9.13.orig/src/banshee.c	Sat Jun 23 12:47:52 2001
++++ svgalib-1.9.13/src/banshee.c	Mon Apr  8 23:33:37 2002
+@@ -510,7 +510,7 @@
+     banshee_unlock();
+     
+     if (__svgalib_driver_report) {
+-	printf("Using Banshee / Voodoo3 driver, %iKB.\n",banshee_memory);
++	fprintf(stderr,"Using Banshee / Voodoo3 driver, %iKB.\n",banshee_memory);
+     }
+     
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/chips.c svgalib-1.9.13/src/chips.c
+--- svgalib-1.9.13.orig/src/chips.c	Mon Apr  2 17:07:48 2001
++++ svgalib-1.9.13/src/chips.c	Mon Apr  8 23:33:37 2002
+@@ -403,7 +403,7 @@
+ static void CHIPS_getmodeinfo(int mode, vga_modeinfo * modeinfo)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_getmodeinfo(%d, *)\n", mode);
++    fprintf(stderr,"CHIPS: CHIPS_getmodeinfo(%d, *)\n", mode);
+ #endif
+ 	if (modeinfo->bytesperpixel > 0)
+ 	{	modeinfo->maxpixels = video_memory * 1024 /
+@@ -452,7 +452,7 @@
+ static void ctHWCalcClock(unsigned char *vclk, unsigned int Clock)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: ctHWCalcClock(*, %d)\n", Clock);
++    fprintf(stderr,"CHIPS: ctHWCalcClock(*, %d)\n", Clock);
+ #endif
+     vclk[MSR] =  (Clock << 2) & 0xC;
+     vclk[XR54] = vclk[MSR];
+@@ -483,7 +483,7 @@
+     int M_max = ctisHiQV ? 63 : 127;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: ctCalcClock(*, %d)\n", Clock);
++    fprintf(stderr,"CHIPS: ctCalcClock(*, %d)\n", Clock);
+ #endif
+ 
+     /* Other parameters available on the 65548 but not the 65545, and
+@@ -586,14 +586,14 @@
+ 	vclk[VCLK(3)] = (bestP << 4) + (bestPSN == 1);
+ #ifdef DEBUG
+ 	if (__svgalib_driver_report) {
+-	    printf("Probed Freq: %.2f MHz", (float)(Clock / 1000.));
+-            printf("VCLK(0) = %x, ",VCLK(0));
+-            printf("VCLK(1) = %x, ",VCLK(1));
+-            printf("VCLK(2) = %x, ",VCLK(2));
+-            printf("VCLK(3) = %x\n",VCLK(3));
+-	    printf(", vclk[0]=%X, vclk[1]=%X, vclk[2]=%X, vlck[3]=%X\n",
++	    fprintf(stderr,"Probed Freq: %.2f MHz", (float)(Clock / 1000.));
++            fprintf(stderr,"VCLK(0) = %x, ",VCLK(0));
++            fprintf(stderr,"VCLK(1) = %x, ",VCLK(1));
++            fprintf(stderr,"VCLK(2) = %x, ",VCLK(2));
++            fprintf(stderr,"VCLK(3) = %x\n",VCLK(3));
++	    fprintf(stderr,", vclk[0]=%X, vclk[1]=%X, vclk[2]=%X, vlck[3]=%X\n",
+ 		   vclk[VCLK(0)], vclk[VCLK(1)], vclk[VCLK(2)], vclk[VCLK(3)]);
+-	    printf("Freq used: %.2f MHz\n", bestFout / 1.0e6);
++	    fprintf(stderr,"Freq used: %.2f MHz\n", bestFout / 1.0e6);
+ 	}
+ #endif
+ 	return;
+@@ -606,10 +606,10 @@
+ 	vclk[VCLK(2)] = bestN - 2;
+ #ifdef DEBUG
+ 	if (__svgalib_driver_report) {
+-	    printf("Probed Freq: %.2f MHz", (float)(Clock / 1000.));
+-	    printf(", vclk[0]=%X, vclk[1]=%X, vclk[2]=%X\n",
++	    fprintf(stderr,"Probed Freq: %.2f MHz", (float)(Clock / 1000.));
++	    fprintf(stderr,", vclk[0]=%X, vclk[1]=%X, vclk[2]=%X\n",
+ 		   vclk[VCLK(0)], vclk[VCLK(1)], vclk[VCLK(2)]);
+-	    printf("Freq used: %.2f MHz\n", bestFout / 1.0e6);
++	    fprintf(stderr,"Freq used: %.2f MHz\n", bestFout / 1.0e6);
+ 	}
+ #endif
+ 	return;
+@@ -624,7 +624,7 @@
+     unsigned int Clk;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: ctClockSave\n");
++    fprintf(stderr,"CHIPS: ctClockSave\n");
+ #endif
+ 
+     msr = inb(0x3CC);  	/* save the standard VGA clock registers */
+@@ -761,7 +761,7 @@
+     int i;
+     
+ #ifdef DEBUG
+-    printf("CHIPS: ctClockRestore\n");
++    fprintf(stderr,"CHIPS: ctClockRestore\n");
+ #endif
+ 
+     msr = inb(0x3CC); 			/* Select fixed clock */
+@@ -817,7 +817,7 @@
+ static int CHIPS_matchProgrammableClock(int clock)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_matchProgrammableClock(%d)\n",clock);
++    fprintf(stderr,"CHIPS: CHIPS_matchProgrammableClock(%d)\n",clock);
+ #endif
+     /* Basically we can program any valid clock */
+     return clock;
+@@ -826,7 +826,7 @@
+ static int CHIPS_mapClock(int bpp, int pixelclock)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_mapClock(%d, %d)\n",bpp, pixelclock);
++    fprintf(stderr,"CHIPS: CHIPS_mapClock(%d, %d)\n",bpp, pixelclock);
+ #endif
+     if (ctisHiQV) {
+ 	return pixelclock;
+@@ -851,7 +851,7 @@
+ static int CHIPS_mapHorizontalCrtc(int bpp, int pixelclock, int htiming)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_mapHorizontalCrtc(%d, %d, %d)\n",bpp, pixelclock,
++    fprintf(stderr,"CHIPS: CHIPS_mapHorizontalCrtc(%d, %d, %d)\n",bpp, pixelclock,
+ 	   htiming);
+ #endif
+     if (ctisHiQV) {
+@@ -879,7 +879,7 @@
+     unsigned char tmp;
+     
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_unlock\n");
++    fprintf(stderr,"CHIPS: CHIPS_unlock\n");
+ #endif
+ 
+    /* set registers so that we can program the controller */
+@@ -909,7 +909,7 @@
+     int i;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_saveregs\n");
++    fprintf(stderr,"CHIPS: CHIPS_saveregs\n");
+ #endif
+ 
+     CHIPS_unlock();
+@@ -947,7 +947,7 @@
+     int i,tmp;
+     
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_setregs(*, %d)\n", mode);
++    fprintf(stderr,"CHIPS: CHIPS_setregs(*, %d)\n", mode);
+ #endif
+ 
+     CHIPS_unlock();
+@@ -1040,7 +1040,7 @@
+     ModeInfo *modeinfo;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_modeavailable(%d)\n", mode);
++    fprintf(stderr,"CHIPS: CHIPS_modeavailable(%d)\n", mode);
+ #endif
+ 
+     if (IS_IN_STANDARD_VGA_DRIVER(mode))
+@@ -1081,7 +1081,7 @@
+     int temp;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_initializemode\n");
++    fprintf(stderr,"CHIPS: CHIPS_initializemode\n");
+ #endif
+ 
+     /* Get current values. Must be called before CalcClock */
+@@ -1176,7 +1176,7 @@
+ 	/* This ugly hack is needed because CR01 and XR1C share the 8th bit!*/
+ 	CrtcHDisplay = ((mode->CrtcHDisplay >> 3) - 1);
+ 	if((lcdHDisplay & 0x100) != ( CrtcHDisplay & 0x100)){
+-	  printf("This display configuration might cause problems !\n");
++	  fprintf(stderr,"This display configuration might cause problems !\n");
+ 	  lcdHDisplay = 255;}
+ 
+ 	/* now init register values */
+@@ -1274,8 +1274,8 @@
+ 	if (ctFlagsSet & ctFlags_StretchEnable) {
+ 	    moderegs[XR55] |= 0x20;		/* h-comp on, h-double off */
+ 	    moderegs[XR57] |= 0x60;		/* vertical stretching on */
+-	    printf("0x%X, 0x%X\n", mode->flags, DOUBLESCAN);
+-	    printf("%d, %d\n", mode->CrtcVDisplay, __svgalib_ctSize.VDisplay);
++	    fprintf(stderr,"0x%X, 0x%X\n", mode->flags, DOUBLESCAN);
++	    fprintf(stderr,"%d, %d\n", mode->CrtcVDisplay, __svgalib_ctSize.VDisplay);
+ 	    if (2*mode->CrtcVDisplay <= __svgalib_ctSize.VDisplay) 
+ 	    {
+ 	        /* We assume that automatic double scanning occurs */
+@@ -1372,7 +1372,7 @@
+     unsigned int temp;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_HiQV_initializemode\n");
++    fprintf(stderr,"CHIPS: CHIPS_HiQV_initializemode\n");
+ #endif
+ 
+     /* Get current values. Must be called before CalcClock */
+@@ -1383,7 +1383,7 @@
+ 
+     /* init clock */
+ #ifdef DEBUG
+-    printf("CHIPS: pixelclock used: %d\n",mode->pixelClock);
++    fprintf(stderr,"CHIPS: pixelclock used: %d\n",mode->pixelClock);
+ #endif
+     ctCalcClock(moderegs,mode->pixelClock);
+ 
+@@ -1426,22 +1426,22 @@
+ 	lcdVRetraceEnd = mode->CrtcVSyncEnd;
+ 
+ #ifdef MODELINE_DEBUG
+-        printf("lcdHTotal = %d, lcdHDisplay = %d, lcdHRetraceStart = %d\n",
++        fprintf(stderr,"lcdHTotal = %d, lcdHDisplay = %d, lcdHRetraceStart = %d\n",
+                lcdHTotal,lcdHDisplay,lcdHRetraceStart);
+-        printf("lcdHRetraceEnd = %d, lcdHSyncStart = %d\n",lcdHRetraceEnd,lcdHSyncStart);
+-        printf("lcdVTotal = %d, lcdVDisplay = %d, lcdVretraceStart = %d\n",
++        fprintf(stderr,"lcdHRetraceEnd = %d, lcdHSyncStart = %d\n",lcdHRetraceEnd,lcdHSyncStart);
++        fprintf(stderr,"lcdVTotal = %d, lcdVDisplay = %d, lcdVretraceStart = %d\n",
+                lcdVTotal,lcdVDisplay,lcdVRetraceStart);
+ 
+-        printf("before:\n");
+-        printf("#20 = %02X, #21 = %02X, #22 = %02X, #23 = %02X, #24 = %02X, #25 = %02X\n",
++        fprintf(stderr,"before:\n");
++        fprintf(stderr,"#20 = %02X, #21 = %02X, #22 = %02X, #23 = %02X, #24 = %02X, #25 = %02X\n",
+                moderegs[HiQVFR20],moderegs[HiQVFR21],moderegs[HiQVFR22],moderegs[HiQVFR23],
+                moderegs[HiQVFR24],moderegs[HiQVFR25]);
+-        printf("#26 = %02X, #27 = %02X\n",
++        fprintf(stderr,"#26 = %02X, #27 = %02X\n",
+                moderegs[HiQVFR26],moderegs[HiQVFR27]);
+-        printf("#30 = %02X, #31 = %02X, #32 = %02X, #33 = %02X, #34 = %02X, #35 = %02X\n",
++        fprintf(stderr,"#30 = %02X, #31 = %02X, #32 = %02X, #33 = %02X, #34 = %02X, #35 = %02X\n",
+                moderegs[HiQVFR30],moderegs[HiQVFR31],moderegs[HiQVFR32],moderegs[HiQVFR33],
+                moderegs[HiQVFR34],moderegs[HiQVFR35]);
+-        printf("#36 = %02X, #37 = %02X\n",
++        fprintf(stderr,"#36 = %02X, #37 = %02X\n",
+                moderegs[HiQVFR36],moderegs[HiQVFR37]);
+ #endif
+ 
+@@ -1469,16 +1469,16 @@
+ 	moderegs[HiQVFR37] |= 0x80;
+ 
+ #ifdef MODELINE_DEBUG
+-        printf("after:\n");
+-        printf("#20 = %02X, #21 = %02X, #22 = %02X, #23 = %02X, #24 = %02X, #25 = %02X\n",
++        fprintf(stderr,"after:\n");
++        fprintf(stderr,"#20 = %02X, #21 = %02X, #22 = %02X, #23 = %02X, #24 = %02X, #25 = %02X\n",
+                moderegs[HiQVFR20],moderegs[HiQVFR21],moderegs[HiQVFR22],moderegs[HiQVFR23],
+                moderegs[HiQVFR24],moderegs[HiQVFR25]);
+-        printf("#26 = %02X, #27 = %02X\n",
++        fprintf(stderr,"#26 = %02X, #27 = %02X\n",
+                moderegs[HiQVFR26],moderegs[HiQVFR27]);
+-        printf("#30 = %02X, #31 = %02X, #32 = %02X, #33 = %02X, #34 = %02X, #35 = %02X\n",
++        fprintf(stderr,"#30 = %02X, #31 = %02X, #32 = %02X, #33 = %02X, #34 = %02X, #35 = %02X\n",
+                moderegs[HiQVFR30],moderegs[HiQVFR31],moderegs[HiQVFR32],moderegs[HiQVFR33],
+                moderegs[HiQVFR34],moderegs[HiQVFR35]);
+-        printf("#36 = %02X, #37 = %02X\n",
++        fprintf(stderr,"#36 = %02X, #37 = %02X\n",
+                moderegs[HiQVFR36],moderegs[HiQVFR37]);
+ #endif
+     }
+@@ -1570,7 +1570,7 @@
+ static int CHIPS_interlaced(int mode)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_interlaced(%d)\n",mode);
++    fprintf(stderr,"CHIPS: CHIPS_interlaced(%d)\n",mode);
+ #endif
+ 	/* This driver does not support interlaced mode */
+ 	return FALSE;
+@@ -1587,7 +1587,7 @@
+ 	ModeTiming *modetiming;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_setmode(%d, %d)\n", mode, prv_mode);
++    fprintf(stderr,"CHIPS: CHIPS_setmode(%d, %d)\n", mode, prv_mode);
+ #endif
+ 
+         if (CHIPSchipset == CT_545 || CHIPSchipset == CT_546 ||
+@@ -1619,45 +1619,45 @@
+ 
+ #ifdef MODELINE_DEBUG
+         /*------------------------------------*/
+-        printf("Modetiming:\n");
+-        printf("pixelclock - %d, HDisplay - %d, HSyncStart - %d, HSyncEnd - %d, HTotal - %d\n",
++        fprintf(stderr,"Modetiming:\n");
++        fprintf(stderr,"pixelclock - %d, HDisplay - %d, HSyncStart - %d, HSyncEnd - %d, HTotal - %d\n",
+                modetiming->pixelClock,modetiming->HDisplay,modetiming->HSyncStart,
+                modetiming->HSyncEnd,modetiming->HTotal);
+-        printf("VDisplay - %d, VSyncStart - %d, VSyncEnd - %d, VTotal - %d, flags - %d\n",
++        fprintf(stderr,"VDisplay - %d, VSyncStart - %d, VSyncEnd - %d, VTotal - %d, flags - %d\n",
+                modetiming->VDisplay,modetiming->VSyncStart,modetiming->VSyncEnd,
+                modetiming->VTotal,modetiming->flags);
+-        printf("programmedClock - %d, selectedClockNo - %d, CrtcHDisplay - %d\n",
++        fprintf(stderr,"programmedClock - %d, selectedClockNo - %d, CrtcHDisplay - %d\n",
+                modetiming->programmedClock,modetiming->selectedClockNo,modetiming->CrtcHDisplay);
+-        printf("CrtcHSyncStart - %d, CrtcHSyncEnd - %d, CrtcHDisplay - %d, CrtcHTotal - %d\n",
++        fprintf(stderr,"CrtcHSyncStart - %d, CrtcHSyncEnd - %d, CrtcHDisplay - %d, CrtcHTotal - %d\n",
+                modetiming->CrtcHSyncStart,modetiming->CrtcHSyncEnd,modetiming->CrtcHDisplay,
+                modetiming->CrtcHTotal);
+-        printf("CrtcVSyncStart - %d, CrtcVSyncEnd - %d, CrtcVTotal - %d\n\n",
++        fprintf(stderr,"CrtcVSyncStart - %d, CrtcVSyncEnd - %d, CrtcVTotal - %d\n\n",
+                modetiming->CrtcVSyncStart,modetiming->CrtcVSyncEnd,modetiming->CrtcVTotal);
+ 
+-        printf("ModeInfo:\n");
+-        printf("width - %d, height - %d, bytesPerPixel - %d, bitsPerPixel - %d\n",
++        fprintf(stderr,"ModeInfo:\n");
++        fprintf(stderr,"width - %d, height - %d, bytesPerPixel - %d, bitsPerPixel - %d\n",
+                (int)modeinfo->width,(int)modeinfo->height,(int)modeinfo->bytesPerPixel,
+                (int)modeinfo->bitsPerPixel);
+-        printf("colorBits - %d, redWeight - %d, greenWeight - %d, blueWeight - %d\n",
++        fprintf(stderr,"colorBits - %d, redWeight - %d, greenWeight - %d, blueWeight - %d\n",
+                (int)modeinfo->colorBits,(int)modeinfo->redWeight,(int)modeinfo->greenWeight,
+                (int)modeinfo->blueWeight);
+-        printf("redOffset - %d, blueOffset - %d, greenOffset - %d\n",
++        fprintf(stderr,"redOffset - %d, blueOffset - %d, greenOffset - %d\n",
+                (int)modeinfo->redOffset,(int)modeinfo->blueOffset,
+                (int)modeinfo->greenOffset);
+-        printf("redMask - %d, blueMask - %d, greenMask - %d, lineWidth - %d\n",
++        fprintf(stderr,"redMask - %d, blueMask - %d, greenMask - %d, lineWidth - %d\n",
+                (int)modeinfo->redMask,(int)modeinfo->blueMask,(int)modeinfo->greenMask,
+                modeinfo->lineWidth);
+-        printf("realWidth - %d, realHeight - %d, flags - %d\n\n",
++        fprintf(stderr,"realWidth - %d, realHeight - %d, flags - %d\n\n",
+                (int)modeinfo->realWidth,(int)modeinfo->realHeight,modeinfo->flags);
+ 
+-        printf("CardSpecs:\n");
+-        printf("videoMemory - %d, maxPixelClock8bpp - %d, flags - %d\n",
++        fprintf(stderr,"CardSpecs:\n");
++        fprintf(stderr,"videoMemory - %d, maxPixelClock8bpp - %d, flags - %d\n",
+                cardspecs->videoMemory,cardspecs->maxPixelClock8bpp,
+                cardspecs->flags);
+-        printf("nClocks - %d, maxHorizontalCrtc - %d, mapClock - %p\n",
++        fprintf(stderr,"nClocks - %d, maxHorizontalCrtc - %d, mapClock - %p\n",
+                cardspecs->nClocks,cardspecs->maxHorizontalCrtc,
+                cardspecs->mapClock);
+-        printf("matchProgrammableClock - %p, mapHorizontalCrtc - %p\n",
++        fprintf(stderr,"matchProgrammableClock - %p, mapHorizontalCrtc - %p\n",
+                cardspecs->matchProgrammableClock,cardspecs->mapHorizontalCrtc);
+ 
+         /*------------------------------------*/
+@@ -1808,7 +1808,7 @@
+ static void CHIPS_setlinear(int addr)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_setlinear(0x%X)\n", addr);
++    fprintf(stderr,"CHIPS: CHIPS_setlinear(0x%X)\n", addr);
+ #endif
+ 
+     if (ctisHiQV) {
+@@ -1829,7 +1829,7 @@
+ static int CHIPS_linear(int op, int param)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_linear(%d, %d)\n", op, param);
++    fprintf(stderr,"CHIPS: CHIPS_linear(%d, %d)\n", op, param);
+ #endif
+ 
+     if (CHIPSchipset != CT_520) {	/* The 65520 doesn't support it */
+@@ -1861,7 +1861,7 @@
+                 if (param == 0) {
+                     __svgalib_CHIPS_LinearBase = chips_pcilinearbase;
+ #ifdef DEBUG
+-                    printf("CHIPS_linear: base = %08X\n",__svgalib_CHIPS_LinearBase);
++                    fprintf(stderr,"CHIPS_linear: base = %08X\n",__svgalib_CHIPS_LinearBase);
+ #endif
+                 } else {
+                     /* As the above PCI membase probing code is new
+@@ -1916,7 +1916,7 @@
+ 	unsigned char temp;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_test\n");
++    fprintf(stderr,"CHIPS: CHIPS_test\n");
+ #endif
+ 
+ 	/*
+@@ -2043,7 +2043,7 @@
+ 	unsigned char temp;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_EnterLeave(%d)\n", enter);
++    fprintf(stderr,"CHIPS: CHIPS_EnterLeave(%d)\n", enter);
+ #endif
+ 
+ 	/* (taken from XFree86) */
+@@ -2098,7 +2098,7 @@
+ static void CHIPS_setpage(int page)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_setpage(%d)\n",page);
++    fprintf(stderr,"CHIPS: CHIPS_setpage(%d)\n",page);
+ #endif
+ 
+ 	if (ctisHiQV) {
+@@ -2146,7 +2146,7 @@
+ static void CHIPS_setreadpage(int page)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_setreadpage(%d)\n",page);
++    fprintf(stderr,"CHIPS: CHIPS_setreadpage(%d)\n",page);
+ #endif
+     if (CHIPSchipset == CT_4300) {
+       unsigned char tmp;
+@@ -2166,7 +2166,7 @@
+ static void CHIPS_setwritepage(int page)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_setwritepage(%d)\n",page);
++    fprintf(stderr,"CHIPS: CHIPS_setwritepage(%d)\n",page);
+ #endif
+     if (CHIPSchipset == CT_4300) {
+       unsigned char tmp;
+@@ -2186,7 +2186,7 @@
+ static void CHIPS_setdisplaystart(int addr)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_setdisplaystart(%d)\n",addr);
++    fprintf(stderr,"CHIPS: CHIPS_setdisplaystart(%d)\n",addr);
+ #endif
+ 
+ 	addr >>= 2;
+@@ -2219,7 +2219,7 @@
+ static void CHIPS_setlogicalwidth(int width)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_setlogicalwidth(%d)\n",width);
++    fprintf(stderr,"CHIPS: CHIPS_setlogicalwidth(%d)\n",width);
+ #endif
+ 
+ 	outw(vgaIOBase + 4, 0x13 | (((width >> 3) << 8) & 0xFF00));
+@@ -2278,7 +2278,7 @@
+ static char *CHIPS_process_option(int option, int mode, char** dummy)
+ {
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_process_option(%d, %d)\n",option, mode);
++    fprintf(stderr,"CHIPS: CHIPS_process_option(%d, %d)\n",option, mode);
+ #endif
+ /*
+  * option is the number of the option string in CHIPS_config_options,
+@@ -2383,7 +2383,7 @@
+     int	temp;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: CHIPS_init(%d, %d, %d)\n", force, par1, par2);
++    fprintf(stderr,"CHIPS: CHIPS_init(%d, %d, %d)\n", force, par1, par2);
+ #endif
+ 
+ 	if (force) {
+@@ -2484,7 +2484,7 @@
+             if (getenv("IOPERM") == NULL) {
+                 _ioperm=1;
+                 if (iopl(3) < 0) {
+-                    printf("svgalib: vgapci: cannot get I/O permissions\n");
++                    fprintf(stderr,"svgalib: vgapci: cannot get I/O permissions\n");
+                     exit(1);
+                 }
+             }
+@@ -2626,7 +2626,7 @@
+ 		__svgalib_ctSize.VTotal = ((tmp1 & 0x01) << 8)
+ 		    + ((tmp1 & 0x20) << 4) + temp + 2;
+ #ifdef DEBUG
+-		printf("__svgalib_ctSize.VDisplay = %d, __svgalib_ctSize.HDisplay = %d\n",
++		fprintf(stderr,"__svgalib_ctSize.VDisplay = %d, __svgalib_ctSize.HDisplay = %d\n",
+ 		__svgalib_ctSize.VDisplay,__svgalib_ctSize.HDisplay);
+ #endif
+ 	    }
+@@ -2651,7 +2651,7 @@
+ 	
+ 	if (__svgalib_driver_report)
+ 	{
+-		printf("Using C&T 655xx driver (%dK) [%d].\n",
++		fprintf(stderr,"Using C&T 655xx driver (%dK) [%d].\n",
+ 			   video_memory, CHIPSchipset);
+ 	}
+ 
+@@ -2931,7 +2931,7 @@
+     int srcaddr, destaddr, op;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: ScreenCopy(%d, %d, %d, %d, %d, %d)\n", x1, y1, x1, y2, w, h);
++    fprintf(stderr,"CHIPS: ScreenCopy(%d, %d, %d, %d, %d, %d)\n", x1, y1, x1, y2, w, h);
+ #endif
+ 
+     srcaddr = BLTBYTEADDRESS(x1, y1);
+@@ -2963,7 +2963,7 @@
+     int srcaddr, destaddr, op;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: mmio_ScreenCopy(%d, %d, %d, %d, %d, %d)\n", x1, y1, x1, y2, w, h);
++    fprintf(stderr,"CHIPS: mmio_ScreenCopy(%d, %d, %d, %d, %d, %d)\n", x1, y1, x1, y2, w, h);
+ #endif
+ 
+     srcaddr = BLTBYTEADDRESS(x1, y1);
+@@ -2996,7 +2996,7 @@
+     int srcaddr, destaddr, op;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: hiqv_ScreenCopy(%d, %d, %d, %d, %d, %d)\n", x1, y1, x1, y2, w, h);
++    fprintf(stderr,"CHIPS: hiqv_ScreenCopy(%d, %d, %d, %d, %d, %d)\n", x1, y1, x1, y2, w, h);
+ #endif
+ 
+     srcaddr = BLTBYTEADDRESS(x1, y1);
+@@ -3030,7 +3030,7 @@
+     int destaddr;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: FillBox(%d, %d, %d, %d)\n", x, y, width, height);
++    fprintf(stderr,"CHIPS: FillBox(%d, %d, %d, %d)\n", x, y, width, height);
+ #endif
+ 
+     destaddr = BLTBYTEADDRESS(x, y);
+@@ -3052,7 +3052,7 @@
+     int destaddr;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: mmio_FillBox(%d, %d, %d, %d)\n", x, y, width, height);
++    fprintf(stderr,"CHIPS: mmio_FillBox(%d, %d, %d, %d)\n", x, y, width, height);
+ #endif
+ 
+     destaddr = BLTBYTEADDRESS(x, y);
+@@ -3075,7 +3075,7 @@
+     int destaddr;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: hiqv_FillBox(%d, %d, %d, %d)\n", x, y, width, height);
++    fprintf(stderr,"CHIPS: hiqv_FillBox(%d, %d, %d, %d)\n", x, y, width, height);
+ #endif
+ 
+     destaddr = BLTBYTEADDRESS(x, y);
+@@ -3101,7 +3101,7 @@
+     Bool fastfill;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: FillBox24(%d, %d, %d, %d)\n", x, y, width, height);
++    fprintf(stderr,"CHIPS: FillBox24(%d, %d, %d, %d)\n", x, y, width, height);
+ #endif
+ 
+     pixel3 = ctFGCOLOR & 0xFF;
+@@ -3183,7 +3183,7 @@
+     Bool fastfill;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: mmio_FillBox24(%d, %d, %d, %d)\n", x, y, width, height);
++    fprintf(stderr,"CHIPS: mmio_FillBox24(%d, %d, %d, %d)\n", x, y, width, height);
+ #endif
+ 
+     pixel3 = ctFGCOLOR & 0xFF;
+@@ -3265,7 +3265,7 @@
+     int destaddr, line;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: PutBitMap(%d, %d, %d, %d)\n", x, y, w, h);
++    fprintf(stderr,"CHIPS: PutBitMap(%d, %d, %d, %d)\n", x, y, w, h);
+ #endif
+ 
+     destaddr = BLTBYTEADDRESS(x, y);
+@@ -3304,7 +3304,7 @@
+     int destaddr, line;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: mmio_PutBitMap(%d, %d, %d, %d)\n", x, y, w, h);
++    fprintf(stderr,"CHIPS: mmio_PutBitMap(%d, %d, %d, %d)\n", x, y, w, h);
+ #endif
+ 
+     destaddr = BLTBYTEADDRESS(x, y);
+@@ -3349,7 +3349,7 @@
+     int destaddr, line;
+ 
+ #ifdef DEBUG
+-    printf("CHIPS: hiqv_PutBitMap(%d, %d, %d, %d)\n", x, y, w, h);
++    fprintf(stderr,"CHIPS: hiqv_PutBitMap(%d, %d, %d, %d)\n", x, y, w, h);
+ #endif
+ 
+     destaddr = BLTBYTEADDRESS(x, y);
+diff -Nur svgalib-1.9.13.orig/src/cirrus.c svgalib-1.9.13/src/cirrus.c
+--- svgalib-1.9.13.orig/src/cirrus.c	Sat Jun 30 12:25:49 2001
++++ svgalib-1.9.13/src/cirrus.c	Mon Apr  8 23:33:37 2002
+@@ -233,7 +233,7 @@
+ /*      int i; */
+ 
+ /*      #ifdef DEBUG
+-   printf("Saving Cirrus extended registers.\n");
++   fprintf(stderr,"Saving Cirrus extended registers.\n");
+    #endif
+  */
+     cirrus_unlock();		/* May be locked again by other programs (e.g. X) */
+@@ -314,7 +314,7 @@
+ static void cirrus_setregs(const unsigned char regs[], int mode)
+ {
+ /*      #ifdef DEBUG
+-   printf("Setting Cirrus extended registers.\n");
++   fprintf(stderr,"Setting Cirrus extended registers.\n");
+    #endif
+  */
+     cirrus_unlock();		/* May be locked again by other programs (eg. X) */
+@@ -986,7 +986,7 @@
+ 	    cirrus_chiptype = CLGD7548;
+ 	    break;
+ 	default:
+-	    printf("Unknown Cirrus chip %2x.\n",
++	    fprintf(stderr,"Unknown Cirrus chip %2x.\n",
+ 		   cirrus_chiptype);
+ 	    return -1;
+ 	}
+@@ -1030,7 +1030,7 @@
+ 	}
+     }
+     if (__svgalib_driver_report) {
+-	printf("Using Cirrus Logic GD542x/3x driver (%s, %dK).\n",
++	fprintf(stderr,"Using Cirrus Logic GD542x/3x driver (%s, %dK).\n",
+ 	       cirrus_chipname[cirrus_chiptype], cirrus_memory);
+     }
+     if (CHIP_HAS_MCLK_REGISTER())
+diff -Nur svgalib-1.9.13.orig/src/clockchip/icd2061a.c svgalib-1.9.13/src/clockchip/icd2061a.c
+--- svgalib-1.9.13.orig/src/clockchip/icd2061a.c	Tue Jun 13 10:05:36 2000
++++ svgalib-1.9.13/src/clockchip/icd2061a.c	Mon Apr  8 23:33:37 2002
+@@ -255,7 +255,7 @@
+ {
+     if (DAC && !__svgalib_I2061A_clockchip_methods.DAC_initializeState) {
+ 	if (__svgalib_driver_report)
+-	    printf("svgalib: Using ICD2061A or compatible clockchip.\n");
++	    fprintf(stderr,"svgalib: Using ICD2061A or compatible clockchip.\n");
+ 	__svgalib_I2061A_clockchip_methods.DAC_initializeState = DAC->initializeState;
+ 	__svgalib_I2061A_clockchip_methods.DAC_saveState = DAC->saveState;
+ 	__svgalib_I2061A_clockchip_methods.DAC_restoreState = DAC->restoreState;
+diff -Nur svgalib-1.9.13.orig/src/egadrv.c svgalib-1.9.13/src/egadrv.c
+--- svgalib-1.9.13.orig/src/egadrv.c	Sat Jun 23 13:09:44 2001
++++ svgalib-1.9.13/src/egadrv.c	Mon Apr  8 23:33:37 2002
+@@ -123,7 +123,7 @@
+     else
+ 	r = LOOKUPMODE(ega_modes, lastmode);
+     if (r == NULL) {
+-	printf("svgalib: egadrv.c/saveregs(): internal error\n");
++	fprintf(stderr,"svgalib: egadrv.c/saveregs(): internal error\n");
+ 	exit(-1);
+     }
+     memcpy(regs, r, CRT_C + ATT_C + GRA_C + SEQ_C + MIS_C);
+@@ -245,7 +245,7 @@
+ {
+ 
+     if (__svgalib_driver_report)
+-	printf("Using EGA driver.\n");
++	fprintf(stderr,"Using EGA driver.\n");
+ 
+     /* Read additional modes from file if available */
+     if (ega_modes == NULL) {
+diff -Nur svgalib-1.9.13.orig/src/et3000.c svgalib-1.9.13/src/et3000.c
+--- svgalib-1.9.13.orig/src/et3000.c	Sat Jun 23 13:09:23 2001
++++ svgalib-1.9.13/src/et3000.c	Mon Apr  8 23:33:37 2002
+@@ -361,7 +361,7 @@
+     }
+ 
+     if (__svgalib_driver_report)
+-	printf("Using Tseng ET3000 driver (%d).\n", et3000_memory);
++	fprintf(stderr,"Using Tseng ET3000 driver (%d).\n", et3000_memory);
+     __svgalib_driverspecs = &__svgalib_et3000_driverspecs;
+ 
+     __svgalib_banked_mem_base=0xa0000;
+diff -Nur svgalib-1.9.13.orig/src/et4000.c svgalib-1.9.13/src/et4000.c
+--- svgalib-1.9.13.orig/src/et4000.c	Sat Jun 23 13:09:23 2001
++++ svgalib-1.9.13/src/et4000.c	Mon Apr  8 23:33:37 2002
+@@ -1122,15 +1122,15 @@
+ 	    break;
+ 	}
+ 
+-	printf("Using Tseng ET4000 driver (%s %d%s).",
++	fprintf(stderr,"Using Tseng ET4000 driver (%s %d%s).",
+ 	       chipname[et4000_chiptype], et4000_memory,
+ 	       et4000_dac & 1 ? dacname : "");
+ #ifdef USE_CLOCKS
+-	printf(" Clocks:");
++	fprintf(stderr," Clocks:");
+ 	for (i = 0; i < 8; ++i)
+-	    printf(" %d", (clocks[i] + 500) / 1000);
++	    fprintf(stderr," %d", (clocks[i] + 500) / 1000);
+ #endif
+-	printf("\n");
++	fprintf(stderr,"\n");
+     }
+     __svgalib_driverspecs = &__svgalib_et4000_driverspecs;
+ 
+diff -Nur svgalib-1.9.13.orig/src/et6000.c svgalib-1.9.13/src/et6000.c
+--- svgalib-1.9.13.orig/src/et6000.c	Sat Jun 23 13:09:23 2001
++++ svgalib-1.9.13/src/et6000.c	Mon Apr  8 23:33:37 2002
+@@ -398,7 +398,7 @@
+   if(x3_8)
+     outb(x3_8,0xa0);
+     else
+-      printf("et6000_unlock called when et6000 was not initialized.\n");
++      fprintf(stderr,"et6000_unlock called when et6000 was not initialized.\n");
+ }
+ 
+ static void et6000_lock(void)
+@@ -411,7 +411,7 @@
+     outb(x3_8,0);          /* I think it is because we lose root  */
+   }                        /* privalege after initialize and can  */
+   else                     /* no longer unlock registers.         */
+-    printf("et6000_lock called when et6000 was not initialized.\n");
++    fprintf(stderr,"et6000_lock called when et6000 was not initialized.\n");
+ }
+ 
+ static int  et6000_test(void)
+@@ -455,7 +455,7 @@
+   sprintf(dboutfile,"D%ld.txt",time(NULL));
+   outf = fopen(dboutfile,"w");
+   if(!outf){
+-    printf("Can't open a debug output file in et6000_init.\n");
++    fprintf(stderr,"Can't open a debug output file in et6000_init.\n");
+     exit(1);
+   }
+   else
+@@ -555,7 +555,7 @@
+     outb(base1 | 0x69,0x24);
+     outb(base1 | 0x69,0x21);
+     if(__svgalib_driver_report)
+-      printf("Using Tseng ET6000 driver (%d MBytes %sDRAM)\n",
++      fprintf(stderr,"Using Tseng ET6000 driver (%d MBytes %sDRAM)\n",
+ 		       et6000_memory,mem_type ? "M" : "");
+ #ifdef DB6K
+     else
+@@ -584,7 +584,7 @@
+       fdm = fopen("regset.txt","w");
+       if(!fdm)
+ 	{
+-	  printf("Can't open register setting file.\n");
++	  fprintf(stderr,"Can't open register setting file.\n");
+ 	  exit(1);
+ 	}
+       fprintf(fdm,"CardSpecs\n");
+@@ -959,7 +959,7 @@
+     case CURSOR_SHOW:
+       if(active_cursor == -1)
+ 	{
+-	  printf("No active cursor\n");
++	  fprintf(stderr,"No active cursor\n");
+ 	  return(-1);
+ 	}
+       outb(base1 | 0x46,port_in(base1 | 0x46) | 0x01);
+@@ -1149,7 +1149,7 @@
+ 	}
+       else 
+ 	{
+-	  printf("Cursor %d's immage has not been loaded when selected!\n",
++	  fprintf(stderr,"Cursor %d's immage has not been loaded when selected!\n",
+ 		 p1);
+ 	 return(-1);
+ 	}
+@@ -1217,12 +1217,12 @@
+         if (!WITHIN(fvco, fmin, fmax))
+           continue;
+ #if 0
+-	printf("clock=%i m=%i n1=%i n2=%i\n ",clock,m,n1,n2);
++	fprintf(stderr,"clock=%i m=%i n1=%i n2=%i\n ",clock,m,n1,n2);
+ #endif
+         return (m - 2) | ((n1 - 2)<<8) | (n2 << 13) ;
+       }
+     }
+   }
+-  printf("ET6000: Illegal clock\n");
++  fprintf(stderr,"ET6000: Illegal clock\n");
+   return 0;
+ }
+diff -Nur svgalib-1.9.13.orig/src/fbdev.c svgalib-1.9.13/src/fbdev.c
+--- svgalib-1.9.13.orig/src/fbdev.c	Sat Jun 23 12:47:52 2001
++++ svgalib-1.9.13/src/fbdev.c	Mon Apr  8 23:33:37 2002
+@@ -117,7 +117,7 @@
+ 
+         dacmode = 6;
+         
+-        printf("Using fbdev, %iKB at %08x\n",fbdev_memory/1024, (unsigned int)info.smem_start);
++        fprintf(stderr,"Using fbdev, %iKB at %08x\n",fbdev_memory/1024, (unsigned int)info.smem_start);
+ 
+ 	return 0;
+ }
+diff -Nur svgalib-1.9.13.orig/src/g400.c svgalib-1.9.13/src/g400.c
+--- svgalib-1.9.13.orig/src/g400.c	Wed Feb 20 12:20:10 2002
++++ svgalib-1.9.13/src/g400.c	Mon Apr  8 23:33:37 2002
+@@ -827,7 +827,7 @@
+     found=__svgalib_pci_find_vendor_vga_pos(VENDOR_ID,buf,0);
+     
+     if(found==-1) {
+-        printf("Error: Must use Matrox driver, but no card found\n");
++        fprintf(stderr,"Error: Must use Matrox driver, but no card found\n");
+         exit(1);
+     }
+ 
+@@ -897,7 +897,7 @@
+     HasSDRAM=(buf[0x10]&(1<<14))?0:1;
+     
+     if (__svgalib_driver_report) {
+-	printf("Using Matrox %s driver, %iKB S%cRAM.\n",ids[id],
++	fprintf(stderr,"Using Matrox %s driver, %iKB S%cRAM.\n",ids[id],
+            	g400_memory, HasSDRAM?'D':'G');
+     };
+ 
+diff -Nur svgalib-1.9.13.orig/src/g450c2.c svgalib-1.9.13/src/g450c2.c
+--- svgalib-1.9.13.orig/src/g450c2.c	Wed Jan 23 13:06:28 2002
++++ svgalib-1.9.13/src/g450c2.c	Mon Apr  8 23:36:29 2002
+@@ -352,7 +352,7 @@
+     found=__svgalib_pci_find_vendor_vga_pos(VENDOR_ID,buf,0);
+     
+     if(found==-1) {
+-        printf("Error: Must use Matrox driver, but no card found\n");
++        fprintf(stderr,"Error: Must use Matrox driver, but no card found\n");
+         exit(1);
+     }
+ 
+@@ -375,7 +375,7 @@
+     }
+     
+     if (__svgalib_driver_report) {
+-	printf("Using Matrox G450 CRTC2 driver, %iKB RAM.\n", memory);
++	fprintf(stderr,"Using Matrox G450 CRTC2 driver, %iKB RAM.\n", memory);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/gvga6400.c svgalib-1.9.13/src/gvga6400.c
+--- svgalib-1.9.13.orig/src/gvga6400.c	Sat Jun 23 13:09:23 2001
++++ svgalib-1.9.13/src/gvga6400.c	Mon Apr  8 23:33:37 2002
+@@ -283,7 +283,7 @@
+ static int gvga6400_init(int force, int par1, int par2)
+ {
+     if (__svgalib_driver_report)
+-	printf("Using Genoa GVGA 6400 driver.\n");
++	fprintf(stderr,"Using Genoa GVGA 6400 driver.\n");
+     __svgalib_driverspecs = &__svgalib_gvga6400_driverspecs;
+     __svgalib_banked_mem_base=0xa0000;
+     __svgalib_banked_mem_size=0x10000;
+diff -Nur svgalib-1.9.13.orig/src/i740.c svgalib-1.9.13/src/i740.c
+--- svgalib-1.9.13.orig/src/i740.c	Sat Jun 23 13:12:33 2001
++++ svgalib-1.9.13/src/i740.c	Mon Apr  8 23:33:37 2002
+@@ -451,7 +451,7 @@
+     *DIVSEL= ((p_best << 4) | (d_best ? 4 : 0) | REF_DIV_1);
+ 
+ #if 0
+-    printf("Setting dot clock to %.6lf MHz "
++    fprintf(stderr,"Setting dot clock to %.6lf MHz "
+ 	   "[ %02X %02X %02X ] "
+ 	   "[ %d %d %d %d ]\n",
+ 	   CALC_VCLK(m_best,n_best,p_best,d_best),
+@@ -814,7 +814,7 @@
+     I740HasSGRAM = !((temp & DRAM_RAS_TIMING) || (temp & DRAM_RAS_PRECHARGE));
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using I740 driver, %iKB.\n",i740_memory);
++	fprintf(stderr,"Using I740 driver, %iKB.\n",i740_memory);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/i810.c svgalib-1.9.13/src/i810.c
+--- svgalib-1.9.13.orig/src/i810.c	Sun Jan 20 18:18:20 2002
++++ svgalib-1.9.13/src/i810.c	Mon Apr  8 23:33:37 2002
+@@ -343,7 +343,7 @@
+     *DIVSEL= p_best << 4;
+ 
+ #if 0
+-    printf("Setting dot clock to %.6lf MHz "
++    fprintf(stderr,"Setting dot clock to %.6lf MHz "
+ 	   "[ %02X %02X %02X ] "
+ 	   "[ %d %d %d %d ]\n",
+ 	   CALC_VCLK(m_best,n_best,p_best,d_best),
+@@ -688,7 +688,7 @@
+     }
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using I810 driver, %iKB.\n",memory);
++	fprintf(stderr,"Using I810 driver, %iKB.\n",memory);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/joystick/joystick.c svgalib-1.9.13/src/joystick/joystick.c
+--- svgalib-1.9.13.orig/src/joystick/joystick.c	Mon Jul 24 09:16:38 2000
++++ svgalib-1.9.13/src/joystick/joystick.c	Mon Apr  8 23:33:37 2002
+@@ -134,7 +134,7 @@
+     unsigned long tmpl;
+ 
+ #ifdef DEBUG
+-    printf("joyflp: %d, %d\n", joydev, acquire);
++    fprintf(stderr,"joyflp: %d, %d\n", joydev, acquire);
+ #endif
+ 
+     if (!acquire) {
+@@ -145,7 +145,7 @@
+ 	}
+     } else if (joydesc[joydev].fd < 0) {
+ #ifdef DEBUG
+-    puts("trying to reopen");
++    fprintf("trying to reopen\n");
+ #endif
+ 	/* (re)open joystick device */
+    	if ((joydesc[joydev].fd = open(__joystick_devicenames[joydev] ?
+@@ -223,17 +223,17 @@
+    
+    if (-1 == ioctl(joydesc[joydev].fd, JS_SET_TIMELIMIT, &tmpl)) {
+ 	if (__svgalib_driver_report)
+-	    printf("svgalib, joystick%d: Failed to set timelimit\n", joydev);
++	    fprintf(stderr,"svgalib, joystick%d: Failed to set timelimit\n", joydev);
+ 	return -1;
+    }
+    
+    if (-1 == ioctl(joydesc[joydev].fd, JS_GET_CAL, &js_data)) {
+ 	if (__svgalib_driver_report)
+-	    printf("svgalib, joystick%d: Failed to read calibration data\n", joydev);
++	    fprintf(stderr,"svgalib, joystick%d: Failed to read calibration data\n", joydev);
+ 	return -1;
+    }
+    if (__svgalib_driver_report)
+-	printf("svgalib, joystick%d: Current correction: %d , %d\n", joydev,
++	fprintf(stderr,"svgalib, joystick%d: Current correction: %d , %d\n", joydev,
+ 		js_data.x, js_data.y);
+ 
+    sprintf(msg, "Move Joystick %d to lower right corner and press either button...\n", joydev);
+@@ -248,13 +248,13 @@
+    js_data.y = tmp;
+ 
+    if (__svgalib_driver_report)
+-	printf("svgalib, joystick%d: Setting correction: %d , %d\n", joydev,
++	fprintf(stderr,"svgalib, joystick%d: Setting correction: %d , %d\n", joydev,
+ 		js_data.x, js_data.y);
+    
+    if (-1 == ioctl(joydesc[joydev].fd, JS_SET_CAL, &js_data))
+      {
+ 	if (__svgalib_driver_report)
+-	    printf("svgalib, joystick%d: Failed to set calibration data\n", joydev);
++	    fprintf(stderr,"svgalib, joystick%d: Failed to set calibration data\n", joydev);
+ 	return -1;
+      }
+ 
+@@ -266,7 +266,7 @@
+    while ((read (joydesc[joydev].fd, &js_data, JS_RETURN) > 0) && !js_data.buttons)
+      usleep(100);
+    if (__svgalib_driver_report)
+-	printf("svgalib, joystick%d: Setting center offset: %d , %d\n", 
++	fprintf(stderr,"svgalib, joystick%d: Setting center offset: %d , %d\n", 
+ 	       joydev,	js_data.x, js_data.y);
+    joydesc[joydev].joydata->p.prot0.xdif = js_data.x;
+    joydesc[joydev].joydata->p.prot0.ydif = js_data.y;
+@@ -338,7 +338,7 @@
+    if (-1 == ioctl(joydesc[joydev].fd, JSIOCGCORR, &corr)) 
+      {
+ 	if (__svgalib_driver_report)
+-	   printf("svgalib, joystick %d: error getting correction\n", joydev);
++	   fprintf(stderr,"svgalib, joystick %d: error getting correction\n", joydev);
+ 	return -1;
+      }
+ 
+@@ -357,12 +357,12 @@
+    
+    
+    if (__svgalib_driver_report)
+-     printf("svgalib, joystick %d: Setting correction to: %s\n", joydev, corr_name[JS_CORR_NONE]);
++     fprintf(stderr,"svgalib, joystick %d: Setting correction to: %s\n", joydev, corr_name[JS_CORR_NONE]);
+    
+    if (-1 == ioctl(joydesc[joydev].fd, JSIOCSCORR, &corr)) 
+      {
+    	if (__svgalib_driver_report)
+-	  printf("svgalib, joystick %d: error setting correction\n", joydev);
++	  fprintf(stderr,"svgalib, joystick %d: error setting correction\n", joydev);
+ 	return -1;
+      }
+    
+@@ -434,25 +434,25 @@
+ 
+    if (__svgalib_driver_report)
+      {
+-	printf("svgalib, joystick %d: Setting correction to: %s\n", joydev,
++	fprintf(stderr,"svgalib, joystick %d: Setting correction to: %s\n", joydev,
+ 		 corr_name[(int)corr[0].type]);
+ 	for (i = 0; i < joydesc[joydev].joydata->axes; i++) 
+ 	  {
+-	     printf("  Coefs for axis %d:", i);
++	     fprintf(stderr,"  Coefs for axis %d:", i);
+ 	     for(j = 0; j < corr_coef_num[(int)corr[i].type]; j++) 
+ 	       {
+-		  printf(" %d", corr[i].coef[j]); 
+-		  if (j < corr_coef_num[(int)corr[i].type] - 1) putchar(',');
++		  fprintf(stderr," %d", corr[i].coef[j]); 
++		  if (j < corr_coef_num[(int)corr[i].type] - 1) putc(',',stderr);
+ 	       }
+-	     puts("");
++	     fprintf(stderr,"\n");
+ 	  }
+-	puts("");
++	fprintf(stderr,"\n");
+      }
+    
+    if (-1 == ioctl(joydesc[joydev].fd, JSIOCSCORR, &corr)) 
+      {
+    	if (__svgalib_driver_report)
+-	  printf("svgalib, joystick %d: error setting correction\n", joydev);
++	  fprintf(stderr,"svgalib, joystick %d: error setting correction\n", joydev);
+ 	return -1;
+      }
+    
+@@ -482,7 +482,7 @@
+    for (i = 0; i < NUM_JOYSTICKS; i++)
+ 	if (joydesc[i].joydata && joydesc[i].joydata->flip_vc)
+ 	    if (joydesc[i].joydata->flip_vc(i, acquire)) {
+-		puts("svgalib: Fatal, cannot reopen joystick after VC switch.\n");
++		fprintf(stderr,"svgalib: Fatal, cannot reopen joystick after VC switch.\n");
+ 		exit(1);
+ 	    }
+ }
+@@ -515,7 +515,7 @@
+ 	if (-1 == ioctl(joydesc[joydev].fd, JSIOCGVERSION, &version)) 
+ 	  {
+ 	     if (__svgalib_driver_report)
+-	       printf("svgalib: Initializing joystick %d: assuming old 0.x driver protocol\n", joydev);
++	       fprintf(stderr,"svgalib: Initializing joystick %d: assuming old 0.x driver protocol\n", joydev);
+ 	     
+ 	     /* Old 0.x protocol */
+ 	     joystick_initdefhandler(joydev, 4, 2);
+@@ -528,7 +528,7 @@
+ 	     joydesc[joydev].joydata->p.prot0.ydif = 0x80;
+ 	     
+ 	     if (__svgalib_driver_report)
+-	       printf("   assuming %d axes and %d buttons\n",
++	       fprintf(stderr,"   assuming %d axes and %d buttons\n",
+ 		      joydesc[joydev].joydata->axes, joydesc[joydev].joydata->buttons);
+ 	     
+ 	     /* Now calibrate ... */
+@@ -538,7 +538,7 @@
+ 	     if (-1 == ioctl(joydesc[joydev].fd, JS_GET_CAL,
+ 			 &joydesc[joydev].joydata->p.prot0.caldata)) {
+ 	       if (__svgalib_driver_report)
+-		  printf("svgalib, joystick%d: Failed to read calibration data\n", joydev);
++		  fprintf(stderr,"svgalib, joystick %d: Failed to read calibration data\n", joydev);
+ 	       joystick_close(joydev);
+ 	       return -1;
+ 	     }
+@@ -549,7 +549,7 @@
+ 	     char axes, buttons;
+ 
+ 	     if (__svgalib_driver_report)
+-	       printf("svgalib: Initializing joystick %d: driver version %x.%x.%x (new protocol)\n",
++	       fprintf(stderr,"svgalib: Initializing joystick %d: driver version %x.%x.%x (new protocol)\n",
+ 		      joydev,
+ 		      (version & 0xff0000) >> 16, (version & 0xff00)>> 8,
+ 		      version & 0xff);
+@@ -557,7 +557,7 @@
+ 	     if (-1 == ioctl(joydesc[joydev].fd, JSIOCGAXES, &axes)) 
+ 	       {
+ 	          if (__svgalib_driver_report)
+-		    printf("svgalib, joystick%d: error getting number of axes\n", joydev);
++		    fprintf(stderr,"svgalib, joystick %d: error getting number of axes\n", joydev);
+ 	          joystick_close(joydev);
+ 		  return -1;
+ 	       }
+@@ -565,13 +565,13 @@
+ 	     if (-1 == ioctl(joydesc[joydev].fd, JSIOCGBUTTONS, &buttons)) 
+ 	       {
+ 	          if (__svgalib_driver_report)
+-		    printf("svgalib, joystick%d: error getting number of buttons\n", joydev);
++		    fprintf(stderr, "svgalib, joystick %d: error getting number of buttons\n", joydev);
+ 	          joystick_close(joydev);
+ 		  return -1;
+ 	       }
+ 
+ 	     if (__svgalib_driver_report)
+-	       printf("joystick %d has %d axes and %d buttons\n", joydev, axes, buttons);
++	       fprintf(stderr,"joystick %d has %d axes and %d buttons\n", joydev, axes, buttons);
+ 	     joystick_initdefhandler(joydev, buttons, axes);
+ 	     
+ 	     /* Now calibrate ... */
+@@ -582,7 +582,7 @@
+ 	     if (-1 == ioctl(joydesc[joydev].fd, JSIOCGCORR,
+ 			&joydesc[joydev].joydata->p.prot1.corrdata)) {
+ 	       if (__svgalib_driver_report)
+-		  printf("svgalib, joystick%d: Failed to read calibration data\n", joydev);
++		  fprintf(stderr,"svgalib, joystick%d: Failed to read calibration data\n", joydev);
+ 	       joystick_close(joydev);
+ 	       return -1;
+ 	     }
+@@ -636,7 +636,7 @@
+    joydesc[joydev].joydata = malloc(sizeof(joydat_t));
+    if (!joydesc[joydev].joydata) {
+      nomem:
+-	printf("svgalib: Fatal, out of memory\n");
++	fprintf(stderr,"svgalib: Fatal, out of memory\n");
+ 	exit(1);
+    }
+    joydesc[joydev].joydata->axes = axes;
+@@ -658,7 +658,7 @@
+ static void joystick_defaulthandler(int event, int num, char val, int joydev)
+ {
+ #ifdef DEBUG
+-   printf("%d: %d %d %d\n", joydev, event, num, val);
++   fprintf(stderr,"%d: %d %d %d\n", joydev, event, num, val);
+ #endif
+    switch (event)
+      {
+diff -Nur svgalib-1.9.13.orig/src/keyboard/keyboard.c svgalib-1.9.13/src/keyboard/keyboard.c
+--- svgalib-1.9.13.orig/src/keyboard/keyboard.c	Fri Jun 22 20:08:47 2001
++++ svgalib-1.9.13/src/keyboard/keyboard.c	Mon Apr  8 23:33:37 2002
+@@ -230,7 +230,7 @@
+   store_event:
+ 
+ #ifdef DEBUG_KEYBOARD
+-  printf(" Fake Mouse Event: scancode: %ld;  type: %ld;  data: %ld;  flags: %ld\n", (long)scancode, (long)type, (long)data, (long)flags);
++  fprintf(stderr," Fake Mouse Event: scancode: %ld;  type: %ld;  data: %ld;  flags: %ld\n", (long)scancode, (long)type, (long)data, (long)flags);
+ #endif
+ 	   if ( ! expand_events(n))
+ 	     return ptr;
+@@ -336,7 +336,7 @@
+         __svgalib_kbd_fd = __svgalib_tty_fd; /* We are initialized. */
+     
+         if (ioctl(__svgalib_kbd_fd, KDGKBMODE, &oldkbmode)) {
+-	    printf("svgalib: cannot get keyboard mode.\n");
++	    fprintf(stderr,"svgalib: cannot get keyboard mode.\n");
+ 	    return -1;
+         }
+         tcgetattr(__svgalib_kbd_fd, &oldkbdtermios);
+@@ -527,15 +527,15 @@
+                     flags = event -> flags;
+                     request_at_down = (event -> flags & FMEF_AT_PRESS)  ?  1 : 0;
+ #ifdef DEBUG_KEYBOARD
+-                    printf(" event type: %ld;  flags: %ld;  data: %ld; is_pressed: %ld\n", (long)event->type, (long)flags, (long)event->data, (long)is_pressed);
++                    fprintf(stderr," event type: %ld;  flags: %ld;  data: %ld; is_pressed: %ld\n", (long)event->type, (long)flags, (long)event->data, (long)is_pressed);
+ #endif
+                     if (flags & FMEF_AT_BOTH  ||  request_at_down == is_pressed) {
+ #ifdef DEBUG_KEYBOARD
+-                        printf("   flags: %ld\n", (long)flags);
++                        fprintf(stderr,"   flags: %ld\n", (long)flags);
+ #endif
+                         if (  (! (flags & FMEF_TRIGGERED))  ||  flags & FMEF_REPEAT) {
+ #ifdef DEBUG_KEYBOARD
+-                            printf("      triggering\n");
++                            fprintf(stderr,"      triggering\n");
+ #endif
+                             switch (event -> type) {
+                             case FME_TYPE_BUTTON1:
+@@ -580,7 +580,7 @@
+               __svgalib_mouse_eventhandler(but, dx, dy, dz, 0, 0, 0);
+ 
+ #ifdef DEBUG_KEYBOARD
+-            printf("\tfake_mouse_event triggered; but: %ld; dx: %ld; dy: %ld; dz: %ld\n",
++            fprintf(stderr,"\tfake_mouse_event triggered; but: %ld; dx: %ld; dy: %ld; dz: %ld\n",
+                    (long)but, (long)dx, (long)dy, (long)dz);
+ #endif
+           }
+@@ -652,7 +652,7 @@
+ static int checkscancode(int scancode)
+ {
+     if (scancode < 0 || scancode >= NR_KEYS) {
+-	printf("svgalib: keyboard scancode out of range (%d).\n",
++	fprintf(stderr,"svgalib: keyboard scancode out of range (%d).\n",
+ 	       scancode);
+ 	return 1;
+     }
+@@ -706,7 +706,7 @@
+ 
+ #if 0				/* This happens very often. */
+     if (state[scancode] == newstate) {
+-	printf("svgalib: keyboard event does not match (scancode = %d)\n",
++	fprintf(stderr,"svgalib: keyboard event does not match (scancode = %d)\n",
+ 	       scancode);
+ 	return;
+     }
+diff -Nur svgalib-1.9.13.orig/src/laguna.c svgalib-1.9.13/src/laguna.c
+--- svgalib-1.9.13.orig/src/laguna.c	Fri Mar  8 11:39:42 2002
++++ svgalib-1.9.13/src/laguna.c	Mon Apr  8 23:33:37 2002
+@@ -640,7 +640,7 @@
+     if(laguna_memory<4096) pagemul<<=2;
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using LAGUNA driver, %s with %iKB video ram found.\n",
++	fprintf(stderr,"Using LAGUNA driver, %s with %iKB video ram found.\n",
+             	chipnames[laguna_chiptype],laguna_memory);
+     };
+ 
+diff -Nur svgalib-1.9.13.orig/src/mach32.c svgalib-1.9.13/src/mach32.c
+--- svgalib-1.9.13.orig/src/mach32.c	Sat Jun 23 13:09:23 2001
++++ svgalib-1.9.13/src/mach32.c	Mon Apr  8 23:33:37 2002
+@@ -604,15 +604,15 @@
+ /* Better reconfigure all used registers */
+     mach32_accelstate = R_UNKNOWN;
+     CRITICAL = 0;		/* Obviously we are idle */
+-    puts("\asvgalib: mach32: Warning! GE_Engine timed out, draw command\n"
++    fprintf(stderr,"\asvgalib: mach32: Warning! GE_Engine timed out, draw command\n"
+ 	 "was probably corrupted! If you have a very fast machine (10*Pentium)\n"
+ 	 "raise BUSYWAIT and ADDIWAIT in mach32.c, may also be a driver/card bug,\n"
+ 	 "so report detailed info to me (Michael Weller).\nBUT:\n"
+ 	 "This reaction is normal when svgalib is killed in a very critical operation\n"
+ 	 "by a fatal signal like INT (pressing ^C). In this situation this reset just\n"
+ 	 "guarantees that you can continue working on the console, so in this case\n"
+-	 "PLEASE don't bloat my mailbox with bug reports. Thx, Michael.");
+-    printf("POST-Mortem:\n\tSubsys stat: %04x - %sIOerror (is usually a queue overrun)\n"
++	 "PLEASE don't bloat my mailbox with bug reports. Thx, Michael.\n");
++    fprintf(stderr,"POST-Mortem:\n\tSubsys stat: %04x - %sIOerror (is usually a queue overrun)\n"
+ 	   "\tGE stat    : %04x - engine %s, %sdata ready for host.\n\tQueue stat : %04x\n",
+ 	   ioerr, (ioerr & 4) ? "" : "no ", ge_stat,
+ 	   (ge_stat & GE_BUSY) ? "busy" : "idle", (ge_stat & 0x100) ? "" : "no ", queue_stat);
+@@ -662,7 +662,7 @@
+ static void mach32_setdisplaystart(int address)
+ {
+ #ifdef DEBUG
+-    printf("mach32_setdisplaystart(%x)\n", address);
++    fprintf(stderr,"mach32_setdisplaystart(%x)\n", address);
+ #endif
+     mach32_ge_off_l = address >> 2;
+     outw(CRT_OFFSET_LO, mach32_ge_off_l);
+@@ -680,14 +680,14 @@
+ {
+     register int mywidth;
+ #ifdef DEBUG
+-    printf("mach32_setlogicalwidth(%d)\n", width);
++    fprintf(stderr,"mach32_setlogicalwidth(%d)\n", width);
+ #endif
+     if (infotable[CM].bytesperpixel) {	/* always >= 1 for Mach32 modes */
+ 	/*Unfortunately the Mach32 expects this value in Pixels not bytes: */
+ 	mywidth = width / (infotable[CM].bytesperpixel);
+ 	mywidth = (mywidth >> 3) & 0xff;
+ #ifdef DEBUG
+-	printf("mach32_setlogicalwidth: Mach32 width to %d pels.\n", mywidth * 8);
++	fprintf(stderr,"mach32_setlogicalwidth: Mach32 width to %d pels.\n", mywidth * 8);
+ #endif
+ 	outw(CRT_PITCH, mywidth);
+ 	mach32_ge_pitch = mywidth;
+@@ -705,7 +705,7 @@
+     register unsigned short tmp;
+ 
+ #ifdef DEBUG
+-    printf("mach32_setpage(%d)\n", page);
++    fprintf(stderr,"mach32_setpage(%d)\n", page);
+ #endif
+     if (mach32_pagemode != PAGE_BOTH) {
+ 	outb(ATIPORT, ATISEL(0x3E));
+@@ -767,7 +767,7 @@
+ 
+     regs[offset] = mach32_dacmode;
+ #ifdef DEBUG
+-    printf("mach32_sav_dac(%d,...): Dac:%d, dac_mode:%d\n", offset, mach32_dac,
++    fprintf(stderr,"mach32_sav_dac(%d,...): Dac:%d, dac_mode:%d\n", offset, mach32_dac,
+ 	   regs[offset]);
+ #endif
+     return offset + 1;
+@@ -787,7 +787,7 @@
+     act_ge_conf = inw(R_EXT_GE_CONF) & 0x8fff;
+ 
+ #ifdef DEBUG
+-    printf("mach32_set_dac(%d,%d): Dac:%d\n", dac_mode, clock_intended, mach32_dac);
++    fprintf(stderr,"mach32_set_dac(%d,%d): Dac:%d\n", dac_mode, clock_intended, mach32_dac);
+ #endif
+     mach32_dacmode = dac_mode;
+     dac_mode &= 0x7f;
+@@ -796,7 +796,7 @@
+     case MACH32_SC11483:
+ 	dac_reg = mach32_dac1;
+ #ifdef DEBUG
+-	fputs("DAC1: ", stdout);
++	fputs("DAC1: ", stderr);
+ #endif
+ 	if (dac_mode <= DAC_MODE565)
+ 	    goto dac1_4;
+@@ -815,7 +815,7 @@
+ 	    outb(DAC2, 0x30);
+ 	    outb(DAC3, 0x2d);
+ #ifdef DEBUG
+-	    puts("DAC2: 0x00 0x30 0x2d (8bpp)");
++	    fprintf(stderr,"DAC2: 0x00 0x30 0x2d (8bpp)\n");
+ #endif
+ 	    if (dac_mode != DAC_MODEMUX)
+ 		break;
+@@ -824,7 +824,7 @@
+ 	    outb(DAC1, 0x01);
+ 	    mach32_blankadj(1);
+ #ifdef DEBUG
+-	    puts("DAC2: 0x01 0x09 0x1d (8bpp MUX)");
++	    fprintf(stderr"DAC2: 0x01 0x09 0x1d (8bpp MUX)\n");
+ #endif
+ 	    break;
+ 	case DAC_MODE555:
+@@ -836,7 +836,7 @@
+ 	    if ((!(clock_intended & 0xc0)) && (!(mach32_dacmode & DAC_SEMICLK))) {
+ 		outb(DAC2, 0x00);
+ #ifdef DEBUG
+-		puts("DAC2: 0x01 0x00 0x0d (16/24bpp)");
++		fprintf(stderr,"DAC2: 0x01 0x00 0x0d (16/24bpp)\n");
+ #endif
+ 	    } else {
+ 		clock_intended &= 0xff3f;
+@@ -845,7 +845,7 @@
+ 		if (xres <= 640)
+ 		    mach32_blankadj(2);
+ #ifdef DEBUG
+-		puts("DAC2: 0x01 0x08 0x0d (16/24bpp)");
++		fprintf(stderr,"DAC2: 0x01 0x08 0x0d (16/24bpp)\n");
+ #endif
+ 	    }
+ 	    outb(DAC3, 0x0d);
+@@ -860,14 +860,14 @@
+     case MACH32_BT481:
+ 	dac_reg = mach32_dac4;
+ #ifdef DEBUG
+-	fputs("DAC4: ", stdout);
++	fputs("DAC4: ", stderr);
+ #endif
+       dac1_4:
+ 	if (dac_mode <= DAC_MODERGB) {
+ 	    clean_clocks();
+ 	    outw(EXT_GE_CONF, 0x101a);
+ #ifdef DEBUG
+-	    printf("%02x\n", dac_reg[dac_mode]);
++	    fprintf(stderr,"%02x\n", dac_reg[dac_mode]);
+ #endif
+ 	    outb(DAC2, dac_reg[dac_mode]);
+ 	}
+@@ -876,7 +876,7 @@
+ 	clean_clocks();
+ 	outw(EXT_GE_CONF, 0x301a);
+ #ifdef DEBUG
+-	printf("DAC5: %02x\n", mach32_dac5[dac_mode]);
++	fprintf(stderr,"DAC5: %02x\n", mach32_dac5[dac_mode]);
+ #endif
+ 	outb(DAC0, mach32_dac5[dac_mode]);
+ 	break;
+@@ -892,7 +892,7 @@
+     case DAC_MODE8:
+     case DAC_MODEMUX:
+ #ifdef DEBUG
+-	puts("DAC-Mask to 0xff");
++	fprintf(stderr,"DAC-Mask to 0xff\n");
+ #endif
+ 	outb(DAC_MASK, 0xff);
+ 	break;
+@@ -901,13 +901,13 @@
+ 	case MACH32_ATI6871:
+ 	case MACH32_BT481:
+ #ifdef DEBUG
+-	    puts("DAC-Mask to 0x00");
++	    fprintf(stderr,"DAC-Mask to 0x00\n");
+ #endif
+ 	    outb(DAC_MASK, 0x00);
+ 	    break;
+ 	}
+ #ifdef DEBUG
+-	puts("VGA-DAC-Mask to 0x0f");
++	fprintf(stderr,"VGA-DAC-Mask to 0x0f\n");
+ #endif
+ 	outb(VGA_DAC_MASK, 0x0f);
+ 	break;
+@@ -935,7 +935,7 @@
+     }
+     retval = mach32_sav_dac(retval, regs);
+ #ifdef DEBUG
+-    printf("mach32_saveregs: retval=%d\n", retval);
++    fprintf(stderr,"mach32_saveregs: retval=%d\n", retval);
+ #endif
+     return retval - EXT;
+ }
+@@ -959,7 +959,7 @@
+ 	    break;
+ 	}
+ #ifdef DEBUG
+-    printf("mach32_setregs: offset=%d, clock_intended=%d\n", offset, clock_intended);
++    fprintf(stderr,"mach32_setregs: offset=%d, clock_intended=%d\n", offset, clock_intended);
+ #endif
+ 
+     retval = offset + 1;
+@@ -1003,7 +1003,7 @@
+     unsigned short oldval;
+ 
+ #ifdef DEBUG
+-    puts("mach32_unlock");
++    fprintf(stderr,"mach32_unlock\n");
+ #endif				/* DEBUG */
+     outb(ATIPORT, ATISEL(0x2e));
+     oldval = port_in(ATIPORT + 1) & ~0x10;	/* Unlock CPUCLK Select */
+@@ -1040,7 +1040,7 @@
+     unsigned short oldval;
+ 
+ #ifdef DEBUG
+-    puts("mach32_lock");
++    fprintf(stderr,"mach32_lock\n");
+ #endif				/* DEBUG */
+ /* I'm really not sure if calling this function would be a good idea */
+ /* Actually it is not called in svgalib */
+@@ -1066,7 +1066,7 @@
+ 
+ static void mach32_experm(void)
+ {
+-    printf("svgalib(mach32): Cannot get I/O permissions.\n");
++    fprintf(stderr,"svgalib(mach32): Cannot get I/O permissions.\n");
+     exit(-1);
+ }
+ 
+@@ -1150,7 +1150,7 @@
+ /* Ok, now we have a Mach32. Unfortunately we need also the VGA to be enabled: */
+     if (inw(CONF_STAT1) & ONLY_8514) {
+ 	if (__svgalib_driver_report)
+-	    puts("Mach32 detected, but unusable with VGA disabled.\nSorry.\n");
++	    fprintf(stderr,"Mach32 detected, but unusable with VGA disabled.\nSorry.\n");
+ 	goto quit;		/*VGA circuitry disabled. */
+     }
+     result = 1;
+@@ -1160,7 +1160,7 @@
+     if (result)
+ 	mach32_init(0, 0, 0);
+ #ifdef DEBUG
+-    printf("mach32_test: returning %d.\n", result);
++    fprintf(stderr,"mach32_test: returning %d.\n", result);
+ #endif				/* DEBUG */
+     return result;
+ }
+@@ -1274,18 +1274,18 @@
+     saved_nice = nice(0);
+     nice(-20 - saved_nice);
+ 
+-    puts("Warning, about to measure clocks. Wait until system is completely idle!\n"
++    fprintf(stderr,"Warning, about to measure clocks. Wait until system is completely idle!\n"
+ 	 "Any activity will disturb measuring, and therefor hinder correct driver\n"
+ 	 "function. Test will need about 3-4 seconds.\n"
+ 	 "If your monitor doesn't switch off when it gets signals it can't sync on\n"
+ 	 "better switch it off now before continuing. I'll beep when you can safely\n"
+-	 "switch it back on.");
++	 "switch it back on.\n");
+ #if 1
+-    puts("\n(Enter Y<Return> to continue, any other text to bail out)");
++    fprintf(stderr,"\n(Enter Y<Return> to continue, any other text to bail out)\n");
+ 
+     if (getchar() != 'Y') {
+       bailout:
+-	puts("\aBailed out.");
++	fprintf(stderr,"\aBailed out.\n");
+ 	exit(0);
+     }
+     if (getchar() != '\n')
+@@ -1390,7 +1390,7 @@
+     clock &= 0xff83;
+     if (!clock_map[clock_ind]) {
+ 	vga_setmode(TEXT);
+-	puts("svgalib-mach32: Panic, internal error: DAC1/4, invalid clock for >8bpp.");
++	fprintf(stderr,"svgalib-mach32: Panic, internal error: DAC1/4, invalid clock for >8bpp.\n");
+ 	exit(1);
+     }
+     return clock | ((clock_map[clock_ind] - 1) << 2);
+@@ -1415,9 +1415,9 @@
+ #ifdef EXPERIMENTAL
+     if (getenv("EXPERIMENTAL") != NULL) {
+ 	mach32_experimental = atoi(getenv("EXPERIMENTAL"));
+-	printf("mach32: EXPERIMENTAL set to: %04x\n", mach32_experimental);
++	fprintf(stderr,"mach32: EXPERIMENTAL set to: %04x\n", mach32_experimental);
+     } else {
+-	printf("mach32: EXPERIMENTAL defaults to: %04x\n", mach32_experimental);
++	fprintf(stderr,"mach32: EXPERIMENTAL defaults to: %04x\n", mach32_experimental);
+     }
+ #endif
+ 
+@@ -1440,7 +1440,7 @@
+ 	unsigned short sum, crea_eeprom = 1;
+ 
+ 	if ((mach32_eeprom = malloc(sizeof(short) * 2 * 128)) == NULL) {
+-	    printf("svgalib: mach32: Fatal error,\n"
++	    fprintf(stderr,"svgalib: mach32: Fatal error,\n"
+ 	      "not enough memory for EEPROM image (512 Bytes needed)\n");
+ 	    /* svgamode not yet set.. */
+ 	    exit(-1);
+@@ -1452,7 +1452,7 @@
+ 	    fd = fopen(eeprom_fname, "rb");
+ 	    if (fd == NULL) {
+ 	      readerr:
+-		printf("mach32: Warning, can't access EEPROM file >%s<\nError was %d - %s\n",
++		fprintf(stderr,"mach32: Warning, can't access EEPROM file >%s<\nError was %d - %s\n",
+ 		       eeprom_fname, errno, strerror(errno));
+ 		goto read_eeprom;
+ 	    }
+@@ -1472,7 +1472,7 @@
+ 		goto skip_read;	/* Use the read in file... */
+ 	    }
+ 	    sum = 0;		/*Mark unsuccesful read.. */
+-	    printf("mach32: Warning, EEPROM file >%s< corrupted.\n", eeprom_fname);
++	    fprintf(stderr,"mach32: Warning, EEPROM file >%s< corrupted.\n", eeprom_fname);
+ 	}
+ 	/* Read in eeprom */
+       read_eeprom:
+@@ -1494,10 +1494,10 @@
+ 	} else
+ 	    sum = 0;
+ 	if (sum & 0xffff) {
+-	    puts("mach32: Warning, Illegal checksum in Mach32 EEPROM.\n"
++	    fprintf(stderr,"mach32: Warning, Illegal checksum in Mach32 EEPROM.\n"
+ 	     "Check configuration of your card and read README.mach32,\n"
+ 		 "esp. the Mach32 Eeprom Woe chapter.\n"
+-		 "Ignoring contents...");
++		 "Ignoring contents...\n");
+ 	    eeprom_option &= ~(EEPROM_USE_MEMCFG | EEPROM_USE_TIMING);
+ 	}
+       skip_read:
+@@ -1520,7 +1520,7 @@
+ 	    fd = fopen(eeprom_fname, "wb");
+ 	    if (fd == NULL) {
+ 	      writerr:
+-		printf("mach32: Warning, can't create new EEPROM file >%s<\nError was %d - %s\n",
++		fprintf(stderr,"mach32: Warning, can't create new EEPROM file >%s<\nError was %d - %s\n",
+ 		       eeprom_fname, errno, strerror(errno));
+ 		crea_eeprom = 0;
+ 		goto finish_w_eeprom;
+@@ -1536,7 +1536,7 @@
+ 		 goto fwri_err;
+ 	    if (fclose(fd))
+ 		goto writerr;
+-	    printf("mach32: Notice: new EEPROM file >%s< succesful created.\n",
++	    fprintf(stderr,"mach32: Notice: new EEPROM file >%s< succesful created.\n",
+ 		   eeprom_fname);
+ 	  finish_w_eeprom:
+ 	}
+@@ -1554,23 +1554,23 @@
+ 	if (!clocks_set) {
+ 	    char linebuffer[512];
+ 
+-	    puts("mach32: Warning, no clocks defined.. please have a look at\n"
++	    fprintf(stderr,"mach32: Warning, no clocks defined.. please have a look at\n"
+ 		 "README.Mach32 and README.config for details.\n");
+ 	    mach32_scan_clocks();
+ 	    fputs("\a\nResulting clocks command for your libvga.config should be:\n\n"
+-		  "clocks", stdout);
++		  "clocks", stderr);
+ 	    for (i = 0; i < 16; i++)
+-		printf(" %3d", mach32_clocks[i]);
++		fprintf(stderr," %3d", mach32_clocks[i]);
+ 	    fputs("\n\nPlease edit \""
+ 		  SVGALIB_CONFIG_FILE
+ 		  "\" appropriately.\n"
+ 		  "Or shall I try to do it for you? You have to have write access to the\n"
+-		  "config file to do it! (y/n) ", stdout);
++		  "config file to do it! (y/n) ", stderr);
+ 	    i = getchar();
+ 	    if (i != '\n')
+ 		while (getchar() != '\n');
+ 	    if ((i != 'y') && (i != 'Y')) {
+-		puts("Ok, then do it yourself.");
++		fprintf(stderr,"Ok, then do it yourself.\n");
+ 		exit(0);
+ 	    }
+ 	    /* Toast setuid settings coz of security breach of system().. */
+@@ -1593,25 +1593,25 @@
+ 		   ".bak >"
+ 		   SVGALIB_CONFIG_FILE);
+ 	    if (system(linebuffer))
+-		puts("Failed (at least partial, maybe there was just no config file yet).");
++		fprintf(stderr,"Failed (at least partial, maybe there was just no config file yet).\n");
+ 	    else
+-		puts("Ok. (But you should check it anyway)");
++		fprintf(stderr,"Ok. (But you should check it anyway)\n");
+ 	    exit(0);
+ 	}
+ #ifdef DEBUG
+-	printf("ATI-EEPROM contents:");
++	fprintf(stderr,"ATI-EEPROM contents:");
+ 	for (i = 0; i < 128; i++) {
+ 	    if (i & 7)
+-		putchar(' ');
++		putc(' ',stderr);
+ 	    else
+-		puts("");
+-	    printf("%02x - %04x", i, mach32_eeprom[i]);
++		fprintf(stderr,"");
++	    fprintf(stderr,"%02x - %04x", i, mach32_eeprom[i]);
+ 	}
+ #ifdef DEBUG_KEY
+-	fputs("\n(Hit Return)", stdout);
++	fputs("\n(Hit Return)", stderr);
+ 	while (getchar() != '\n');
+ #else
+-	putchar('\n');
++	putc('\n',stderr);
+ #endif				/* DEBUG_KEY */
+ #endif				/* DEBUG */
+     }
+@@ -1653,9 +1653,9 @@
+ 	    i -= mach32_apadd;
+ 	    i -= (mach32_apsiz == 1) ? 1 : 4;
+ 	    if (i < 0) {
+-		puts("svgalib-mach32: Dangerous warning:\n"
++		fprintf(stderr,"svgalib-mach32: Dangerous warning:\n"
+ 		     "\tsetuplinear setting exceeds phys. address range of card!\n"
+-		     "\tSetting ignored.");
++		     "\tSetting ignored.\n");
+ 		mach32_apsiz = 0;
+ 	    } else {
+ 		/* will be actually set by setappage(0) call in setmode */
+@@ -1681,7 +1681,7 @@
+ 	}
+     }
+     if (mach32_dac > 5) {
+-	printf("mach32: Warning, unknown DAC type: %d. Assuming stupid 8bpp DAC rated at 80Mhz!\n",
++	fprintf(stderr,"mach32: Warning, unknown DAC type: %d. Assuming stupid 8bpp DAC rated at 80Mhz!\n",
+ 	       mach32_dac);
+ 	/* Assumption is already done in all tables used... */
+     }
+@@ -1691,7 +1691,7 @@
+ 	cptr = getenv("SVGALIB_MACH32");
+ 	if (cptr == NULL) {
+ 	  messexit:
+-	    puts("\aWarning!! The mach32 driver of svgalib was never tried with a DAC type\n"
++	    fprintf(stderr,"\aWarning!! The mach32 driver of svgalib was never tried with a DAC type\n"
+ 		 "!=4,3,2,0. Nevertheless, I put every knowledge I got from the DOCs in this\n"
+ 		 "driver, so it should work. If you think you can stand this risk\n"
+ 		 "(for example, your monitor will just switch off if he can't stand the\n"
+@@ -1704,7 +1704,7 @@
+ 		 "In any case, that is, if it works or not (and what went wrong),\n"
+ 		 "please tell me about:\n"
+ 		 "Michael Weller, eowmob@exp-math.uni-essen.de,\n"
+-		 "eowmob@pollux.exp-math.uni-essen.de, or mat42b@aixrs1.hrz.uni-essen.de.\n.");
++		 "eowmob@pollux.exp-math.uni-essen.de, or mat42b@aixrs1.hrz.uni-essen.de.\n.\n");
+ 	    exit(-1);
+ 	}
+ 	if (strcmp(cptr, "ILLTRYIT"))
+@@ -1724,7 +1724,7 @@
+ 	    apertloc = ((unsigned long) (mach32_memcfg & 0xff00)) << 12;
+ 	}
+ #ifdef DEBUG
+-	printf("mach32: Physical aperture starts at %08lx.\n", apertloc);
++	fprintf(stderr,"mach32: Physical aperture starts at %08lx.\n", apertloc);
+ #endif
+ 	mach32_aperture = (char *) mmap(NULL,
+ 	      (mach32_chiptype & MACH32_APERTURE_4M) ? 4194304 : 1048576,
+@@ -1735,13 +1735,13 @@
+ 	/* I trust the comment about memory waste in vgamisc.c... */
+ 	if (((long) mach32_aperture) < 0) {
+ 	    i = errno;
+-	    printf("mach32: Mmaping of aperture failed.\nError was %d", i);
++	    fprintf(stderr,"mach32: Mmaping of aperture failed.\nError was %d", i);
+ 	    errno = i;
+ 	    perror(" - ");
+ 	    exit(-1);
+ 	}
+ #ifdef DEBUG
+-	printf("mach32: Aperture mapped to %08lx.\n", (long) mach32_aperture);
++	fprintf(stderr,"mach32: Aperture mapped to %08lx.\n", (long) mach32_aperture);
+ #endif
+     }
+     __svgalib_driverspecs = &__svgalib_mach32_driverspecs;
+@@ -1763,7 +1763,7 @@
+     if (!mach32_modes) {
+ 	mach32_modes = malloc(__svgalib_max_modes * sizeof(mode_entry *));
+ 	if (!mach32_modes) {
+-	    puts("mach32: No memory for dynamic mode table.");
++	    fprintf(stderr,"mach32: No memory for dynamic mode table.\n");
+ 	    exit(1);
+ 	}
+     }
+@@ -1774,30 +1774,30 @@
+ 	mach32_clock_by3[i] = mach32_search_clk(mach32_clocks[i] * 3);
+ 
+ #ifdef DEBUG
+-    puts("15/16bpp DAC1/4 clock_maps:");
++    fprintf(stderr,"15/16bpp DAC1/4 clock_maps:\n");
+     for (i = 0; i < 32; i++) {
+ 	if (!(i & 7))
+-	    putchar('\n');
++	    putc('\n',stderr);
+ 	if (mach32_clock_by2[i])
+-	    printf("%3d->%3d  ", mach32_clocks[i], mach32_clocks[mach32_clock_by2[i] - 1]);
++	    fprintf(stderr,"%3d->%3d  ", mach32_clocks[i], mach32_clocks[mach32_clock_by2[i] - 1]);
+ 	else
+-	    printf("%3d->  -  ", mach32_clocks[i]);
++	    fprintf(stderr,"%3d->  -  ", mach32_clocks[i]);
+     }
+-    puts("\n24bpp DAC1/4 clock_maps:");
++    fprintf(stderr,"\n24bpp DAC1/4 clock_maps:\n");
+     for (i = 0; i < 32; i++) {
+ 	if (!(i & 7))
+-	    putchar('\n');
++	    putc('\n',stderr);
+ 	if (mach32_clock_by3[i])
+-	    printf("%3d->%3d  ", mach32_clocks[i], mach32_clocks[mach32_clock_by3[i] - 1]);
++	    fprintf(stderr,"%3d->%3d  ", mach32_clocks[i], mach32_clocks[mach32_clock_by3[i] - 1]);
+ 	else
+-	    printf("%3d->  -  ", mach32_clocks[i]);
++	    fprintf(stderr,"%3d->  -  ", mach32_clocks[i]);
+     }
+-    putchar('\n');
++    putc('\n',stderr);
+ #endif
+ 
+ /*Populating database: */
+     if (verbose)
+-	puts("Populating mode table:");
++	fprintf(stderr,"Populating mode table:\n");
+ 
+     for (i = 0; i < __svgalib_max_modes; i++)
+ 	mach32_modes[i] = NULL;
+@@ -1833,12 +1833,12 @@
+ 			   max2msk[3 & (mach32_eeprom[i] >> 9)], -1);
+     }
+     if (verbose)
+-	puts("Squeeze in run-time config:");
++	fprintf(stderr,"Squeeze in run-time config:\n");
+     mach32_final_modefixup();
+ 
+     if (__svgalib_driver_report) {
+ 	sprintf(messbuf, " at %dM", (int) (apertloc >> 20));
+-	printf("Using Mach32 driver 2.1 (%s apert%s (%s), %dK mem, DAC %d%s%s).\n",
++	fprintf(stderr,"Using Mach32 driver 2.1 (%s apert%s (%s), %dK mem, DAC %d%s%s).\n",
+ 	       (mach32_chiptype & MACH32_APERTURE) ?
+ 	       ((mach32_chiptype & MACH32_APERTURE_4M) ? "4M" : "1M")
+ 	       : "no",
+@@ -1907,7 +1907,7 @@
+     clock = mach32_clocks[n_clock = 0x1f & (mode->clock_sel >> 2)];
+     if (!clock) {
+ 	if (verbose)
+-	    puts("Illegal clock #%d of unknown frequency! (rejected)");
++	    fprintf(stderr,"%s","Illegal clock #%d of unknown frequency! (rejected)\n");
+ 	return;
+     }
+     horz = (1e3 * clock) / (float) (mode->h_total * 8 + 8);
+@@ -1931,20 +1931,20 @@
+     i = modemask;
+     modemask &= mach32_mmask[(clock > 80) ? 1 : 0][mach32_dac];
+     if (verbose && (i != modemask)) {
+-	printf("Modemask (32bpp,24bpp,16bpp,8bpp) %x cut down to %x by DAC restrictions.\n", i, modemask);
++	fprintf(stderr,"Modemask (32bpp,24bpp,16bpp,8bpp) %x cut down to %x by DAC restrictions.\n", i, modemask);
+     }
+ /*Check if needed multiples are available */
+     if ((mach32_dac == MACH32_BT481) || (mach32_dac == MACH32_SC11483)) {
+ 	if ((modemask & 2) && (!mach32_clock_by2[n_clock])) {
+ 	    modemask &= ~2;
+ 	    if (verbose)
+-		printf("DAC1/4: There is no clock with two times the requested\n"
++		fprintf(stderr,"DAC1/4: There is no clock with two times the requested\n"
+ 		       "\tfreq. of %dMHz => no 15 or 16 bpp.\n", clock);
+ 	}
+ 	if ((mach32_dac == MACH32_BT481) && (modemask & 4) && (!mach32_clock_by3[n_clock])) {
+ 	    modemask &= ~4;
+ 	    if (verbose)
+-		printf("DAC4: There is no clock with three times the requested\n"
++		fprintf(stderr,"DAC4: There is no clock with three times the requested\n"
+ 		       "\tfreq. of %dMHz => no 24bpp.\n", clock);
+ 	}
+     }
+@@ -1960,7 +1960,7 @@
+ 	modemask &= ~8;
+ 
+     if (verbose && (i != modemask))
+-	printf("Modemask (32bpp,24bpp,16bpp,8bpp) %x cut down to %x by maxclocks.\n", i, modemask);
++	fprintf(stderr,"Modemask (32bpp,24bpp,16bpp,8bpp) %x cut down to %x by maxclocks.\n", i, modemask);
+ 
+     if (forcein >= 0) {
+ 	/*Well hack the next loop to run exactly one time for i=forcein.. */
+@@ -1975,41 +1975,41 @@
+ 	    continue;
+ 	cmpvert = (mode->disp_cntl & 0x10) ? 2.0 * vert  : vert;
+ 	if (verbose) {
+-	    printf("%4ux%4ux%2u: ",
++	    fprintf(stderr,"%4ux%4ux%2u: ",
+ 		   wid, hei, mach32_log2(iptr));
+-	    printf("%3d MHz Clock, %6.3f KHz horz., %6.3f Hz vert.,\n\t%s, VFIFO(16-%d,24-%d)",
++	    fprintf(stderr,"%3d MHz Clock, %6.3f KHz horz., %6.3f Hz vert.,\n\t%s, VFIFO(16-%d,24-%d)",
+ 		   clock, horz, cmpvert,
+ 	      (mode->disp_cntl & 0x10) ? "Interlaced" : "Non-Interlaced",
+ 		   mode->vfifo16, mode->vfifo24);
+ 	}
+ 	if (iptr->xbytes * iptr->ydim > mach32_memory * 1024) {
+ 	    if (verbose)
+-		puts(" (not enough memory)");
++		fprintf(stderr," (not enough memory)\n");
+ 	    continue;
+ 	}
+ 	if (__svgalib_horizsync.max < OFF_ALLOWANCE(horz * 1000)) {
+ 	    if (verbose)
+-		puts(" (rejected, hsync too high)");
++		fprintf(stderr," (rejected, hsync too high)\n");
+ 	    continue;
+ 	}
+ 	if (__svgalib_horizsync.min > ADD_ALLOWANCE(horz * 1000)) {
+ 	    if (verbose)
+-		puts(" (rejected, hsync too low)");
++		fprintf(stderr," (rejected, hsync too low)\n");
+ 	    continue;
+ 	}
+ 	if (__svgalib_vertrefresh.max < OFF_ALLOWANCE(cmpvert)) {
+ 	    if (verbose)
+-		puts(" (rejected, vsync too high)");
++		fprintf(stderr," (rejected, vsync too high)\n");
+ 	    continue;
+ 	}
+ 	if (__svgalib_vertrefresh.min > ADD_ALLOWANCE(cmpvert)) {
+ 	    if (verbose)
+-		puts(" (rejected, vsync too low)");
++		fprintf(stderr," (rejected, vsync too low)\n");
+ 	    continue;
+ 	}
+ 	if ((mach32_modes[i] == NULL) || (forcein >= 0)) {
+ 	    if (verbose)
+-		puts(" (accepted)");
++		fprintf(stderr," (accepted)\n");
+ 	  fillin:
+ 	    mach32_modes[i] = mode;
+ 	    continue;
+@@ -2017,11 +2017,11 @@
+ 	if ((mach32_modes[i]->disp_cntl ^ mode->disp_cntl) & 0x10) {
+ 	    if (mode->disp_cntl & 0x10) {
+ 		if (verbose)
+-		    puts(" (rejected, is interlaced)");
++		    fprintf(stderr," (rejected, is interlaced)\n");
+ 		continue;
+ 	    } else {
+ 		if (verbose)
+-		    puts(" (preferred, is non-interlaced)");
++		    fprintf(stderr," (preferred, is non-interlaced)\n");
+ 		goto fillin;
+ 	    }
+ 	}
+@@ -2037,11 +2037,11 @@
+ 	n_vert = (n_horz * 1000) / tmp;
+ 	if (n_vert < vert) {
+ 	    if (verbose)
+-		puts(" (higher V_SYNC preferred)");
++		fprintf(stderr," (higher V_SYNC preferred)\n");
+ 	    goto fillin;
+ 	}
+ 	if (verbose)
+-	    puts(" (rejected, have a better one already)");
++	    fprintf(stderr," (rejected, have a better one already)\n");
+     }
+ }
+ 
+@@ -2120,7 +2120,7 @@
+     if(mach32_ast)
+ 	return;
+ #ifdef DEBUG
+-    printf("mach32_blankadj(%d)\n", adj);
++    fprintf(stderr,"mach32_blankadj(%d)\n", adj);
+ #endif
+     outb(MISC_CTL + 1, (port_in(R_MISC_CTL + 1) & 0xf0) | adj);
+ }
+@@ -2136,7 +2136,7 @@
+ 	return 1;
+ 
+ #ifdef DEBUG
+-    printf("mach32_setmode: %d -> %d\n", previous, mode);
++    fprintf(stderr,"mach32_setmode: %d -> %d\n", previous, mode);
+ #endif
+ 
+     if (mach32_modeavailable(previous) == SVGADRV)
+@@ -2145,7 +2145,7 @@
+     mach32_accelstate = R_UNKNOWN;	/* Accel registers need to be reset */
+ 
+ #ifdef DEBUG
+-    puts("mach32_setmode: accel set.");
++    fprintf(stderr,"mach32_setmode: accel set.\n");
+ #endif
+ 
+     if (type != SVGADRV) {
+@@ -2154,7 +2154,7 @@
+ 	unsigned int val;
+ 
+ #ifdef DEBUG
+-	printf("mach32_setmode: standard mode:%d\n", mode);
++	fprintf(stderr,"mach32_setmode: standard mode:%d\n", mode);
+ #endif
+ 
+ 	__svgalib_mach32_driverspecs.emul = NULL;
+@@ -2223,7 +2223,7 @@
+     __svgalib_mach32_driverspecs.emul = &mach32_vgaemul;
+ 
+ #ifdef DEBUG
+-    printf("mach32_setmode: Setting vga in 8bpp graphmode.\n");
++    fprintf(stderr,"mach32_setmode: Setting vga in 8bpp graphmode.\n");
+ #endif
+ 
+ /*Ripped out from Xfree.. mach32 Server.. */
+@@ -2243,7 +2243,7 @@
+ /*Switch on any videomemory latches we have: */
+     outw(MISC_OPTIONS, (inw(MISC_OPTIONS) & 0x8f7f) | (latchopt & 0x7080));
+ #ifdef DEBUG
+-    printf("mach32_setmode: extended mode:%d\n", mode);
++    fprintf(stderr,"mach32_setmode: extended mode:%d\n", mode);
+ #endif
+ 
+     mptr = mach32_modes[mode];
+@@ -2326,8 +2326,8 @@
+     clock_intended |= 1;
+ 
+ #ifdef DEBUG
+-    printf("GE_CONF:%hx\n", act_ge_conf);
+-    printf("Setting mode:\th_disp: %x\th_total: %x\th_sync_wid: %x\th_sync_strt: %x\t"
++    fprintf(stderr,"GE_CONF:%hx\n", act_ge_conf);
++    fprintf(stderr,"Setting mode:\th_disp: %x\th_total: %x\th_sync_wid: %x\th_sync_strt: %x\t"
+ 	   "v_disp: %x\tv_total: %x\tv_sync_wid: %x\tv_sync_strt: %x\tclock_sel: %x\tdisp_ctl: %x\n",
+ 	   mptr->h_disp, mptr->h_total, mptr->h_sync_wid, mptr->h_sync_strt, mptr->v_disp, mptr->v_total,
+ 	   mptr->v_sync_wid, mptr->v_sync_strt, clock_intended, mach32_disp_shadow);
+@@ -2357,7 +2357,7 @@
+     outw(DISP_CNTL, mach32_disp_shadow | 0x20);		/* Mach32 CRT enable */
+ 
+ #if defined(DEBUG_KEY)&&defined(DEBUG)
+-    fputs("\n(Hit Return)", stdout);
++    fputs("\n(Hit Return)", stderr);
+     while (getchar() != '\n');
+ #endif
+     return 0;
+@@ -2374,7 +2374,7 @@
+ 	else
+ 	    mach32_modemixup = realloc(mach32_modemixup, (mixup_alloc += PREALLOC) * sizeof(short));
+ 	if (mach32_modemixup == NULL) {
+-	    puts("mach32-config: Fatal error: Out of memory.");
++	    fprintf(stderr,"mach32-config: Fatal error: Out of memory.\n");
+ 	    exit(-1);
+ 	}
+     }
+@@ -2425,7 +2425,7 @@
+     }
+ #endif
+     else {
+-	printf("mach32-config: mode %s unsupported, only 256, 32K, 64K, 16M, 16M32 colors allowed.\n", tmpstr);
++	fprintf(stderr,"mach32-config: mode %s unsupported, only 256, 32K, 64K, 16M, 16M32 colors allowed.\n", tmpstr);
+ 	return -2;
+     }
+     width = (width + 7) & ~7;
+@@ -2446,7 +2446,7 @@
+     if (!create)
+ 	return -2;
+     if ((i = __svgalib_addmode(width, height, colors, linelength, bytesperpixel)) < 0) {
+-	printf("mach32-config: no more dynamic modes, %s ignored.\n", tmpstr);
++	fprintf(stderr,"mach32-config: no more dynamic modes, %s ignored.\n", tmpstr);
+ 	return -2;
+     }
+     return i;
+@@ -2480,7 +2480,7 @@
+ 
+ 	    if (!mode) {
+ 	      access_denied:
+-		printf("mach32-config: %s command access denied.",
++		fprintf(stderr,"mach32-config: %s command access denied.",
+ 		       mach32_conf_commands[command]);
+ 		break;
+ 	    }
+@@ -2489,8 +2489,8 @@
+ 		ptr = strtok(NULL, " ");
+ 		if (ptr == NULL) {
+ 		    if (position <= 1)
+-			puts("mach32-config: mach32eeprom "
+-			     "command expects a parameter.");
++			fprintf(stderr,"mach32-config: mach32eeprom "
++			     "command expects a parameter.\n");
+ 		    return ptr;
+ 		}
+ 		if (!strcasecmp(ptr, "compatible")) {
+@@ -2512,8 +2512,8 @@
+ 		} else if (!strcasecmp(ptr, "file")) {
+ 		    ptr = strtok(NULL, " ");
+ 		    if (ptr == NULL) {
+-			puts("mach32-config: mach32eeprom file subcommand "
+-			     "expects a parameter.");
++			fprintf(stderr,"mach32-config: mach32eeprom file subcommand "
++			     "expects a parameter.\n");
+ 			return ptr;
+ 		    }
+ 		    goto fileparam;
+@@ -2524,12 +2524,12 @@
+ 			    free(eeprom_fname);
+ 			eeprom_fname = strdup(ptr);
+ 			if (eeprom_fname == NULL) {
+-			    puts("mach32-config: Fatal error: out of memory.");
++			    fprintf(stderr,"mach32-config: Fatal error: out of memory.\n");
+ 			    exit(-1);
+ 			}
+ 		    } else {
+-			puts("mach32-config: mach32eeprom: filename has "
+-			     "to start with a / !!");
++			fprintf(stderr,"mach32-config: mach32eeprom: filename has "
++			     "to start with a / !!\n");
+ 		    }
+ 		} else
+ 		    return ptr;
+@@ -2560,7 +2560,7 @@
+ 	    }
+ 	}
+ 	if (!flag) {
+-	    puts("mach32-config: Invalid define command, no valid vga-mode given");
++	    fprintf(stderr,"mach32-config: Invalid define command, no valid vga-mode given\n");
+ 	  ex_inv_mod:
+ 	    mixup_ptr = currptr;
+ 	    return ptr;
+@@ -2571,7 +2571,7 @@
+ 	/*The clock is the only thing that may differ: */
+ 	if (ptr == NULL) {
+ 	  inv_clk:
+-	    puts("mach32-config: Invalid define command, clock is invalid");
++	    fprintf(stderr,"mach32-config: Invalid define command, clock is invalid\n");
+ 	    goto ex_inv_mod;
+ 	}
+ 	if (*ptr == ':') {	/*No. of clock given */
+@@ -2590,14 +2590,14 @@
+ 	    goto inv_clk;
+ 	mptr->clock_sel = (i << 2);
+ #ifdef DEBUG
+-	printf("Constructed clock_sel is: %d\n", mptr->clock_sel);
++	fprintf(stderr,"Constructed clock_sel is: %d\n", mptr->clock_sel);
+ #endif
+ 	mptr->disp_cntl = 0x23;	/* Assume non interlaced */
+ 	/* The rest is straight forward: */
+ 	ptr = strtok(NULL, " ");
+ 	if (!isnumber(ptr)) {
+ 	  inv_time:
+-	    puts("mach32-config: Invalid define command, timing is invalid");
++	    fprintf(stderr,"mach32-config: Invalid define command, timing is invalid\n");
+ 	    goto ex_inv_mod;
+ 	}
+ 	mptr->h_disp = (atoi(ptr) >> 3) - 1;
+@@ -2670,8 +2670,8 @@
+     case 3:
+ 	ptr = strtok(NULL, " ");
+ 	if (!isnumber(ptr)) {
+-	    puts("mach32-config: illegal setlinelength command.\n"
+-		 "Usage: setlinelength integer modes...");
++	    fprintf(stderr,"mach32-config: illegal setlinelength command.\n"
++		 "Usage: setlinelength integer modes...\n");
+ 	    return ptr;
+ 	}
+ 	i = atoi(ptr);
+@@ -2684,13 +2684,13 @@
+ 
+ 	if (!mode) {
+ 	  maxclk_deny:
+-	    puts("Don't use the maxclock's commands out of the environment variable.");
++	    fprintf(stderr,"Don't use the maxclock's commands out of the environment variable.\n");
+ 	    return ptr;
+ 	}
+ 	if (!isnumber(ptr)) {
+ 	  ilmaxclk:
+-	    puts("mach32-config: illegal maxclock16 or maxclock24 command.\n"
+-		 "Usage: maxclock16 integer or maxclock24 integer");
++	    fprintf(stderr,"mach32-config: illegal maxclock16 or maxclock24 command.\n"
++		 "Usage: maxclock16 integer or maxclock24 integer\n");
+ 	    return ptr;
+ 	}
+ 	mach32_maxclk16 = atoi(ptr);
+@@ -2710,11 +2710,11 @@
+ 	    ptr = strtok(NULL, " ");
+ 	    clocks_set = 1;
+ 	    if (!isnumber(ptr)) {
+-		puts("mach32-config: illegal clocks command.\n"
++		fprintf(stderr,"mach32-config: illegal clocks command.\n"
+ 		     "Usage: clocks integer integer ...\n"
+ 		     "16 clocks have to be specified.\n"
+ 		     "specify 0 for unsupported clocks\n"
+-		     "(using 0's for the mistyped clocks)");
++		     "(using 0's for the mistyped clocks)\n");
+ 		if (mode) {
+ 		    while (i < 16)
+ 			mach32_clocks[i++] = 0;
+@@ -2768,12 +2768,12 @@
+ 	ptr = strtok(NULL, " ");
+ 	if (!mode) {
+ 	  tweak_deny:
+-	    puts("The vfifo, latch, blank commands are not allowed out of the environment.");
++	    fprintf(stderr,"The vfifo, latch, blank commands are not allowed out of the environment.\n");
+ 	    return ptr;
+ 	}
+ 	if (!isnumber(ptr)) {
+ 	  ilvfi:
+-	    puts("Illegal vfifo command");
++	    fprintf(stderr,"Illegal vfifo command\n");
+ 	    return ptr;
+ 	}
+ 	vfifo8 = atoi(ptr) & 0xf;
+@@ -2783,7 +2783,7 @@
+ 	if (!mode)
+ 	    goto tweak_deny;
+ 	if (!isnumber(ptr)) {
+-	    puts("Illegal latch command");
++	    fprintf(stderr,"Illegal latch command\n");
+ 	    return ptr;
+ 	}
+ 	latchopt = atoi(ptr);
+@@ -2793,7 +2793,7 @@
+ 	if (!mode)
+ 	    goto tweak_deny;
+ 	if (!isnumber(ptr)) {
+-	    puts("Illegal blank command");
++	    fprintf(stderr,"Illegal blank command\n");
+ 	    return ptr;
+ 	}
+ 	bladj = atoi(ptr) & 0xf;
+@@ -2826,9 +2826,9 @@
+ 	ptr = strtok(NULL, " ");
+ 	if (!isnumber(ptr)) {
+ 	  ilsetupli:
+-	    puts("Illegal setuplinear command.\n"
++	    fprintf(stderr,"Illegal setuplinear command.\n"
+ 		 "usage: setuplinear address size\n"
+-		 "where size = 1 or 4 and both are in MB");
++		 "where size = 1 or 4 and both are in MB\n");
+ 	    return ptr;
+ 	}
+ 	i = atoi(ptr);
+@@ -2844,12 +2844,12 @@
+ 	} else
+ 	    goto ilsetupli;
+ 	if ((i & ~0xfff) || (!i)) {
+-	    puts("setuplinear: address out of range");
++	    fprintf(stderr,"setuplinear: address out of range\n");
+ 	    return ptr;
+ 	}
+       setuplin:
+ 	if (!mode) {
+-	    puts("setuplinear config option strictly disallowed from the environment.");
++	    fprintf(stderr,"setuplinear config option strictly disallowed from the environment.\n");
+ 	    return ptr;
+ 	}
+ 	mach32_apsiz = flag + 1;
+@@ -2953,7 +2953,7 @@
+ 	    dac_override = *ptr - '0';
+ 	else {
+ 	  invpar:
+-	    printf("Invalid parameter:  \"%s %s\"\n",
++	    fprintf(stderr,"Invalid parameter:  \"%s %s\"\n",
+ 		   mach32_conf_commands[command], ptr);
+ 	}
+ 	break;
+@@ -3048,7 +3048,7 @@
+ 		j = __svgalib_addmode(infotable[i].xdim, infotable[i].ydim, infotable[i].colors,
+ 				  newxbytes, infotable[i].bytesperpixel);
+ 		if (j < 0) {
+-		    puts("mach32: Out of dynamic modes for redefinition of modes with\n"
++		    fprintf(stderr,"mach32: Out of dynamic modes for redefinition of modes with\n"
+ 			 "        non-standard linelength. Use inhibit in case of problems.\n");
+ 		    goto giveup;
+ 		}
+@@ -3058,7 +3058,7 @@
+ 		    *push(1) = CMD_CPY + i;	/* Nope, copy instead of move.. */
+ 		*push(1) = j;	/* The destination mode. */
+ /* #ifdef 1 */
+-		printf("Redefining mode %d to %d:%dx%dx%d\n", i, j,
++		fprintf(stderr,"Redefining mode %d to %d:%dx%dx%d\n", i, j,
+ 		       infotable[i].xdim, infotable[i].ydim, infotable[i].colors);
+ /* #endif */
+ 	    }
+@@ -3068,7 +3068,7 @@
+     *push(1) = CMD_MSK;		/* End of fixup commands */
+     mach32_modemixup = realloc(mach32_modemixup, mixup_ptr * sizeof(short));
+     if (mach32_modemixup == NULL) {
+-	puts("mach32-config: Fatal: queue shrink failed.");
++	fprintf(stderr,"mach32-config: Fatal: queue shrink failed.\n");
+ 	exit(-1);
+     }
+ }
+@@ -3133,11 +3133,11 @@
+ 	    i = *ptr & ~CMD_MSK;
+ 	    oldentry = mach32_modes[i];
+ #ifdef DEBUG
+-	    puts("Calling mach32_modfill to add new mode.");
++	    fprintf(stderr,"Calling mach32_modfill to add new mode.\n");
+ #endif
+ 	    mach32_modfill((mode_entry *) ptm, col2msk(infotable + i), i);
+ 	    if (mach32_modes[i] == oldentry) {
+-		printf("mach32: Setting of mode %dx%dx%s failed.\n"
++		fprintf(stderr,"mach32: Setting of mode %dx%dx%s failed.\n"
+ 		       "Mode cannot be realized with your hardware\n"
+ 		     "(or due to configured restrictions ;-) ), sorry.\n"
+ 		       "specify verbose in config file or SVGALIB_CONFIG to get\n"
+@@ -3261,7 +3261,7 @@
+     int base, src_x, des_x, adj_w, forw_cpy;
+ 
+ #ifdef DEBUG
+-    printf("mach32_bitblt(%xh,%xh,%d,%d,%d)\n", srcaddr, destaddr, w, h, pitch);
++    fprintf(stderr,"mach32_bitblt(%xh,%xh,%d,%d,%d)\n", srcaddr, destaddr, w, h, pitch);
+ #endif
+ 
+     base = (forw_cpy = (srcaddr > destaddr)) ? destaddr : srcaddr;
+@@ -3278,7 +3278,7 @@
+     adj_w = (infotable[CM].bytesperpixel == 2) ? w << 1 : w;
+ 
+ #ifdef DEBUG
+-    printf("   base=%xh,src=%xh,des=%xh,src_x=%d,des_x=%d,adj_w=%d\n", base, srcaddr,
++    fprintf(stderr,"   base=%xh,src=%xh,des=%xh,src_x=%d,des_x=%d,adj_w=%d\n", base, srcaddr,
+ 	   destaddr, src_x, des_x, adj_w);
+ #endif
+ 
+@@ -3299,7 +3299,7 @@
+ 	    des_x -= pitch;
+ 
+ #ifdef DEBUG
+-	printf("   src=%xh,des=%xh,src_x=%d,des_x=%d,adj=%d\n", srcaddr, destaddr, src_x, des_x, adj);
++	fprintf(stderr,"   src=%xh,des=%xh,src_x=%d,des_x=%d,adj=%d\n", srcaddr, destaddr, src_x, des_x, adj);
+ #endif
+ 	/*Still invalid? */
+ 	if (((src_x + adj_w) > pitch) || ((des_x + adj_w) > pitch))
+@@ -3310,7 +3310,7 @@
+     destaddr /= pitch;
+ 
+ #ifdef DEBUG
+-    printf("   >>src=%xh,des=%xh,base=%xh\n", srcaddr, destaddr, base);
++    fprintf(stderr,"   >>src=%xh,des=%xh,base=%xh\n", srcaddr, destaddr, base);
+ #endif
+ 
+     if ((srcaddr > (1535 - h)) || (destaddr > (1535 - h)))
+@@ -3319,7 +3319,7 @@
+     if (infotable[CM].bytesperpixel == 2) {
+ 	if ((src_x & 1) || (des_x & 1) || (pitch & 0xfffff00f)) {
+ 	  f_ugh:
+-	    puts("\asvgalib: mach32: mach32_bitblt can't emulate Cirrus.");
++	    fprintf(stderr,"\asvgalib: mach32: mach32_bitblt can't emulate Cirrus.\n");
+ 	    return;
+ 	}
+ 	src_x >>= 1;
+@@ -3351,7 +3351,7 @@
+     checkqueue(10);		/* Need new FIFO room for commands */
+ /*start coords: */
+ #ifdef DEBUG
+-    printf("   ##x=%x,y=%x,xd=%x,yd=%x\n", src_x, srcaddr, des_x, destaddr);
++    fprintf(stderr,"   ##x=%x,y=%x,xd=%x,yd=%x\n", src_x, srcaddr, des_x, destaddr);
+ #endif
+     if (forw_cpy) {
+ 	/* cpy from lower to higher addr, x, y */
+@@ -3384,7 +3384,7 @@
+     mach32_bltwait();		/* resets critical as well */
+     outw(DP_CONFIG, 0x3291);	/* reset to standard config.. otherwise dramatical speed down */
+ #ifdef DEBUG
+-    printf("   **x=%xh,y=%xh\n", (int) inw(CUR_X), (int) inw(CUR_Y));
++    fprintf(stderr,"   **x=%xh,y=%xh\n", (int) inw(CUR_X), (int) inw(CUR_Y));
+ #endif
+ 
+     vga_unlockvc();
+@@ -3393,7 +3393,7 @@
+ static void mach32_fillblt(int destaddr, int w, int h, int pitch, int c)
+ {
+ #ifdef DEBUG
+-    printf("mach32_fillblt(%xh,%d,%d,%d,%d)\n", destaddr, w, h, pitch, c);
++    fprintf(stderr,"mach32_fillblt(%xh,%d,%d,%d,%d)\n", destaddr, w, h, pitch, c);
+ #endif
+ 
+ /* Do not disturb us: */
+@@ -3413,7 +3413,7 @@
+     if (infotable[CM].bytesperpixel == 2) {
+ 	if ((destaddr & 1) || (pitch & 0xfffff00f)) {
+ 	  ugh:
+-	    puts("\asvgalib: mach32: mach32_fillblt can't emulate Cirrus.");
++	    fprintf(stderr,"\asvgalib: mach32: mach32_fillblt can't emulate Cirrus.\n");
+ 	    CRITICAL = 0;
+ 	    vga_unlockvc();
+ 	    return;
+@@ -3446,7 +3446,7 @@
+ static void mach32_hlinelistblt(int ymin, int n, int *xmin, int *xmax, int pitch, int c)
+ {
+ #ifdef DEBUG
+-    printf("mach32_hlinelistblt(%d,%d,%08xh,%08xh,%d,%d)\n", ymin, n, (unsigned) xmin, (unsigned) xmax, pitch, c);
++    fprintf(stderr,"mach32_hlinelistblt(%d,%d,%08xh,%08xh,%d,%d)\n", ymin, n, (unsigned) xmin, (unsigned) xmax, pitch, c);
+ #endif
+ 
+ /* Do not disturb us: */
+@@ -3465,7 +3465,7 @@
+     if (infotable[CM].bytesperpixel == 2) {
+ 	if (pitch & 0xfffff00f) {
+ 	  ugh:
+-	    puts("\asvgalib: mach32: mach32_hlinelistblt can't emulate Cirrus.");
++	    fprintf(stderr,"\asvgalib: mach32: mach32_hlinelistblt can't emulate Cirrus.\n");
+ 	    CRITICAL = 0;
+ 	    vga_unlockvc();
+ 	    return;
+@@ -3513,7 +3513,7 @@
+     vga_lockvc();
+ 
+ #ifdef DEBUG
+-    printf("mach32_imageblt(%xh,%xh,%d,%d,%d)\n", (int) srcaddr, destaddr, w, h, pitch);
++    fprintf(stderr,"mach32_imageblt(%xh,%xh,%d,%d,%d)\n", (int) srcaddr, destaddr, w, h, pitch);
+ #endif
+ 
+ /* Ensure std GE config to emulate simple Cirrus */
+@@ -3530,7 +3530,7 @@
+     if (infotable[CM].bytesperpixel == 2) {
+ 	if ((destaddr & 1) || (pitch & 0xfffff00f)) {
+ 	  ugh:
+-	    puts("\asvgalib: mach32: mach32_imageblt can't emulate Cirrus.");
++	    fprintf(stderr,"\asvgalib: mach32: mach32_imageblt can't emulate Cirrus.\n");
+ 
+ 	    CRITICAL = 0;
+ 	    vga_unlockvc();
+@@ -3572,7 +3572,7 @@
+    fastest way to do this. Loop unrolling will gain nothing, so it is not done.. */
+ 
+ #ifdef __alpha__
+-    printf("mach32_imageblt: not done yet\n");
++    fprintf(stderr,"mach32_imageblt: not done yet\n");
+ #else
+     asm("cld\n"			/* Increasing addresses.. */
+ 	"	movw $0xe2e8,%%dx\n"	/* PIX_TRANS port */
+@@ -3603,8 +3603,8 @@
+     char *source = srcaddr, *dest = (char * /*discard volatile */ ) mach32_aperture + destaddr;
+ 
+ #ifdef DEBUG
+-    printf("mach32_memimageblt(%xh,%xh,%d,%d,%d)\n", (int) srcaddr, destaddr, w, h, pitch);
+-    printf("\tmemtrans: %xh -> %xh\n", (int) source, (int) dest);
++    fprintf(stderr,"mach32_memimageblt(%xh,%xh,%d,%d,%d)\n", (int) srcaddr, destaddr, w, h, pitch);
++    fprintf(stderr,"\tmemtrans: %xh -> %xh\n", (int) source, (int) dest);
+ #endif
+ 
+     if (!infotable[CM].bytesperpixel)
+@@ -3622,7 +3622,7 @@
+ 	}
+     }
+ #ifdef DEBUG
+-    puts("mach32_mach32_imageblt ended.");
++    fprintf(stderr,"mach32_mach32_imageblt ended.\n");
+ #endif
+ }
+ 
+@@ -3645,7 +3645,7 @@
+ 
+     ptr = bitrot = malloc(sizeof(unsigned short) * (1 << 16));
+     if (!bitrot) {
+-	printf("svgalib: mach32: Not enough memory for PUTBITMAP rotation table.\n");
++	fprintf(stderr,"svgalib: mach32: Not enough memory for PUTBITMAP rotation table.\n");
+ 	return NULL;
+     }
+     for (i = 0; i < 16; i++)
+@@ -3844,7 +3844,7 @@
+ 	    data = va_arg(params, unsigned char *);
+ 	    outw(CMD, 0x53B1);
+ #ifdef __alpha__
+-	    printf("mach32_ACCEL_PUTIMAGE: not done yet\n");
++	    fprintf(stderr,"mach32_ACCEL_PUTIMAGE: not done yet\n");
+ #else
+     	    if (infotable[CM].bytesperpixel == 2) {
+ 		asm("cld\n"
+diff -Nur svgalib-1.9.13.orig/src/millennium.c svgalib-1.9.13/src/millennium.c
+--- svgalib-1.9.13.orig/src/millennium.c	Fri Sep 28 17:33:13 2001
++++ svgalib-1.9.13/src/millennium.c	Mon Apr  8 23:33:37 2002
+@@ -919,7 +919,7 @@
+     }
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using Millennium driver, %iKB. ",mil_memory);
++	fprintf(stderr,"Using Millennium driver, %iKB. ",mil_memory);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/mouse/mouse.c svgalib-1.9.13/src/mouse/mouse.c
+--- svgalib-1.9.13.orig/src/mouse/mouse.c	Fri Feb 11 12:51:58 2000
++++ svgalib-1.9.13/src/mouse/mouse.c	Mon Apr  8 23:33:37 2002
+@@ -339,7 +339,7 @@
+ void mouse_setscale(int s)
+ {
+     if (scale==0)
+-      printf("Mouse scale must be non-zero!\n");
++      fprintf(stderr,"Mouse scale must be non-zero!\n");
+     else {
+       mouse_x = (mouse_x*s)/scale;
+       mouse_y = (mouse_y*s)/scale;
+diff -Nur svgalib-1.9.13.orig/src/mouse/ms.c svgalib-1.9.13/src/mouse/ms.c
+--- svgalib-1.9.13.orig/src/mouse/ms.c	Fri Nov 16 09:24:01 2001
++++ svgalib-1.9.13/src/mouse/ms.c	Mon Apr  8 23:33:37 2002
+@@ -180,7 +180,7 @@
+  int newmtype;
+ 
+ #ifdef DEBUG_ACCEL
+-  printf("Processing option %ld (%s)\n", (long)option, mouse_config_options[option]);
++  fprintf(stderr,"Processing option %ld (%s)\n", (long)option, mouse_config_options[option]);
+ #endif
+ 
+    switch (option) {
+@@ -265,7 +265,7 @@
+ #ifdef ALLOW_MOUSE_OVERRIDE
+ 	newmtype = vga_getmousetype();
+ 	if (m_type != newmtype) {
+-	    printf("svgalib: mouse-init: mouse type override %d to %d\n",
++	    fprintf(stderr,"svgalib: mouse-init: mouse type override %d to %d\n",
+ 		   m_type, newmtype);
+ 	    m_type = newmtype;
+ 	}
+@@ -397,14 +397,14 @@
+         } else {
+          int i;
+ #ifdef DEBUG_ACCEL
+-	  printf("m_accel_powertable:\n");
++	  fprintf(stderr,"m_accel_powertable:\n");
+ #endif
+           for (i = 1; i < m_accel_thresh; i++) {
+             m_accel_powertable[i] = pow((double)(i-1)/(m_accel_thresh-1), m_accel_power)
+               * (m_accel_mult - m_accel_offset) + m_accel_offset;
+ 
+ #ifdef DEBUG_ACCEL
+-	    printf("  %ld => %f (%f)\n", (long)i, (double)m_accel_powertable[i] * i,
++	    fprintf(stderr,"  %ld => %f (%f)\n", (long)i, (double)m_accel_powertable[i] * i,
+ 	  			     (double)m_accel_powertable[i]);
+ #endif
+           }
+@@ -413,14 +413,14 @@
+     }
+ 
+ #ifdef DEBUG_ACCEL
+-    printf("m_accel_type: %ld\n",	(long)m_accel_type);
+-    printf("m_force: %ld\n",		(long)m_force);
+-    printf("m_accel_thresh: %ld\n",	(long)m_accel_thresh);
+-    printf("m_accel_offset: %ld\n",	(long)m_accel_offset);
+-    printf("m_accel_mult: %f\n",	(double)m_accel_mult);
+-    printf("m_accel_power: %f\n",	(double)m_accel_power);
+-    printf("m_maxdelta: %ld\n",		(long)m_maxdelta);
+-    printf("m_accel_maxdelta: %ld\n",	(long)m_accel_maxdelta);
++    fprintf(stderr,"m_accel_type: %ld\n",	(long)m_accel_type);
++    fprintf(stderr,"m_force: %ld\n",		(long)m_force);
++    fprintf(stderr,"m_accel_thresh: %ld\n",	(long)m_accel_thresh);
++    fprintf(stderr,"m_accel_offset: %ld\n",	(long)m_accel_offset);
++    fprintf(stderr,"m_accel_mult: %f\n",	(double)m_accel_mult);
++    fprintf(stderr,"m_accel_power: %f\n",	(double)m_accel_power);
++    fprintf(stderr,"m_maxdelta: %ld\n",		(long)m_maxdelta);
++    fprintf(stderr,"m_accel_maxdelta: %ld\n",	(long)m_accel_maxdelta);
+ #endif
+ 
+     /*  Ensure that the open will get a file descriptor greater
+@@ -676,7 +676,7 @@
+ 	nu_bytes += bytesread;
+ 
+ #ifdef DEBUG
+-    printf("#bytes in buffer: %d\n", nu_bytes);
++    fprintf(stderr,"#bytes in buffer: %d\n", nu_bytes);
+ #endif
+ 
+   handle_packets:
+@@ -684,10 +684,10 @@
+     /* Handle packets in buffer. */
+ 
+ #ifdef DEBUG
+-    printf("Bytes left in buffer: %d at %d, packet is %d bytes\n",
++    fprintf(stderr,"Bytes left in buffer: %d at %d, packet is %d bytes\n",
+ 	   nu_bytes - i, i, proto[m_type][4]);
+     if (nu_bytes - i > 0 )
+-      printf("Header byte: %c %d\n", (buf[i] & 0177), buf[i]);
++      fprintf(stderr,"Header byte: %c %d\n", (buf[i] & 0177), buf[i]);
+ 
+ #endif
+ 
+@@ -747,7 +747,7 @@
+     if ((buf[i] & proto[m_type][0]) != proto[m_type][1]) {
+ 	/* Not a header byte. */
+ #ifdef DEBUG
+-    printf("Bad header byte: %c %d\n", (buf[i] & 0177), buf[i]);
++    fprintf(stderr,"Bad header byte: %c %d\n", (buf[i] & 0177), buf[i]);
+ #endif
+ 	i++;
+ 	goto handle_packets;
+@@ -1103,7 +1103,7 @@
+ 	    /*    if (fabs(dx) < sorb_trans_thresh[1]) dx = 0; */
+             i+=13;
+ #ifdef DEBUG
+-    printf("Got D packet! but=%d, x=%d y=%d z=%d rx=%d ry=%d rz=%d\n",
++    fprintf(stderr,"Got D packet! but=%d, x=%d y=%d z=%d rx=%d ry=%d rz=%d\n",
+             but,dx,dy,dz,drx,dry,drz);
+ #endif
+             break;
+@@ -1113,23 +1113,23 @@
+ 	    if (but==MOUSE_RESETBUTTON)
+ 	      mouse_orientation=1-mouse_orientation;
+ #ifdef DEBUG
+-    printf("Got K packet! but=%d, x=%d y=%d z=%d rx=%d ry=%d rz=%d\n",
++    fprintf(stderr,"Got K packet! but=%d, x=%d y=%d z=%d rx=%d ry=%d rz=%d\n",
+             but,dx,dy,dz,drx,dry,drz);
+ #endif
+ 	    i+=6;
+ 	    break;
+ 	  case 'R':
+ #ifdef DEBUG
+-    printf("Got init string!\n");
++    fprintf(stderr,"Got init string!\n");
+ #endif
+ 	    for (j=i;((buf[j] !=13)&&(j<nu_bytes));j++)
+-              printf("%c",(buf[j] & 0177));
+-            printf("\n\n");
++              fprintf(stderr,"%c",(buf[j] & 0177));
++            fprintf(stderr,"\n\n");
+             i=j+1;
+             break;
+ 	  default:
+ #ifdef DEBUG
+-    printf("Got unknown packet!\n");
++    fprintf(stderr,"Got unknown packet!\n");
+ #endif
+             i++;
+             break;
+@@ -1171,20 +1171,20 @@
+ 
+       case MOUSE_ACCEL_TYPE_NORMAL:
+ #ifdef DEBUG_ACCEL 
+-  printf("%ld\t", (long)dx);
++  fprintf(stderr,"%ld\t", (long)dx);
+ #endif
+ 	if (abs(dx) > m_accel_thresh) dx = (int) ((float)dx * m_accel_mult);
+ 	if (abs(dy) > m_accel_thresh) dy = (int) ((float)dy * m_accel_mult);
+ 	if (abs(dz) > m_accel_thresh) dz = (int) ((float)dz * m_accel_mult);
+ #ifdef DEBUG_ACCEL
+-  printf("%ld\n", (long)dx);
++  fprintf(stderr,"%ld\n", (long)dx);
+ #endif
+         break;
+ 
+ 
+       case MOUSE_ACCEL_TYPE_POWER:
+ #ifdef DEBUG_ACCEL 
+-  printf("%ld\t", (long)dx);
++  fprintf(stderr,"%ld\t", (long)dx);
+ #endif
+ 	delta = abs(dx);
+ 	dx = (delta >= m_accel_thresh)  ?  (float)dx * m_accel_mult :
+@@ -1199,7 +1199,7 @@
+ 	     (float)dz * m_accel_powertable[delta];
+ 
+ #ifdef DEBUG_ACCEL
+-  printf("%ld\n", (long)dx);
++  fprintf(stderr,"%ld\n", (long)dx);
+ #endif
+         break;
+     }
+diff -Nur svgalib-1.9.13.orig/src/mx.c svgalib-1.9.13/src/mx.c
+--- svgalib-1.9.13.orig/src/mx.c	Sat Jun 23 13:07:02 2001
++++ svgalib-1.9.13/src/mx.c	Mon Apr  8 23:33:37 2002
+@@ -637,16 +637,16 @@
+     };
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using MX driver, %iKB. ",mx_memory);
++	fprintf(stderr,"Using MX driver, %iKB. ",mx_memory);
+         switch(mx_chiptype){
+            case 1:
+-              printf("82651 chipset.\n");
++              fprintf(stderr,"82651 chipset.\n");
+            break;
+            case 0:
+-              printf("82650 chipset.\n");
++              fprintf(stderr,"82650 chipset.\n");
+            break;
+            default:
+-              printf("unknown chipset, using 82650.\n");
++              fprintf(stderr,"unknown chipset, using 82650.\n");
+            break;
+         };
+     }
+@@ -717,14 +717,14 @@
+ 	b=0;
+ 	if((fvco>150000.0))b=1;		
+ #if 0
+-printf("clock=%i l=%i m=%i n=%i f=%i b=%i\n",clock,n,m,l,f,b);
++fprintf(stderr,"clock=%i l=%i m=%i n=%i f=%i b=%i\n",clock,n,m,l,f,b);
+ #endif
+    	if(l==2)l=3;
+         return (n << 8) | m | (l << 5) | (f<<7) | (b<<15);
+       }
+     }
+   }
+-printf("MX driver: Can't do clock=%i\n",clock);
++fprintf(stderr,"MX driver: Can't do clock=%i\n",clock);
+   return 0;
+ }
+ 
+diff -Nur svgalib-1.9.13.orig/src/neo.c svgalib-1.9.13/src/neo.c
+--- svgalib-1.9.13.orig/src/neo.c	Sat Jun 23 13:07:02 2001
++++ svgalib-1.9.13/src/neo.c	Mon Apr  8 23:33:37 2002
+@@ -735,7 +735,7 @@
+     if (getenv("IOPERM") == NULL) {
+       _ioperm=1;
+       if (iopl(3) < 0) {
+-        printf("svgalib: cannot get I/O permissions\n");
++        fprintf(stderr,"svgalib: cannot get I/O permissions\n");
+         exit(1);
+       }
+     }
+@@ -877,7 +877,7 @@
+     if (getenv("IOPERM") == NULL) {
+       _ioperm=1;
+       if (iopl(3) < 0) {
+-        printf("svgalib: cannot get I/O permissions\n");
++        fprintf(stderr,"svgalib: cannot get I/O permissions\n");
+         exit(1);
+       }
+     }
+@@ -909,7 +909,7 @@
+     }
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using NeoMagic driver, %iKB. ",neo_memory);
++	fprintf(stderr,"Using NeoMagic driver, %iKB. ",neo_memory);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/nv3.c svgalib-1.9.13/src/nv3.c
+--- svgalib-1.9.13.orig/src/nv3.c	Wed Apr  3 09:53:15 2002
++++ svgalib-1.9.13/src/nv3.c	Mon Apr  8 23:33:37 2002
+@@ -746,7 +746,7 @@
+        
+     };
+     if (__svgalib_driver_report) {
+-	printf("Using RIVA driver, %iKB, Type:%s.\n",nv3_memory,architectures[nv3_chiptype]);
++	fprintf(stderr,"Using RIVA driver, %iKB, Type:%s.\n",nv3_memory,architectures[nv3_chiptype]);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/oak.c svgalib-1.9.13/src/oak.c
+--- svgalib-1.9.13.orig/src/oak.c	Sat Jun 23 13:07:02 2001
++++ svgalib-1.9.13/src/oak.c	Mon Apr  8 23:33:37 2002
+@@ -560,7 +560,7 @@
+ 	oak_memory = oak_memorydetect();
+     }
+     if (__svgalib_driver_report) {
+-	printf("Using Oak driver (OTI-0%d, %dK).\n", oak_chiptype,
++	fprintf(stderr,"Using Oak driver (OTI-0%d, %dK).\n", oak_chiptype,
+ 	       oak_memory);
+     }
+     __svgalib_driverspecs = &__svgalib_oak_driverspecs;
+@@ -593,7 +593,7 @@
+ 	else if (temp1 == 0x00)
+ 	    return 512;
+ 	else {
+-	    printf("Oak driver: Invalid amount of memory. Using 256K.\n");
++	    fprintf(stderr,"Oak driver: Invalid amount of memory. Using 256K.\n");
+ 	    return 256;
+ 	}
+     } else {
+@@ -605,7 +605,7 @@
+ 	else if (temp1 == 0x00)
+ 	    return 256;
+ 	else {
+-	    printf("Oak driver: Invalid amount of memory. Using 256K.\n");
++	    fprintf(stderr,"Oak driver: Invalid amount of memory. Using 256K.\n");
+ 	    return 256;
+ 	}
+     }
+@@ -640,7 +640,7 @@
+     /* none of the above ... maybe the nonexistant '97 I've been 
+        hearing about? */
+ 
+-/*    printf("Oak driver: Unknown chipset (id = %2x)\n", temp1);*/
++/*    fprintf(stderr,"Oak driver: Unknown chipset (id = %2x)\n", temp1);*/
+     oak_lock();
+     return 0;
+ }
+diff -Nur svgalib-1.9.13.orig/src/paradise.c svgalib-1.9.13/src/paradise.c
+--- svgalib-1.9.13.orig/src/paradise.c	Sat Jun 23 13:07:02 2001
++++ svgalib-1.9.13/src/paradise.c	Mon Apr  8 23:33:37 2002
+@@ -41,7 +41,7 @@
+ static void inline _outb(unsigned port,unsigned value)
+ {
+ #ifdef DEBUG
+- printf ("0x%x, 0x%x\n",port,value);
++ fprintf (stderr,"0x%x, 0x%x\n",port,value);
+ #endif
+ outb(port,value);
+ }
+@@ -51,7 +51,7 @@
+ static void paradise_getmodeinfo(int mode, vga_modeinfo * modeinfo)
+ {
+ #ifdef DEBUG
+- printf("paradise_getmodeinfo\n");
++ fprintf(stderr,"paradise_getmodeinfo\n");
+ #endif
+     switch(modeinfo->colors)
+      {
+@@ -78,7 +78,7 @@
+ static void setup_registers(void)
+ {
+ #ifdef DEBUG
+- printf("setup_registers\n");
++ fprintf(stderr,"setup_registers\n");
+ #endif
+     if (paradise_modes == NULL) {
+ 	    paradise_modes = paradise_modes_512;
+@@ -93,7 +93,7 @@
+ unsigned a,b;
+ 
+ #ifdef DEBUG
+- printf("paradise_saveregs\n");
++ fprintf(stderr,"paradise_saveregs\n");
+ #endif
+ 
+ paradise_unlock();
+@@ -137,7 +137,7 @@
+ {
+ unsigned char b;
+ #ifdef DEBUG
+- printf("paradise_unlock\n");
++ fprintf(stderr,"paradise_unlock\n");
+ #endif
+ outw(GRA_I,0x050f);
+ outw(CRT_IC,0x8529);
+@@ -164,7 +164,7 @@
+ static void paradise_lock(void)
+ {
+ #ifdef DEBUG
+- printf("paradise_lock\n");
++ fprintf(stderr,"paradise_lock\n");
+ #endif
+ outw(GRA_I,0x000f);
+ outw(CRT_IC,0x0029);
+@@ -177,7 +177,7 @@
+ {
+ unsigned a,b;
+ #ifdef DEBUG
+-printf("paradise_setregs\n");
++fprintf(stderr,"paradise_setregs\n");
+ #endif
+ 
+ paradise_unlock();
+@@ -226,7 +226,7 @@
+     const unsigned char *regs;
+     struct info *info;
+ #ifdef DEBUG
+- printf("paradise_modeavailable\n");
++ fprintf(stderr,"paradise_modeavailable\n");
+ #endif
+ 
+     regs = LOOKUPMODE(paradise_modes, mode);
+@@ -249,7 +249,7 @@
+     const unsigned char *regs;
+ 
+ #ifdef DEBUG
+- printf("paradise_setmode\n");
++ fprintf(stderr,"paradise_setmode\n");
+ #endif
+ 
+     regs = LOOKUPMODE(paradise_modes, mode);
+@@ -275,7 +275,7 @@
+     unsigned char old_value;
+     unsigned char txt[6];
+ #ifdef DEBUG
+- printf("paradise_test\n");
++ fprintf(stderr,"paradise_test\n");
+ #endif
+     txt[5]=0;
+     old_value=port_in(CRT_IC);
+@@ -331,7 +331,7 @@
+ static void paradise_setpage(int page)
+ {
+ #ifdef DEBUG
+- printf("paradise_setpage\n");
++ fprintf(stderr,"paradise_setpage\n");
+ #endif
+ paradise_unlock();
+ /* set read-write paging mode */
+@@ -352,7 +352,7 @@
+ static void paradise_setdisplaystart(int address)
+ {unsigned char bits,orig;
+ #ifdef DEBUG
+- printf("paradise_setdisplaystart\n");
++ fprintf(stderr,"paradise_setdisplaystart\n");
+ #endif
+ paradise_unlock();
+ outb(CRT_IC,0x2f);
+@@ -370,7 +370,7 @@
+ static void paradise_setlogicalwidth(int width)
+ {
+ #ifdef DEBUG
+- printf("paradise_setlogicalwidth\n");
++ fprintf(stderr,"paradise_setlogicalwidth\n");
+ #endif
+ paradise_unlock();
+     outw(CRT_IC, 0x13 + (width >> 3) * 256);
+@@ -411,11 +411,11 @@
+ static int paradise_init(int force, int par1, int par2)
+ {
+ #ifdef DEBUG
+- printf("paradise_init\n");
++ fprintf(stderr,"paradise_init\n");
+ #endif
+     if (force) {
+ #ifdef DEBUG
+- printf("forcing memory to %dkB\n",par1);
++ fprintf(stderr,"forcing memory to %dkB\n",par1);
+ #endif
+ 	paradise_memory = par1;
+     } else {
+@@ -437,7 +437,7 @@
+     }
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using WD90C31 Paradise driver (%dK non-interlaced).\n",
++	fprintf(stderr,"Using WD90C31 Paradise driver (%dK non-interlaced).\n",
+ 	       paradise_memory);
+     }
+     __svgalib_driverspecs = &__svgalib_paradise_driverspecs;
+diff -Nur svgalib-1.9.13.orig/src/r128.c svgalib-1.9.13/src/r128.c
+--- svgalib-1.9.13.orig/src/r128.c	Wed Sep 26 20:01:11 2001
++++ svgalib-1.9.13/src/r128.c	Mon Apr  8 23:33:37 2002
+@@ -1217,7 +1217,7 @@
+     }
+ #endif
+ #if 0
+-printf("pll: %i %i %i %i %i\n",pll.reference_freq,pll.reference_div,
++fprintf(stderr,"pll: %i %i %i %i %i\n",pll.reference_freq,pll.reference_div,
+     pll.min_pll_freq,    pll.max_pll_freq, pll.xclk);
+ #endif
+ 
+@@ -1229,7 +1229,7 @@
+     r128_mapio();
+     
+     if (__svgalib_driver_report) {
+-	printf("Using Rage 128 driver, %iKB.\n",r128_memory);
++	fprintf(stderr,"Using Rage 128 driver, %iKB.\n",r128_memory);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/rage.c svgalib-1.9.13/src/rage.c
+--- svgalib-1.9.13.orig/src/rage.c	Sat Sep 29 10:29:11 2001
++++ svgalib-1.9.13/src/rage.c	Mon Apr  8 23:33:37 2002
+@@ -1282,7 +1282,7 @@
+       };
+ 
+    if(found || !i){
+-      printf("svgalib: Rage driver must be used, but not found\n");
++      fprintf(stderr,"svgalib: Rage driver must be used, but not found\n");
+       exit(1);
+    };
+ 
+@@ -1338,8 +1338,8 @@
+    rage_mapio();
+ 
+    if (__svgalib_driver_report) {
+-        printf("Using RAGE driver, %iKB.   ChipID:%i MemType:%i\n",rage_memory,ATIChip,ATIMemoryType);
+-        if(rage_dac)printf("Using external DAC:%i\n",rage_dac);
++        fprintf(stderr,"Using RAGE driver, %iKB.   ChipID:%i MemType:%i\n",rage_memory,ATIChip,ATIMemoryType);
++        if(rage_dac)fprintf(stderr,"Using external DAC:%i\n",rage_dac);
+    }
+ 
+    cardspecs = malloc(sizeof(CardSpecs));
+@@ -1419,7 +1419,7 @@
+       fref*=2; /* X says double for all chips */
+       if(__svgalib_ragedoubleclock)fref/=2; /* just in case */
+       if (__svgalib_driver_report) {
+-          printf("Rage: BIOS reports base frequency=%.3fMHz  Denominator=%3i\n",fref/1000,maxM);
++          fprintf(stderr,"Rage: BIOS reports base frequency=%.3fMHz  Denominator=%3i\n",fref/1000,maxM);
+       }
+    } else {
+       rage_dac=(j>>9)&7;
+@@ -1450,7 +1450,7 @@
+               break;
+       };
+       if (__svgalib_driver_report) {
+-          printf("Rage: BIOS reports RamDAC=%i\n",rage_dac);
++          fprintf(stderr,"Rage: BIOS reports RamDAC=%i\n",rage_dac);
+       }
+    };
+ 
+@@ -1487,9 +1487,9 @@
+       }
+     }
+   }
+-printf("Can't do clock=%i\n",clock);
+-printf("fref=%f, M= in %i - %i, N in %i - %i\n",fref,minM, maxM, minN,maxN);
+-{int i; for (i=0;i<8;i++)printf("%i ",postdiv[i]); printf("\n");};
++fprintf(stderr,"Can't do clock=%i\n",clock);
++fprintf(stderr,"fref=%f, M= in %i - %i, N in %i - %i\n",fref,minM, maxM, minN,maxN);
++{int i; for (i=0;i<8;i++) fprintf(stderr,"%i ",postdiv[i]); fprintf(stderr,"\n");};
+   return 0;
+ }
+ 
+diff -Nur svgalib-1.9.13.orig/src/ramdac/IBMRGB52x.c svgalib-1.9.13/src/ramdac/IBMRGB52x.c
+--- svgalib-1.9.13.orig/src/ramdac/IBMRGB52x.c	Sun Jun 22 17:44:13 1997
++++ svgalib-1.9.13/src/ramdac/IBMRGB52x.c	Mon Apr  8 23:33:37 2002
+@@ -187,7 +187,7 @@
+     }
+ 
+ #ifdef DEBUG
+-    printf("clk %d, setting to %f, m 0x%02x %d, n 0x%02x %d, df %d\n", clk,
++    fprintf(stderr,"clk %d, setting to %f, m 0x%02x %d, n 0x%02x %d, df %d\n", clk,
+ 	   ((best_m + 65.0) / best_n) / (8 >> best_df) * ffref,
+ 	   best_m, best_m, best_n, best_n, best_df);
+ #endif
+@@ -204,12 +204,12 @@
+ 
+     idrev = IBMRGB52x_probe();
+     if (__svgalib_driver_report)
+-	printf("svgalib: Using IBM RGB 52%d PaletteDAC, revision %d.\n",
++	fprintf(stderr,"svgalib: Using IBM RGB 52%d PaletteDAC, revision %d.\n",
+ 	       (idrev >> 8) == 1 ? 5 : 4,
+ 	       idrev & 0xff);
+ #else
+     if (__svgalib_driver_report)
+-	printf("svgalib: Using IBM RGB 52x PaletteDAC.\n");
++	fprintf(stderr,"svgalib: Using IBM RGB 52x PaletteDAC.\n");
+ #endif
+     /* set RS2 */
+     port_out(0x55, 0x3D4);
+@@ -241,7 +241,7 @@
+ 		   IBMRGB52x_fref, &m, &n, &df);
+ 
+     if (__svgalib_driver_report)
+-	printf("clk %d, setting to %.3f, m 0x%02x %d, n 0x%02x %d, df %d\n",
++	fprintf(stderr,"clk %d, setting to %.3f, m 0x%02x %d, n 0x%02x %d, df %d\n",
+ 	       IBMRGB52x_clk, ((m + 65.0) / n) / (8 >> df) * IBMRGB52x_fref / 1000,
+ 	       m, m, n, n, df);
+ 
+diff -Nur svgalib-1.9.13.orig/src/ramdac/attdacs.c svgalib-1.9.13/src/ramdac/attdacs.c
+--- svgalib-1.9.13.orig/src/ramdac/attdacs.c	Tue Jun 19 20:47:16 2001
++++ svgalib-1.9.13/src/ramdac/attdacs.c	Mon Apr  8 23:33:37 2002
+@@ -67,12 +67,12 @@
+ static void att20c490_init(void)
+ {
+     if (__svgalib_driver_report)
+-	printf("svgalib: Using AT&T20C490-compatible truecolor DAC.\n");
++	fprintf(stderr,"svgalib: Using AT&T20C490-compatible truecolor DAC.\n");
+ #if 0
+     dactocomm();
+     inb(PEL_MSK);			/* Skip command register. */
+-    printf("svgalib: DAC Manufacturer ID = 0x%02X, ", inb(PEL_MSK));
+-    printf("Device ID = 0x%02X.\n", inb(PEL_MSK));
++    fprintf(stderr,"svgalib: DAC Manufacturer ID = 0x%02X, ", inb(PEL_MSK));
++    fprintf(stderr,"Device ID = 0x%02X.\n", inb(PEL_MSK));
+ #endif
+ }
+ 
+@@ -156,7 +156,7 @@
+ static void att20c498_init(void)
+ {
+     if (__svgalib_driver_report)
+-	printf("svgalib: Using AT&T20C498-compatible DAC, 80 MHz rated.\n");
++	fprintf(stderr,"svgalib: Using AT&T20C498-compatible DAC, 80 MHz rated.\n");
+ }
+ 
+ static int att20c498_map_clock(int bpp, int pixelclock)
+diff -Nur svgalib-1.9.13.orig/src/ramdac/btdacs.c svgalib-1.9.13/src/ramdac/btdacs.c
+--- svgalib-1.9.13.orig/src/ramdac/btdacs.c	Sat Jul  3 19:44:03 1999
++++ svgalib-1.9.13/src/ramdac/btdacs.c	Mon Apr  8 23:33:37 2002
+@@ -37,7 +37,7 @@
+ static void bt485_init(void)
+ {
+     if (__svgalib_driver_report)
+-	printf("svgalib: Using BT485 DAC, 135 MHz rated.\n");
++	fprintf(stderr,"svgalib: Using BT485 DAC, 135 MHz rated.\n");
+ }
+ 
+ static int bt485_map_clock(int bpp, int pixelclock)
+diff -Nur svgalib-1.9.13.orig/src/ramdac/ics_gendac.c svgalib-1.9.13/src/ramdac/ics_gendac.c
+--- svgalib-1.9.13.orig/src/ramdac/ics_gendac.c	Sat Jul 21 21:37:19 2001
++++ svgalib-1.9.13/src/ramdac/ics_gendac.c	Mon Apr  8 23:33:37 2002
+@@ -50,7 +50,7 @@
+     unsigned char best_n1 = 16 + 2, best_n2 = 2, best_m = 125 + 2;
+ 
+ #if DEBUG_FINDCLOCK
+-    printf("S3dacsFindClock: Trying to match clock of %0.3f MHz\n", freq_in / 1000.0);
++    fprintf(stderr,"S3dacsFindClock: Trying to match clock of %0.3f MHz\n", freq_in / 1000.0);
+ #endif
+     
+     ffreq_in = freq_in / 1000.0 / BASE_FREQ;
+@@ -60,14 +60,14 @@
+     /* Check if getting freq_in is possible at all */
+     if (freq_in < freq_min / 8) {
+ #if DEBUG_FINDCLOCK
+-	printf("S3dacsFindClock: %0.3f MHz is too low (lowest is %0.3f MHz)\n",
++	fprintf(stderr,"S3dacsFindClock: %0.3f MHz is too low (lowest is %0.3f MHz)\n",
+ 	       freq_in / 1000.0, freq_min / 1000.0 / 8);
+ #endif
+ 	return 0;
+     }  
+     if (freq_in > freq_max / (1 << min_n2)) {
+ #if DEBUG_FINDCLOCK
+-	printf("S3dacsFindClock: %0.3f MHz is too high (highest is %0.3f MHz)\n",
++	fprintf(stderr,"S3dacsFindClock: %0.3f MHz is too high (highest is %0.3f MHz)\n",
+ 	       freq_in / 1000.0, freq_max / 1000.0 / (1 << min_n2));
+ #endif
+ 	return 0;
+@@ -96,7 +96,7 @@
+     }
+ 
+ #if DEBUG_FINDCLOCK
+-    printf("S3dacsFindClock: clock wanted %1.6f MHz, found %1.6f MHz (m %d, n1 %d, n2 %d)\n",
++    fprintf(stderr,"S3dacsFindClock: clock wanted %1.6f MHz, found %1.6f MHz (m %d, n1 %d, n2 %d)\n",
+ 	   freq_in / 1000.0,
+ 	   best_m / ((double) best_n1 * (1 << best_n2)) * BASE_FREQ,
+ 	   best_m, best_n1, best_n2);
+@@ -126,7 +126,7 @@
+     int n, m;
+ 
+     if (!S3dacsFindClock(freq, 0, 100000, 250000, &min_m, &min_n1, &n2)) {
+-	printf("Bad dot clock %0.3f MHz.\n", freq / 1000.0);
++	fprintf(stderr,"Bad dot clock %0.3f MHz.\n", freq / 1000.0);
+ 	return;
+     }
+     
+@@ -136,7 +136,7 @@
+     regs[SDAC_PLL_N1_N2] = n;
+ #if 0
+     if (__svgalib_driver_report)
+-	printf("Initializing DAC PLL values; 0x%02X, 0x%02X.\n", m, n);
++	fprintf(stderr,"Initializing DAC PLL values; 0x%02X, 0x%02X.\n", m, n);
+ #endif
+ }
+ 
+diff -Nur svgalib-1.9.13.orig/src/ramdac/icw.c svgalib-1.9.13/src/ramdac/icw.c
+--- svgalib-1.9.13.orig/src/ramdac/icw.c	Sun Jun 22 17:44:19 1997
++++ svgalib-1.9.13/src/ramdac/icw.c	Mon Apr  8 23:33:37 2002
+@@ -31,7 +31,7 @@
+     if (mi == 0x84) {
+ 	if (di == 0x98)
+ 	    return 1;
+-	printf("svgalib: ICW_probe: Unknown IC Works DAC.\n");
++	fprintf(stderr,"svgalib: ICW_probe: Unknown IC Works DAC.\n");
+     }
+     return 0;
+ }
+@@ -43,7 +43,7 @@
+ static void ICW_init(void)
+ {
+     if (__svgalib_driver_report)
+-	printf("svgalib: Using IC Works DAC (AT&T20C498-compatible).\n");
++	fprintf(stderr,"svgalib: Using IC Works DAC (AT&T20C498-compatible).\n");
+ }
+ 
+ static int ICW_map_clock(int bpp, int pixelclock)
+diff -Nur svgalib-1.9.13.orig/src/ramdac/normal.c svgalib-1.9.13/src/ramdac/normal.c
+--- svgalib-1.9.13.orig/src/ramdac/normal.c	Sun Jun 22 17:44:22 1997
++++ svgalib-1.9.13/src/ramdac/normal.c	Mon Apr  8 23:33:37 2002
+@@ -27,7 +27,7 @@
+ static void normal_dac_init(void)
+ {
+     if (__svgalib_driver_report)
+-	printf("svgalib: Using Normal VGA RAMDAC.\n");
++	fprintf(stderr,"svgalib: Using Normal VGA RAMDAC.\n");
+ }
+ 
+ static int normal_dac_map_clock(int bpp, int pixelclock)
+diff -Nur svgalib-1.9.13.orig/src/ramdac/ramdac.c svgalib-1.9.13/src/ramdac/ramdac.c
+--- svgalib-1.9.13.orig/src/ramdac/ramdac.c	Tue Jul  3 17:28:28 2001
++++ svgalib-1.9.13/src/ramdac/ramdac.c	Mon Apr  8 23:33:37 2002
+@@ -46,11 +46,11 @@
+ {
+     if (!dacspeed) {
+ 	if (__svgalib_driver_report)
+-	    printf("svgalib: Assuming %dMHz DAC.\n", defspeed / 1000);
++	    fprintf(stderr,"svgalib: Assuming %dMHz DAC.\n", defspeed / 1000);
+ 	dacspeed = defspeed;
+     } else {
+ 	if (__svgalib_driver_report)
+-	    printf("svgalib: DAC speed set to %dMHz.\n", dacspeed / 1000);
++	    fprintf(stderr,"svgalib: DAC speed set to %dMHz.\n", dacspeed / 1000);
+     }
+     return dacspeed;
+ }
+diff -Nur svgalib-1.9.13.orig/src/ramdac/s3dacs.c svgalib-1.9.13/src/ramdac/s3dacs.c
+--- svgalib-1.9.13.orig/src/ramdac/s3dacs.c	Tue Jun 19 21:01:10 2001
++++ svgalib-1.9.13/src/ramdac/s3dacs.c	Mon Apr  8 23:33:37 2002
+@@ -115,7 +115,7 @@
+     /* Calculate MCLK in kHz. */
+     MCLK = 14318 * (m + 2) / (n1 + 2) / (1 << n2);
+     if (__svgalib_driver_report)
+-	printf("svgalib: S3-GENDAC/SDAC: MCLK = %d.%03d MHz\n",
++	fprintf(stderr,"svgalib: S3-GENDAC/SDAC: MCLK = %d.%03d MHz\n",
+ 	       MCLK / 1000, MCLK % 1000);
+ }
+ #endif
+@@ -145,7 +145,7 @@
+     unsigned char best_n1 = 16 + 2, best_n2 = 2, best_m = 125 + 2;
+ 
+ #if DEBUG_FINDCLOCK
+-    printf("S3dacsFindClock: Trying to match clock of %0.3f MHz\n", freq_in / 1000.0);
++    fprintf(stderr,"S3dacsFindClock: Trying to match clock of %0.3f MHz\n", freq_in / 1000.0);
+ #endif
+     
+     ffreq_in = freq_in / 1000.0 / BASE_FREQ;
+@@ -155,14 +155,14 @@
+     /* Check if getting freq_in is possible at all */
+     if (freq_in < freq_min / 8) {
+ #if DEBUG_FINDCLOCK
+-	printf("S3dacsFindClock: %0.3f MHz is too low (lowest is %0.3f MHz)\n",
++	fprintf(stderr,"S3dacsFindClock: %0.3f MHz is too low (lowest is %0.3f MHz)\n",
+ 	       freq_in / 1000.0, freq_min / 1000.0 / 8);
+ #endif
+ 	return 0;
+     }  
+     if (freq_in > freq_max / (1 << min_n2)) {
+ #if DEBUG_FINDCLOCK
+-	printf("S3dacsFindClock: %0.3f MHz is too high (highest is %0.3f MHz)\n",
++	fprintf(stderr,"S3dacsFindClock: %0.3f MHz is too high (highest is %0.3f MHz)\n",
+ 	       freq_in / 1000.0, freq_max / 1000.0 / (1 << min_n2));
+ #endif
+ 	return 0;
+@@ -191,7 +191,7 @@
+     }
+ 
+ #if DEBUG_FINDCLOCK
+-    printf("S3dacsFindClock: clock wanted %1.6f MHz, found %1.6f MHz (m %d, n1 %d, n2 %d)\n",
++    fprintf(stderr,"S3dacsFindClock: clock wanted %1.6f MHz, found %1.6f MHz (m %d, n1 %d, n2 %d)\n",
+ 	   freq_in / 1000.0,
+ 	   best_m / ((double) best_n1 * (1 << best_n2)) * BASE_FREQ,
+ 	   best_m, best_n1, best_n2);
+@@ -248,7 +248,7 @@
+     int n, m;
+ 
+     if (!S3dacsFindClock(freq, 0, 100000, 250000, &min_m, &min_n1, &n2)) {
+-	printf("Bad dot clock %0.3f MHz.\n", freq / 1000.0);
++	fprintf(stderr,"Bad dot clock %0.3f MHz.\n", freq / 1000.0);
+ 	return;
+     }
+     
+@@ -257,7 +257,7 @@
+     regs[SDAC_PLL_M] = m;
+     regs[SDAC_PLL_N1_N2] = n;
+     if (__svgalib_driver_report)
+-	printf("Initializing DAC PLL values; 0x%02X, 0x%02X.\n", m, n);
++	fprintf(stderr,"Initializing DAC PLL values; 0x%02X, 0x%02X.\n", m, n);
+ }
+ 
+ static void GENDAC_SDAC_savestate(unsigned char *regs)
+@@ -295,7 +295,7 @@
+ 	n2 = (regs[SDAC_PLL_N1_N2] & 0x60) >> 5;
+ 
+ 	clk = 14318 * (m + 2) / (n1 + 2) / (1 << n2);
+-	printf("SDAC.restorestate, setting clock 0x%02X 0x%02X (%d.%3dMHz)\n",
++	fprintf(stderr,"SDAC.restorestate, setting clock 0x%02X 0x%02X (%d.%3dMHz)\n",
+ 	       regs[SDAC_PLL_M],
+ 	       regs[SDAC_PLL_N1_N2], clk / 1000, clk % 1000);
+     } while (0);
+@@ -551,11 +551,11 @@
+     int min_m, min_n1, n2;
+     
+     if (!S3dacsFindClock(khz, 0, 40000, 70000, &min_m, &min_n1, &n2)) {
+-	printf("Bad MCLK %0.3f MHz.\n", khz / 1000.0);
++	fprintf(stderr,"Bad MCLK %0.3f MHz.\n", khz / 1000.0);
+ 	return;
+     }
+ 
+-    printf("%0.3f MHz MCLK, m = %d, n = %d, r = %d\n", khz / 1000.0, min_m - 2, min_n1 - 2, n2);
++    fprintf(stderr,"%0.3f MHz MCLK, m = %d, n = %d, r = %d\n", khz / 1000.0, min_m - 2, min_n1 - 2, n2);
+     outb(0x3C4, 0x08);
+     sr8 = inb(0x3C5);
+     outb(0x3C5, 0x06);		/* Unlock. */
+@@ -581,7 +581,7 @@
+ 
+     mclk = Trio64_get_mclk();
+     if (__svgalib_driver_report)
+-	printf("svgalib: RAMDAC: Trio64: MCLK = %0.3f MHz\n",
++	fprintf(stderr,"svgalib: RAMDAC: Trio64: MCLK = %0.3f MHz\n",
+ 	       mclk / 1000.0);
+     __svgalib_s3_s3Mclk = mclk;
+ }
+@@ -609,7 +609,7 @@
+     int n, m;
+     
+     if (!S3dacsFindClock(freq, 0, 130000, 270000, &min_m, &min_n1, &n2)) {
+-	printf("Bad dot clock %0.3f MHz.\n", freq / 1000.0);
++	fprintf(stderr,"Bad dot clock %0.3f MHz.\n", freq / 1000.0);
+ 	return;
+     }
+     
+@@ -722,7 +722,7 @@
+ {
+     if (dacspeed) {
+ 	if (__svgalib_driver_report)
+-	    printf("svgalib: using 'dacspeed' not recommended for this RAMDAC.\n");
++	    fprintf(stderr,"svgalib: using 'dacspeed' not recommended for this RAMDAC.\n");
+ 	cardspecs->maxPixelClock4bpp = dacspeed;
+ 	cardspecs->maxPixelClock8bpp = 135000;
+ 	cardspecs->maxPixelClock16bpp = dacspeed;
+diff -Nur svgalib-1.9.13.orig/src/ramdac/sierra.c svgalib-1.9.13/src/ramdac/sierra.c
+--- svgalib-1.9.13.orig/src/ramdac/sierra.c	Sun Jun 22 17:44:35 1997
++++ svgalib-1.9.13/src/ramdac/sierra.c	Mon Apr  8 23:33:37 2002
+@@ -34,7 +34,7 @@
+ {
+     /* Should probe the exact DAC type. */
+     if (__svgalib_driver_report)
+-	printf("svgalib: Using Sierra 32K DAC.\n");
++	fprintf(stderr,"svgalib: Using Sierra 32K DAC.\n");
+ }
+ 
+ static int Sierra_32K_map_clock(int bpp, int pixelclock)
+@@ -143,7 +143,7 @@
+ static void SC15025_init(void)
+ {
+     if (__svgalib_driver_report)
+-	printf("svgalib: Using Sierra 15025/26%c truecolor DAC.\n", SC15025_Rev);
++	fprintf(stderr,"svgalib: Using Sierra 15025/26%c truecolor DAC.\n", SC15025_Rev);
+ }
+ 
+ static void SC15025_initializestate(unsigned char *regs, int bpp, int colormode,
+@@ -325,7 +325,7 @@
+ static void SC1148X_init(void)
+ {
+     if (__svgalib_driver_report)
+-	printf("svgalib: Using Sierra 1148x series 32K DAC.\n");
++	fprintf(stderr,"svgalib: Using Sierra 1148x series 32K DAC.\n");
+ }
+ 
+ static void SC1148X_initializestate(unsigned char *regs, int bpp, int colormode,
+diff -Nur svgalib-1.9.13.orig/src/regextr.c svgalib-1.9.13/src/regextr.c
+--- svgalib-1.9.13.orig/src/regextr.c	Tue Jul 27 18:36:19 1999
++++ svgalib-1.9.13/src/regextr.c	Mon Apr  8 23:33:37 2002
+@@ -502,7 +502,7 @@
+     p = modes;
+     while (p != NULL) {
+ #ifdef DEBUG
+-	printf("Found mode %2d: %s\n", p->mnum, mode2name(p->x, p->y, p->c));
++	fprintf(stderr,"Found mode %2d: %s\n", p->mnum, mode2name(p->x, p->y, p->c));
+ #endif
+ 	(*mt)[i].mode_number = p->mnum;
+ 	(*mt)[i].regs = p->regs;
+diff -Nur svgalib-1.9.13.orig/src/rendition.c svgalib-1.9.13/src/rendition.c
+--- svgalib-1.9.13.orig/src/rendition.c	Wed Feb 20 16:54:01 2002
++++ svgalib-1.9.13/src/rendition.c	Mon Apr  8 23:33:37 2002
+@@ -531,7 +531,7 @@
+     }    
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using Rendition driver, %iKB. ",memory);
++	fprintf(stderr,"Using Rendition driver, %iKB. ",memory);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/s3.c svgalib-1.9.13/src/s3.c
+--- svgalib-1.9.13.orig/src/s3.c	Sat Jun 23 15:32:41 2001
++++ svgalib-1.9.13/src/s3.c	Mon Apr  8 23:33:37 2002
+@@ -571,7 +571,7 @@
+     do {
+ 	unsigned char m, n, df;
+ 
+-	printf("pix_fmt = 0x%02X, 8bpp = 0x%02X, 16bpp = 0x%02X, 24bpp = 0x%02X, 32bpp = 0x%02X,\n"
++	fprintf(stderr,"pix_fmt = 0x%02X, 8bpp = 0x%02X, 16bpp = 0x%02X, 24bpp = 0x%02X, 32bpp = 0x%02X,\n"
+ 	  "CR58 = 0x%02X, CR66 = 0x%02X, CR67 = 0x%02X, CR6D = 0x%02X\n",
+ 	       regs[S3_DAC_OFFSET + IBMRGB_pix_fmt],
+ 	       regs[S3_DAC_OFFSET + IBMRGB_8bpp],
+@@ -588,7 +588,7 @@
+ 	df = m >> 6;
+ 	m &= ~0xC0;
+ 
+-	printf("m = 0x%02X %d, n = 0x%02X %d, df = 0x%02X %d, freq = %.3f\n",
++	fprintf(stderr,"m = 0x%02X %d, n = 0x%02X %d, df = 0x%02X %d, freq = %.3f\n",
+ 	       m, m, n, n, df, df, ((m + 65.0) / n) / (8 >> df) * 16.0);
+     } while (0);
+ #endif
+@@ -1633,7 +1633,7 @@
+ 	    }
+ 	}
+ 	if (s3_chiptype == -1) {
+-	    printf("svgalib: S3: Unknown chip id %02x\n",
++	    fprintf(stderr,"svgalib: S3: Unknown chip id %02x\n",
+ 		   id);
+ 	    return -1;
+ 	}
+@@ -1674,12 +1674,12 @@
+     }
+ 
+     if (__svgalib_driver_report) {
+-	printf("svgalib: Using S3 driver (%s, %dK).\n", s3_chipname[s3_chiptype],
++	fprintf(stderr,"svgalib: Using S3 driver (%s, %dK).\n", s3_chipname[s3_chiptype],
+ 	       s3_memory);
+ 	if (s3_flags & S3_OLD_STEPPING)
+-	    printf("svgalib: Chip revision cannot handle modes with width 1152.\n");
++	    fprintf(stderr,"svgalib: Chip revision cannot handle modes with width 1152.\n");
+ 	if (s3_chiptype > S3_TRIO64) {
+-	    printf("svgalib: s3: chipsets newer than S3 Trio64 is not supported well yet.\n");
++	    fprintf(stderr,"svgalib: s3: chipsets newer than S3 Trio64 is not supported well yet.\n");
+ 	}
+     }
+ /* begin: Initialize cardspecs. */
+@@ -1687,7 +1687,7 @@
+     /* ioperm(1). */
+     if (getenv("IOPERM") == NULL) {
+ 	if (0 > iopl(3))
+-	    printf("svgalib: s3: cannot get I/O permissions for 8514.");
++	    fprintf(stderr,"svgalib: s3: cannot get I/O permissions for 8514.\n");
+     }
+ #ifdef S3_LINEAR_SUPPORT
+     if (s3_chiptype > S3_805) {
+@@ -1753,12 +1753,12 @@
+ 
+     if (dac_used == NULL) {
+ 	/* Not supported. */
+-	printf("svgalib: s3: Assuming normal VGA DAC.\n");
++	fprintf(stderr,"svgalib: s3: Assuming normal VGA DAC.\n");
+ #ifdef INCLUDE_NORMAL_DAC
+ 	dac_used = &__svgalib_normal_dac_methods;
+ 	dac_used->initialize();
+ #else
+-	printf("svgalib: Alas, normal VGA DAC support is not compiled in, goodbye.\n");
++	fprintf(stderr,"svgalib: Alas, normal VGA DAC support is not compiled in, goodbye.\n");
+ 	return 1;
+ #endif
+     }
+diff -Nur svgalib-1.9.13.orig/src/savage.c svgalib-1.9.13/src/savage.c
+--- svgalib-1.9.13.orig/src/savage.c	Thu Nov 15 12:11:35 2001
++++ svgalib-1.9.13/src/savage.c	Mon Apr  8 23:33:37 2002
+@@ -1242,7 +1242,7 @@
+     }
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using SAVAGE driver, %iKB. Chipset: %s\n",memory, chipnames[chipset]);
++	fprintf(stderr,"Using SAVAGE driver, %iKB. Chipset: %s\n",memory, chipnames[chipset]);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/sis.c svgalib-1.9.13/src/sis.c
+--- svgalib-1.9.13.orig/src/sis.c	Tue Jul 24 23:10:13 2001
++++ svgalib-1.9.13/src/sis.c	Mon Apr  8 23:33:37 2002
+@@ -661,7 +661,7 @@
+     };
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using SIS driver, %iKB. Chiptype=%i\n",sis_memory,sis_chiptype);
++	fprintf(stderr,"Using SIS driver, %iKB. Chiptype=%i\n",sis_memory,sis_chiptype);
+     };
+ 
+     /* program the 25 and 28 Mhz clocks */
+diff -Nur svgalib-1.9.13.orig/src/skeleton.c svgalib-1.9.13/src/skeleton.c
+--- svgalib-1.9.13.orig/src/skeleton.c	Wed Jul 18 13:24:04 2001
++++ svgalib-1.9.13/src/skeleton.c	Mon Apr  8 23:33:37 2002
+@@ -296,7 +296,7 @@
+     }
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using SK driver, %iKB. ",memory);
++	fprintf(stderr,"Using SK driver, %iKB. ",memory);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/timing.c svgalib-1.9.13/src/timing.c
+--- svgalib-1.9.13.orig/src/timing.c	Fri Aug  4 05:21:11 2000
++++ svgalib-1.9.13/src/timing.c	Mon Apr  8 23:33:37 2002
+@@ -141,7 +141,7 @@
+     if ((mmtp->flags & DOUBLESCAN))
+ 	vsf /= 2.0f;
+ #ifdef DEBUG
+-    printf("hsf = %f (in:%d), vsf = %f (in:%d)\n",
++    fprintf(stderr,"hsf = %f (in:%d), vsf = %f (in:%d)\n",
+ 	   hsf / 1000, (int) INRANGE(hsf, horizsync),
+ 	   vsf, (int) INRANGE(vsf, vertrefresh));
+ #endif
+diff -Nur svgalib-1.9.13.orig/src/trident.c svgalib-1.9.13/src/trident.c
+--- svgalib-1.9.13.orig/src/trident.c	Wed Feb 20 14:55:02 2002
++++ svgalib-1.9.13/src/trident.c	Mon Apr  8 23:34:44 2002
+@@ -1363,7 +1363,7 @@
+     if(__svgalib_incrtc(TVinterface) & 0x80) frequency = 17.73448; else frequency = 14.31818;
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using Trident driver, %s with %iKB.\n", chipnames[chip],memory);
++	fprintf(stderr,"Using Trident driver, %s with %iKB.\n", chipnames[chip],memory);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.13.orig/src/tvga8900.c svgalib-1.9.13/src/tvga8900.c
+--- svgalib-1.9.13.orig/src/tvga8900.c	Sat Jun 23 13:06:21 2001
++++ svgalib-1.9.13/src/tvga8900.c	Mon Apr  8 23:33:37 2002
+@@ -378,7 +378,7 @@
+ 	crtc31 = regs[EXT + 12];
+     }
+ #ifdef REG_DEBUG
+-    printf("Setting extended registers\n");
++    fprintf(stderr,"Setting extended registers\n");
+ #endif
+ 
+     /* write extended CRT registers */
+@@ -417,7 +417,7 @@
+     port_out(regs[EXT + 10], SEQ_D);
+ 
+ #ifdef REG_DEBUG
+-    printf("Now setting last two extended registers.\n");
++    fprintf(stderr,"Now setting last two extended registers.\n");
+ #endif
+ 
+     /* update CRTC reg 1f */
+@@ -683,7 +683,7 @@
+ {
+     if (force) {
+ #ifdef DEBUG
+-	printf("Forcing memory to %dK\n", par1);
++	fprintf(stderr,"Forcing memory to %dK\n", par1);
+ #endif
+ 	tvga8900_memory = par1;
+ 	tvga8900_nonint = par2 & 1;
+@@ -744,19 +744,19 @@
+     if (tvga_model == 9440 || tvga_model == 9680)
+ 	if (getenv("IOPERM") == NULL)
+             if (iopl(3) < 0) {
+-		printf("tvga%d: Cannot get I/O permissions\n",tvga_model);
++		fprintf(stderr,"tvga%d: Cannot get I/O permissions\n",tvga_model);
+     }
+ 
+ 
+     if (__svgalib_driver_report) {
+ 	if(tvga_model == 9440)
+-	    printf("Using Trident 9440 driver (%dK)\n",
++	    fprintf(stderr,"Using Trident 9440 driver (%dK)\n",
+ 		tvga8900_memory);
+ 	else if(tvga_model == 9680)
+-	    printf("Using Trident 9680 driver (%dK)\n",
++	    fprintf(stderr,"Using Trident 9680 driver (%dK)\n",
+ 		tvga8900_memory);
+ 	else
+-	    printf("Using Trident 8900/9000 driver (%dK, %sinterlaced).\n",
++	    fprintf(stderr,"Using Trident 8900/9000 driver (%dK, %sinterlaced).\n",
+ 		tvga8900_memory, (tvga8900_nonint) ? "non-" : "");
+     }
+     __svgalib_driverspecs = &__svgalib_tvga8900_driverspecs;
+diff -Nur svgalib-1.9.13.orig/src/vesa.c svgalib-1.9.13/src/vesa.c
+--- svgalib-1.9.13.orig/src/vesa.c	Tue Jun  5 08:45:00 2001
++++ svgalib-1.9.13/src/vesa.c	Mon Apr  8 23:33:37 2002
+@@ -575,7 +575,7 @@
+     };
+     
+     if (__svgalib_driver_report) {
+-	printf("Using VESA driver, %iKB. %s\n",vesa_memory,
++	fprintf(stderr,"Using VESA driver, %iKB. %s\n",vesa_memory,
+                 (vesa_chiptype==2)?"VBE3":(vesa_chiptype?"VBE2.0":"VBE1.2"));
+     }
+     return 0;
+diff -Nur svgalib-1.9.13.orig/src/vga.c svgalib-1.9.13/src/vga.c
+--- svgalib-1.9.13.orig/src/vga.c	Wed Apr  3 10:38:56 2002
++++ svgalib-1.9.13/src/vga.c	Mon Apr  8 23:35:23 2002
+@@ -748,7 +748,7 @@
+ 
+     if (__svgalib_mem_fd < 0)
+ 	if ((__svgalib_mem_fd = open(mem_device, O_RDWR)) < 0) {
+-	    printf("svgalib: Cannot open %s\n",mem_device);
++	    fprintf(stderr,"svgalib: Cannot open %s\n",mem_device);
+ 	    exit(1);
+ 	}
+ }
+@@ -976,7 +976,7 @@
+     idle_accel();
+     
+     restoretextmode();
+-    printf("svgalib: Signal %d: %s received%s.\n", v, strsignal(v),
++    fprintf(stderr,"svgalib: Signal %d: %s received%s.\n", v, strsignal(v),
+ 	   (v == SIGINT) ? " (ctrl-c pressed)" : "");
+ 
+     for (i = 0; i < sizeof(sig2catch); i++)
+@@ -986,7 +986,7 @@
+ 	    break;
+ 	}
+     if (i >= sizeof(sig2catch)) {
+-	printf("svgalib: Aieeee! Illegal call to signal_handler, raising segfault.\n");
++	fprintf(stderr,"svgalib: Aieeee! Illegal call to signal_handler, raising segfault.\n");
+ 	raise(SIGSEGV);
+     }
+ }
+@@ -1197,12 +1197,12 @@
+ {
+     CHIPSET = c;
+ #ifdef DEBUG
+-    printf("Setting chipset\n");
++    fprintf(stderr,"Setting chipset\n");
+ #endif
+     if (c == UNDEFINED)
+ 	return;
+     if (__svgalib_driverspecslist[c] == NULL) {
+-	printf("svgalib: Invalid chipset. The driver may not be compiled in.\n");
++	fprintf(stderr,"svgalib: Invalid chipset. The driver may not be compiled in.\n");
+ 	CHIPSET = UNDEFINED;
+ 	return;
+     }
+@@ -1217,12 +1217,12 @@
+ {
+     CHIPSET = c;
+ #ifdef DEBUG
+-    printf("Forcing chipset and features\n");
++    fprintf(stderr,"Forcing chipset and features\n");
+ #endif
+     __svgalib_get_perm();
+     __svgalib_driverspecslist[c]->init(1, par1, par2);
+ #ifdef DEBUG
+-    printf("Finished forcing chipset and features\n");
++    fprintf(stderr,"Finished forcing chipset and features\n");
+ #endif
+     __svgalib_setpage = __svgalib_driverspecs->__svgalib_setpage;
+     __svgalib_setrdpage = __svgalib_driverspecs->__svgalib_setrdpage;
+@@ -1289,7 +1289,7 @@
+ 	return;
+     }
+ #ifdef DEBUG
+-    printf("Release request.\n");
++    fprintf(stderr,"Release request.\n");
+ #endif
+ release_acquire=!release_acquire;
+     forbidvtacquire = 1;
+@@ -1311,27 +1311,27 @@
+         };
+     ioctl(__svgalib_tty_fd, VT_RELDISP, 1);
+ #ifdef DEBUG
+-    printf("Finished release.\n");
++    fprintf(stderr,"Finished release.\n");
+ #endif
+     forbidvtacquire = 0;
+ 
+     /* Suspend program until switched to again. */
+ #ifdef DEBUG
+-    printf("Suspended.\n");
++    fprintf(stderr,"Suspended.\n");
+ #endif
+ 
+     __svgalib_oktowrite = 0;
+     if (!__svgalib_runinbackground)
+ 	__svgalib_waitvtactive();
+ #ifdef DEBUG
+-    printf("Waked.\n");
++    fprintf(stderr,"Waked.\n");
+ #endif
+ }
+ 
+ static void __svgalib_acquirevt_signal(int n)
+ {
+ #ifdef DEBUG
+-    printf("Acquisition request.\n");
++    fprintf(stderr,"Acquisition request.\n");
+ #endif
+ release_acquire=!release_acquire;
+     forbidvtrelease = 1;
+@@ -1342,7 +1342,7 @@
+     __svgalib_flipback();
+     ioctl(__svgalib_tty_fd, VT_RELDISP, VT_ACKACQ);
+ #ifdef DEBUG
+-    printf("Finished acquisition.\n");
++    fprintf(stderr,"Finished acquisition.\n");
+ #endif
+     forbidvtrelease = 0;
+     if (__svgalib_come_from_background)
+@@ -1512,7 +1512,7 @@
+ 
+ #if 0 /* What is this for? */
+     if ((long) GM < 0) {
+-	printf("svgalib: mmap error rrr\n");
++	fprintf(stderr,"svgalib: mmap error rrr\n");
+ 	exit(1);
+     }
+ #endif
+@@ -1523,8 +1523,8 @@
+ 
+     i = __svgalib_saveregs(text_regs);
+     if (i > MAX_REGS) {
+-	puts("svgalib: FATAL internal error:");
+-	printf("Set MAX_REGS at least to %d in src/driver.h and recompile everything.\n",
++	fprintf(stderr,"svgalib: FATAL internal error:\n");
++	fprintf(stderr,"Set MAX_REGS at least to %d in src/driver.h and recompile everything.\n",
+ 	       i);
+ 	exit(1);
+     }
+@@ -1613,7 +1613,7 @@
+     int child_status, oldkbmode;
+ 
+     if (initialized) {
+-	printf("svgalib: warning: vga_safety_fork() called when already initialized\n");
++	fprintf(stderr,"svgalib: warning: vga_safety_fork() called when already initialized\n");
+ 	goto no_fork;
+     }
+     initialize();
+@@ -1628,7 +1628,7 @@
+     childpid = fork();
+     if (childpid < 0) {
+       no_fork:
+-	printf("svgalib: warning: can't fork to enhance reliability; proceeding anyway");
++	fprintf(stderr,"svgalib: warning: can't fork to enhance reliability; proceeding anyway");
+ 	return;
+     }
+     if (childpid) {
+@@ -1646,20 +1646,20 @@
+ 		exit(WEXITSTATUS(child_status));
+ 
+ 	    if (WCOREDUMP(child_status))
+-		puts("svgalib:vga_safety_fork: Core dumped!");
++		fprintf(stderr,"svgalib:vga_safety_fork: Core dumped!\n");
+ 
+ 	    if (WIFSIGNALED(child_status)) {
+-		printf("svgalib:vga_safety_fork: Killed by signal %d, %s.\n",
++		fprintf(stderr,"svgalib:vga_safety_fork: Killed by signal %d, %s.\n",
+ 		       WTERMSIG(child_status),
+ 		       strsignal(WTERMSIG(child_status)));
+ 		exit(1);
+ 	    }
+ 	    if (WIFSTOPPED(child_status)) {
+-		printf("svgalib:vga_safety_fork: Stopped by signal %d, %s.\n",
++		fprintf(stderr,"svgalib:vga_safety_fork: Stopped by signal %d, %s.\n",
+ 		       WSTOPSIG(child_status),
+ 		       strsignal(WSTOPSIG(child_status)));
+-		puts("\aWARNING! Continue stopped svgalib application at own risk. You are better\n"
+-		     "off killing it NOW!");
++		fprintf(stderr,"\aWARNING! Continue stopped svgalib application at own risk. You are better\n"
++		     "off killing it NOW!\n");
+ 		continue;
+ 	    }
+ 	}
+@@ -2221,7 +2221,7 @@
+ 	/* (unless more has been claimed, in which case we assume */
+ 	/* SVGA bank-switching) */
+ 	if ((graph_buf = malloc(GRAPH_SIZE)) == NULL) {
+-	    printf("Cannot allocate memory for VGA state\n");
++	    fprintf(stderr,"Cannot allocate memory for VGA state\n");
+ 	    vga_setmode(TEXT);
+ 	    exit(1);
+ 	}
+@@ -2230,7 +2230,7 @@
+ 	/* for planar VGA modes, save the full 256K */
+ 	__svgalib_vga_driverspecs.setmode(GPLANE16, prv_mode);
+ 	if ((graph_buf = malloc(4 * GRAPH_SIZE)) == NULL) {
+-	    printf("Cannot allocate memory for VGA state\n");
++	    fprintf(stderr,"Cannot allocate memory for VGA state\n");
+ 	    vga_setmode(TEXT);
+ 	    exit(1);
+ 	}
+@@ -2245,7 +2245,7 @@
+ 
+ 	size = VMEM;
+ 	if ((graph_buf = malloc(4 * size)) == NULL) {
+-	    printf("Cannot allocate memory for VGA state\n");
++	    fprintf(stderr,"Cannot allocate memory for VGA state\n");
+ 	    vga_setmode(TEXT);
+ 	    exit(1);
+ 	}
+@@ -2267,7 +2267,7 @@
+ 
+ 	size = VMEM;
+ 	if ((graph_buf = malloc(size)) == NULL) {
+-	    printf("Cannot allocate memory for SVGA state.\n");
++	    fprintf(stderr,"Cannot allocate memory for SVGA state.\n");
+ 	    vga_setmode(TEXT);
+ 	    exit(1);
+ 	}
+@@ -2353,7 +2353,7 @@
+ 	size = VMEM;
+ 
+ #ifdef DEBUG
+-	printf("Restoring %dK of video memory.\n", (size + 2) / 1024);
++	fprintf(stderr,"Restoring %dK of video memory.\n", (size + 2) / 1024);
+ #endif
+ 	page = 0;
+ 	while (size >= 65536) {
+@@ -2632,11 +2632,11 @@
+     ptr = __svgalib_token(nptr);
+     while (ptr) {
+ #ifdef DEBUG_CONF
+-	printf("Parsing: %s\n", ptr);
++	fprintf(stderr,"Parsing: %s\n", ptr);
+ #endif
+ 	for (curr = commands, index = 0; *curr; curr++, index++) {
+ #ifdef DEBUG_CONF
+-	    printf("Checking: %s\n", *curr);
++	    fprintf(stderr,"Checking: %s\n", *curr);
+ #endif
+ 	    if (**curr == '!') {
+ 		if (!strcmp(*curr + 1, ptr)) {
+@@ -2666,7 +2666,7 @@
+     
+     fstat(fileno(file), &st);	/* Some error analysis may be fine here.. */
+     if ( (buf = alloca(st.st_size + 1)) == 0) {	/* + a final \0 */
+-        puts("svgalib: out of mem while parsing config file !");
++        fprintf(stderr,"svgalib: out of mem while parsing config file !\n");
+         return;
+     }
+     fread(buf, 1, st.st_size, file);
+@@ -2702,7 +2702,7 @@
+     }
+     if ( (file = fopen(configfilename, "r")) != 0) {
+ #ifdef DEBUG_CONF
+-  printf("Processing config file \'%s\'\n", configfilename);
++  fprintf(stderr,"Processing config file \'%s\'\n", configfilename);
+ #endif
+       process_config_file(file, 1, commands, func);
+       fclose(file);
+@@ -2716,13 +2716,13 @@
+ 
+       filename = alloca(strlen(ptr) + 20);
+       if (!filename) {
+-	puts("svgalib: out of mem while parsing SVGALIB_CONFIG_FILE !");
++	fprintf(stderr,"svgalib: out of mem while parsing SVGALIB_CONFIG_FILE !\n");
+       } else {
+ 	strcpy(filename, ptr);
+ 	strcat(filename, "/.svgalibrc");
+ 	if ( (file = fopen(filename, "r")) != 0) {
+ #ifdef DEBUG_CONF
+-	  printf("Processing config file \'%s\'\n", filename);
++	  fprintf(stderr,"Processing config file \'%s\'\n", filename);
+ #endif
+ 	  process_config_file(file, allowoverride, commands, func);
+ 	  fclose(file);
+@@ -2733,7 +2733,7 @@
+     if ( (ptr = getenv("SVGALIB_CONFIG_FILE")) != 0) {
+       if ( (file = fopen(ptr, "r")) != 0) {
+ #ifdef DEBUG_CONF
+-  printf("Processing config file \'%s\'\n", ptr);
++  fprintf(stderr,"Processing config file \'%s\'\n", ptr);
+ #endif
+ 	process_config_file(file, allowoverride, commands, func);
+ 	fclose(file);
+@@ -2745,11 +2745,11 @@
+     if ( (ptr = getenv("SVGALIB_CONFIG")) != 0  &&  (i = strlen(ptr)) != 0) {
+       buf = alloca(i + 1);
+       if (!buf) {
+-	puts("svgalib: out of mem while parsing SVGALIB_CONFIG !");
++	fprintf(stderr,"svgalib: out of mem while parsing SVGALIB_CONFIG !\n");
+       } else {
+ 	strcpy(buf, ptr);		/* Copy for safety and strtok!! */
+ #ifdef DEBUG_CONF
+-	puts("Parsing env variable \'SVGALIB_CONFIG\'");
++	fprintf(stderr,"Parsing env variable \'SVGALIB_CONFIG\'\n");
+ #endif
+ 	parse_string(buf, commands, func, allowoverride);
+       }
+@@ -2831,17 +2831,17 @@
+     float f;
+ 
+ #ifdef DEBUG_CONF
+-    printf("command %d detected.\n", command);
++    fprintf(stderr,"command %d detected.\n", command);
+ #endif
+     switch (command) {
+     case 5:
+ #ifdef DEBUG_CONF
+-	puts("Allow override");
++	fprintf(stderr,"Allow override\n");
+ #endif
+ 	if (mode)
+ 	    allowoverride = 1;
+ 	else
+-	    puts("Overrideenable denied. (Gee.. Do you think I'm that silly?)");
++	    fprintf(stderr,"Overrideenable denied. (Gee.. Do you think I'm that silly?)\n");
+ 	break;
+     case 0:			/* mouse */
+     case 2:			/* m */
+@@ -2864,16 +2864,16 @@
+ 		}
+ 	    }
+ 	  inv_mouse:
+-	    printf("svgalib: Illegal mouse setting: {mouse|m} %s\n"
++	    fprintf(stderr,"svgalib: Illegal mouse setting: {mouse|m} %s\n"
+ 		   "Correct usage: {mouse|m} mousetype\n"
+ 		   "where mousetype is one of 0, 1, 2, 3, 4, 5, 6, 7, 9,\n",
+ 		   (ptr != NULL) ? ptr : "");
+ 	    for (tabptr = conf_mousenames, i = 0; *tabptr; tabptr++, i++) {
+ 		if (i == MOUSE_NONE)
+ 		    continue;
+-		printf("%s, ", *tabptr);
++		fprintf(stderr,"%s, ", *tabptr);
+ 	    }
+-	    puts("or none.");
++	    fprintf(stderr,"or none.\n");
+ 	    return ptr;		/* Allow a second parse of str */
+ 	}
+ 	break;
+@@ -2896,7 +2896,7 @@
+ 		goto mon_deny;
+ 	    __svgalib_horizsync.max = f * 1000.0f;
+ 	} else {
+-	    printf("svgalib: Illegal monitor setting: {monitor|M} %s\n"
++	    fprintf(stderr,"svgalib: Illegal monitor setting: {monitor|M} %s\n"
+ 		   "Correct usage: {monitor|M} monitortype\n"
+ 		   "where monitortype is one of 0, 1, 2, 3, 4, 5, 6, or\n"
+ 		   "maximal horz. scan frequency in khz.\n"
+@@ -2908,14 +2908,14 @@
+     case 4:			/* chipset */
+ 	ptr = __svgalib_token(nptr);
+ 	if (ptr == NULL) {
+-	    puts("svgalib: Illegal chipset setting: no chipset given");
++	    fprintf(stderr,"svgalib: Illegal chipset setting: no chipset given\n");
+ 	    goto chip_us;
+ 	}
+ 	/*First param is chipset */
+ 	for (i = 0, tabptr = driver_names; *tabptr; tabptr++, i++) {
+ 	    if (!strcasecmp(ptr, *tabptr)) {
+ 		if (!__svgalib_driverspecslist[i]) {
+-		    printf("svgalib: Illegal chipset setting: Driver for %s is NOT compiled in.\n",
++		    fprintf(stderr,"svgalib: Illegal chipset setting: Driver for %s is NOT compiled in.\n",
+ 			ptr);
+ 		    continue; /* The for above will loop a few more times and fail */
+ 		}
+@@ -2928,35 +2928,35 @@
+ 			    vga_setchipsetandfeatures(i, j, atoi(ptr));
+ 			else {
+ 			  chipdeny:
+-			    puts("chipset override from environment denied.");
++			    fprintf(stderr,"chipset override from environment denied.\n");
+ 			}
+ 			return __svgalib_token(nptr);
+ 		    } else {
+-			puts("svgalib: Illegal chipset setting: memory is not a number");
++			fprintf(stderr,"svgalib: Illegal chipset setting: memory is not a number\n");
+ 			goto chip_us;
+ 		    }
+ 		}
+ 		if (mode)
+ 		    vga_setchipset(i);
+ 		else
+-		    puts("chipset override from environment denied.");
++		    fprintf(stderr,"chipset override from environment denied.\n");
+ 		return ptr;
+ 	    }
+ 	}
+-	printf("svgalib: Illegal chipset setting: chipset %s\n", ptr);
++	fprintf(stderr,"svgalib: Illegal chipset setting: chipset %s\n", ptr);
+       chip_us:
+-	puts("Correct usage: chipset driver [par1 par2]\n"
+-	     "where driver is one of:");
++	fprintf(stderr,"Correct usage: chipset driver [par1 par2]\n"
++	     "where driver is one of:\n");
+ 	ptb = "%s";
+ 	for (i = 0, tabptr = driver_names; *tabptr; tabptr++, i++) {
+ 	    if (__svgalib_driverspecslist[i] != NULL) {
+-		printf(ptb, *tabptr);
++		fprintf(stderr,ptb, *tabptr);
+ 		ptb = ", %s";
+ 	    }
+ 	}
+-	puts("\npar1 and par2 are river dependant integers.\n"
++	fprintf(stderr,"\npar1 and par2 are river dependant integers.\n"
+ 	     "Example: Chipset VGA    or\n"
+-	     "Chipset VGA 0 512");
++	     "Chipset VGA 0 512\n");
+ 	return ptr;
+     case 6:			/* oldstyle config: m0-m4 */
+     case 7:
+@@ -2978,7 +2978,7 @@
+       monnum:
+ 	if (!mode) {
+ 	  mon_deny:
+-	    puts("Monitor setting from environment denied.");
++	    fprintf(stderr,"Monitor setting from environment denied.\n");
+ 	    break;
+ 	} else {
+ 	    __svgalib_horizsync.max = __svgalib_maxhsync[command - 12];
+@@ -3007,14 +3007,14 @@
+     case 31:			/* c0-c1 color-text selection */
+ 	if (!mode) {
+ 	  coltexdeny:
+-	    puts("Color/mono text selection from environment denied.");
++	    fprintf(stderr,"Color/mono text selection from environment denied.\n");
+ 	    break;
+ 	}
+ 	color_text = 0;
+ 	break;
+     case 32:
+ 	if (!mode) {
+-	    puts("Color/mono text selection from environment denied.");
++	    fprintf(stderr,"Color/mono text selection from environment denied.\n");
+ 	    break;
+ 	}
+ 	color_text = 1;
+@@ -3069,7 +3069,7 @@
+ 	    __svgalib_horizsync.max = f * 1000;
+ 	} else {
+ 	  hs_bad:
+-	    printf("svgalib: Illegal HorizSync setting.\n"
++	    fprintf(stderr,"svgalib: Illegal HorizSync setting.\n"
+ 		   "Correct usage: HorizSync min_kHz max_kHz\n"
+ 		   "Example: HorizSync 31.5 36.5\n");
+ 	}
+@@ -3092,7 +3092,7 @@
+ 	    __svgalib_vertrefresh.max = f;
+ 	} else {
+ 	  vr_bad:
+-	    printf("svgalib: Illegal VertRefresh setting.\n"
++	    fprintf(stderr,"svgalib: Illegal VertRefresh setting.\n"
+ 		   "Correct usage: VertRefresh min_Hz max_Hz\n"
+ 		   "Example: VertRefresh 50 70\n");
+ 	}
+@@ -3178,7 +3178,7 @@
+ 	}
+     case 46:
+ 	if (!mode) {
+-	    puts("Security setting from environment denied.");
++	    fprintf(stderr,"Security setting from environment denied.\n");
+ 	    break;
+ 	}
+ 	if ( (ptr = __svgalib_token(nptr)) ) {
+@@ -3190,7 +3190,7 @@
+ 		 break;
+ 	    }
+ 	} 
+-	puts("svgalib: Unknown security options\n");
++	fprintf(stderr,"svgalib: Unknown security options\n");
+ 	break;
+     case 47:
+ 	ptr = __svgalib_token(nptr);
+@@ -3198,7 +3198,7 @@
+ 	    mouse_device = strdup(ptr);
+ 	    if (mouse_device == NULL) {
+ 	      nomem:
+-		puts("svgalib: Fatal error: out of memory.");
++		fprintf(stderr,"svgalib: Fatal error: out of memory.\n");
+ 		exit(1);
+ 	    }
+ 	} else
+@@ -3210,12 +3210,12 @@
+ 	  if (mode != -1) {
+ 	    __svgalib_default_mode = mode;
+ 	  } else {
+-	    printf("svgalib: config: illegal mode \'%s\' for \'%s\'\n",
++	    fprintf(stderr,"svgalib: config: illegal mode \'%s\' for \'%s\'\n",
+ 	   			  ptr, vga_conf_commands[command]);
+ 	  }
+ 	} else {
+   param_needed:
+-  	  printf("svgalib: config: \'%s\' requires parameter(s)",
++  	  fprintf(stderr,"svgalib: config: \'%s\' requires parameter(s)",
+   	  				vga_conf_commands[command]);
+ 	  break;
+ 	}
+@@ -3239,7 +3239,7 @@
+ 	if (!__joystick_devicenames[command - 51])
+ 	    goto nomem;
+ #else
+-	printf("svgalib: No joystick support in a.out version.\n");
++	fprintf(stderr,"svgalib: No joystick support in a.out version.\n");
+ #endif
+ 	break;
+     case 55: /* TextProg */
+@@ -3267,7 +3267,7 @@
+         __svgalib_vesatext=1;
+         break;
+ #else
+-       printf("svgalib: Warning: VESA support not enabled!\n");
++       fprintf(stderr,"svgalib: Warning: VESA support not enabled!\n");
+ #endif
+     case 57: /* Vesa save bitmap */  
+ #ifdef INCLUDE_VESA_DRIVER
+@@ -3277,7 +3277,7 @@
+          __svgalib_VESA_savebitmap=j;
+        };
+ #else
+-       printf("svgalib: Warning: VESA support not enabled!\n");
++       fprintf(stderr,"svgalib: Warning: VESA support not enabled!\n");
+ #endif
+        break;
+     case 58:
+@@ -3291,7 +3291,7 @@
+ 	        __svgalib_bandwidth = f;
+ 	    }
+ 	} else {
+-  	    printf("svgalib: config: \'%s\' requires parameter(s)",
++  	    fprintf(stderr,"svgalib: config: \'%s\' requires parameter(s)",
+   	  				vga_conf_commands[command]);
+ 	    break;
+ 	}
+@@ -3322,7 +3322,7 @@
+         };
+         break;
+     case 62:
+-        printf("svgalib: Warning: /proc/bus/pci is not used anymore, so option \"noprocpci\" ignored\n");
++        fprintf(stderr,"svgalib: Warning: /proc/bus/pci is not used anymore, so option \"noprocpci\" ignored\n");
+         break;
+     case 63: /* Vesa text mode number */  
+ #ifdef INCLUDE_VESA_DRIVER
+@@ -3332,7 +3332,7 @@
+          __svgalib_VESA_textmode=j;
+        };
+ #else
+-       printf("svgalib: Warning: VESA support not enabled!\n");
++       fprintf(stderr,"svgalib: Warning: VESA support not enabled!\n");
+ #endif
+        break;
+     case 64:			/* pci initial values */
+@@ -3349,7 +3349,7 @@
+ 	    if((j<256)&&(j>=0))__svgalib_pci_idev = j;
+ 	} else {
+         ps_bad:
+-	    printf("svgalib: Illegal PCI initial values setting.\n"
++	    fprintf(stderr,"svgalib: Illegal PCI initial values setting.\n"
+ 		   "Correct usage: PCIStart initial_bus initial_dev"
+ 		   "Example: PCIStart 1 0\n");
+ 	}
+@@ -3362,7 +3362,7 @@
+ 	    ptr = __svgalib_token(nptr);
+             if ( (file = fopen(ptr, "r")) != 0) {
+ #ifdef DEBUG_CONF
+-                printf("Processing config file \'%s\'\n", ptr);
++                fprintf(stderr,"Processing config file \'%s\'\n", ptr);
+ #endif
+                 process_config_file(file, 1, vga_conf_commands, process_option);
+                 fclose(file);
+@@ -3379,11 +3379,11 @@
+ 	if (ptr) {
+ 	    mem_device = strdup(ptr);
+ 	    if (mem_device == NULL) {
+-		puts("svgalib: Fatal error: out of memory.");
++		fputs("svgalib: Fatal error: out of memory.\n",stderr);
+ 		exit(1);
+ 	    }
+ 	} else {
+-  	  printf("svgalib: config: \'%s\' requires parameter(s)",
++  	  fprintf(stdout,"svgalib: config: \'%s\' requires parameter(s)",
+   	  				vga_conf_commands[command]);
+         }
+ 	break;
+@@ -3404,19 +3404,19 @@
+     __svgalib_read_options(vga_conf_commands, process_option);
+     if (mouse_type == -1) {
+ 	mouse_type = MOUSE_MICROSOFT;	/* Default. */
+-	puts("svgalib: Assuming Microsoft mouse.");
++	fprintf(stderr,"svgalib: Assuming Microsoft mouse.\n");
+     }
+     if (__svgalib_horizsync.max == 0U) {
+ 	/* Default monitor is low end SVGA/8514. */
+ 	__svgalib_horizsync.min = 31500U;
+ 	__svgalib_horizsync.max = 35500U;
+-	puts("svgalib: Assuming low end SVGA/8514 monitor (35.5 KHz).");
++	fprintf(stderr,"svgalib: Assuming low end SVGA/8514 monitor (35.5 KHz).\n");
+     }
+ #ifdef DEBUG_CONF
+-    printf("Mouse is: %d Monitor is: H(%5.1f, %5.1f) V(%u,%u)\n", mouse_type,
++    fprintf(stderr,"Mouse is: %d Monitor is: H(%5.1f, %5.1f) V(%u,%u)\n", mouse_type,
+       __svgalib_horizsync.min / 1000.0, __svgalib_horizsync.max / 1000.0,
+ 	   __svgalib_vertrefresh.min, __svgalib_vertrefresh.max);
+-    printf("Mouse device is: %s",mouse_device);
++    fprintf(stderr,"Mouse device is: %s",mouse_device);
+ #endif
+ }
+ 
+@@ -3541,7 +3541,7 @@
+     if(__svgalib_secondary) __svgalib_emulatepage=1;
+ 
+     if(__svgalib_driver_report) {
+-        printf("svgalib %s\n", versionstr);
++        fprintf(stderr,"svgalib %s\n", versionstr);
+     }
+ 
+ #ifdef SET_TERMIO
+@@ -3618,11 +3618,11 @@
+     };
+    
+ #ifdef DEBUG
+-    printf("svgalib: Opening mouse (type = %x).\n", mouse_type | mouse_modem_ctl);
++    fprintf(stderr,"svgalib: Opening mouse (type = %x).\n", mouse_type | mouse_modem_ctl);
+ #endif
+     if(mouse_type != MOUSE_NONE ) {
+         if (mouse_init(mouse_device, mouse_type | mouse_modem_ctl, MOUSE_DEFAULTSAMPLERATE))
+-           printf("svgalib: Failed to initialize mouse.\n");
++           fprintf(stderr,"svgalib: Failed to initialize mouse.\n");
+         else
+            mouse_open = 1;
+     }
+diff -Nur svgalib-1.9.13.orig/src/vga_console.c svgalib-1.9.13/src/vga_console.c
+--- svgalib-1.9.13.orig/src/vga_console.c	Fri Jun 22 19:42:55 2001
++++ svgalib-1.9.13/src/vga_console.c	Mon Apr  8 23:33:37 2002
+@@ -104,7 +104,7 @@
+     if ((stat(fname, &sbuf) >= 0) && (getuid() == sbuf.st_uid)) {
+         return 1;
+     }
+-    printf("You must be the owner of the current console to use svgalib.\n");
++    fprintf(stderr,"You must be the owner of the current console to use svgalib.\n");
+     return 0;
+ }
+ 
+@@ -145,7 +145,7 @@
+     }
+ 
+     if ((__svgalib_tty_fd = open("/dev/console", O_RDWR)) < 0) {
+-        printf("svgalib: can't open /dev/console \n");
++        fprintf(stderr,"svgalib: can't open /dev/console \n");
+         exit(1);
+     }
+     if (ioctl(__svgalib_tty_fd, VT_OPENQRY, &__svgalib_vc) < 0)
+@@ -164,7 +164,7 @@
+             goto error;
+         /* success, redirect all stdios */
+         if (DREP)
+-            printf("[svgalib: allocated virtual console #%d]\n", __svgalib_vc);
++            fprintf(stderr,"[svgalib: allocated virtual console #%d]\n", __svgalib_vc);
+         fflush(stdin);
+         fflush(stdout);
+         fflush(stderr);
+@@ -187,7 +187,7 @@
+     if (__svgalib_tty_fd > 2)
+ 	close(__svgalib_tty_fd);
+     __svgalib_tty_fd = - 1;
+-    printf("Not running in a graphics capable console,\n"
++    fprintf(stderr,"Not running in a graphics capable console,\n"
+ 	 "and unable to find one.\n");
+     }
+ }
+diff -Nur svgalib-1.9.13.orig/src/vgadrv.c svgalib-1.9.13/src/vgadrv.c
+--- svgalib-1.9.13.orig/src/vgadrv.c	Sat Jun 23 13:04:43 2001
++++ svgalib-1.9.13/src/vgadrv.c	Mon Apr  8 23:33:37 2002
+@@ -313,7 +313,7 @@
+ static int vgadrv_init(int force, int par1, int par2)
+ {
+     if (__svgalib_driver_report)
+-	printf("Using VGA driver.\n");
++	fprintf(stderr,"Using VGA driver.\n");
+     __svgalib_driverspecs = &__svgalib_vga_driverspecs;
+     __svgalib_banked_mem_base=0xa0000;
+     __svgalib_banked_mem_size=0x10000;
+diff -Nur svgalib-1.9.13.orig/src/vgamisc.c svgalib-1.9.13/src/vgamisc.c
+--- svgalib-1.9.13.orig/src/vgamisc.c	Tue Apr  2 23:52:01 2002
++++ svgalib-1.9.13/src/vgamisc.c	Mon Apr  8 23:33:37 2002
+@@ -129,7 +129,7 @@
+     }
+     /* Linear framebuffer is OK. */
+     if(__svgalib_driver_report)
+-    printf("svgalib: Found linear framebuffer at 0x%08X.\n", base);
++    fprintf(stderr,"svgalib: Found linear framebuffer at 0x%08X.\n", base);
+     result = 0;
+    munmap((caddr_t) fb, size);
+     (*lfn) (LINEAR_DISABLE, base);
+@@ -202,7 +202,7 @@
+ 	mapaddr = (__svgalib_physmem() + (gran + gran - 1)) & ~(gran - 1);
+ 	maxmap = (range - 1) * gran;
+ 	if (mapaddr > maxmap) {
+-	    puts("svgalib: Too much physical memory, cannot map aperture\n");
++	    fprintf(stderr,"svgalib: Too much physical memory, cannot map aperture\n");
+ 	    return -1;
+ 	}
+ 	if ((mappedMemory = verify_linear_mapping(mapaddr, memory)) == -1)
+@@ -222,7 +222,7 @@
+         graph_mem = LINEAR_POINTER;
+ 
+ 	if (memory != mappedMemory)
+-	    printf("svgalib: Warning, card has %dK, only %dK available in linear mode.\n",
++	    fprintf(stderr,"svgalib: Warning, card has %dK, only %dK available in linear mode.\n",
+ 		   memory >> 10, mappedMemory >> 10);
+ 	return mappedMemory;
+     }
+diff -Nur svgalib-1.9.13.orig/src/vgapal.c svgalib-1.9.13/src/vgapal.c
+--- svgalib-1.9.13.orig/src/vgapal.c	Wed Feb 20 13:14:00 2002
++++ svgalib-1.9.13/src/vgapal.c	Mon Apr  8 23:33:37 2002
+@@ -72,7 +72,7 @@
+ 
+     if (__svgalib_grayscale) {
+ 	if ((unsigned) index >= sizeof(__svgalib_green_backup) / sizeof(__svgalib_green_backup[0])) {
+-	    printf("vga_setpalette: color index %d out of range\n", index);
++	    fprintf(stderr,"vga_setpalette: color index %d out of range\n", index);
+ 	}
+ 	__svgalib_green_backup[index] = green;
+ 
+@@ -97,7 +97,7 @@
+     else get_lut(index, red, green, blue);
+     if (__svgalib_grayscale) {
+ 	if ((unsigned) index >= sizeof(__svgalib_green_backup) / sizeof(__svgalib_green_backup[0])) {
+-	    printf("vga_getpalette: color index %d out of range\n", index);
++	    fprintf(stderr,"vga_getpalette: color index %d out of range\n", index);
+ 	}
+ 	*green = __svgalib_green_backup[index];
+     }

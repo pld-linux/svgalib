@@ -1,0 +1,15 @@
+diff -Nur svgalib-1.9.9.orig/kernel/svgalib_helper/Makefile svgalib-1.9.9/kernel/svgalib_helper/Makefile
+--- svgalib-1.9.9.orig/kernel/svgalib_helper/Makefile	Tue Jul 24 14:31:25 2001
++++ svgalib-1.9.9/kernel/svgalib_helper/Makefile	Tue Jul 24 14:32:02 2001
+@@ -16,10 +16,7 @@
+ CFLAGS += -DSVGALIB_HELPER_MAJOR=$(SVGALIB_HELPER_MAJOR)
+ 
+ # Extract version number from headers.
+-#VER = $(shell awk -F\" '/REL/ {print $$2}' $(INCLUDEDIR)/linux/version.h)
+-
+-# Use version of current running kernel
+-VER = $(shell uname -r)
++VER = $(shell awk -F\" '/REL/ {print $$2}' $(INCLUDEDIR)/linux/version.h)
+ 
+ TARGET = svgalib_helper
+ OBJS = $(TARGET).o

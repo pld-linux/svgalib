@@ -1,0 +1,301 @@
+diff -Nur svgalib-1.9.13.orig/src/banshee.c svgalib-1.9.13/src/banshee.c
+--- svgalib-1.9.13.orig/src/banshee.c	Mon Apr  8 23:58:48 2002
++++ svgalib-1.9.13/src/banshee.c	Tue Apr  9 00:07:51 2002
+@@ -48,11 +48,18 @@
+ static void banshee_getmodeinfo(int mode, vga_modeinfo *modeinfo)
+ {
+ 
+-    if(modeinfo->colors==16)return;
+-
++    modeinfo->startaddressrange=256*1024-1;
++    if(modeinfo->colors==16)
++	modeinfo->maxpixels=256*1024*2;
++    else if(modeinfo->colors==4)
++	modeinfo->maxpixels=256*1024*4;
++    else if(modeinfo->colors==2)
++	modeinfo->maxpixels=256*1024*8;
++    else {
+     modeinfo->maxpixels = banshee_memory*1024/modeinfo->bytesperpixel;
+-    modeinfo->maxlogicalwidth = 4088;
+     modeinfo->startaddressrange = banshee_memory * 1024 - 1;
++    }
++    modeinfo->maxlogicalwidth = 4088;
+     modeinfo->haveblit = 0;
+     modeinfo->flags &= ~HAVE_RWPAGE;
+ 
+@@ -127,7 +134,7 @@
+     outl(banshee_io_base+0x68,restore->hwCurC0);
+     outl(banshee_io_base+0x6c,restore->hwCurC1);
+     outl(banshee_io_base+0x5c,restore->vidProcCfg&0xfffffffe);
+-    outl(banshee_io_base+0x5c,restore->vidProcCfg|1);
++    outl(banshee_io_base+0x5c,restore->vidProcCfg|1); // ???
+     outl(banshee_io_base+0x5c,restore->vidProcCfg);
+ 
+ }
+@@ -201,100 +208,122 @@
+ 
+     vd    = modetiming->CrtcVDisplay - 1;
+     vt = modetiming->CrtcVTotal - 2;
+-    vbs  = modetiming->CrtcVSyncStart - 1;
++    vbs  = vd;
+     vbe  = vt; 
+     moderegs[BANSHEEREG_SAVE(1)]=((vt & 0x400)>>10) | 
+ 		            ((vd  & 0x400)>>8) |
+ 		            ((vbs & 0x400)>>6) |
+ 		            ((vbe & 0x400)>>4);
+-/*
+-    if (modetiming->flags & INTERLACED)
+-	    moderegs[MXREG_SAVE(3)] |= 0x8;
+-*/
+-
+-    banshee_regs->vidProcCfg&=0xf7e30000;
+-    banshee_regs->vidProcCfg|=0x00000c81;
+ 
+-    banshee_regs->vidScreenSize=modeinfo->width|(modeinfo->height<<12);
++    banshee_regs->vidProcCfg&=0xf7e30000; /* disable HW cursor, scalling etc. */
++    banshee_regs->vidProcCfg|=0x00000c80; /* bypass Desktop&Overlay CLUT, enable Desktop surface */
++    banshee_regs->vidProcCfg|=0x00000001; /* Video Processor on / VGA off */
+ 
+-    if (modetiming->flags & DOUBLESCAN)
+-	    banshee_regs->vidProcCfg |= 0x10;
++    if (modetiming->flags & INTERLACED)
++	    banshee_regs->vidProcCfg |= 0x8; /* Interlace enabled [V3/V4/V5 but not Banshee] */
+ 
++    if (modetiming->flags & DOUBLESCAN) {
++	    banshee_regs->vidProcCfg |= 0x10; /* Double Scan */
++	    banshee_regs->vidScreenSize=modeinfo->width|(modeinfo->height<<13);
++    } else
++	    banshee_regs->vidScreenSize=modeinfo->width|(modeinfo->height<<12);
++	    
+     banshee_regs->vidProcCfg |= 0x02; /* cursor in X11 mode */
+ 
+     switch (modeinfo->bitsPerPixel)
+     {
++	    case 1:
++	    case 2:
++	    case 4:
+ 	    case 8: 
+-               	    banshee_regs->vidProcCfg|=0<<18;
++               	    banshee_regs->vidProcCfg|=0<<18; /* Desktop = 8-bit palettized */
++		    banshee_regs->vidProcCfg&=0xfffff3ff; /* disable CLUT bypass */
+ 		    break;
+ 	    case 15: 
+ 	    case 16:if(modeinfo->greenWeight==5){
+                         banshee_regs->vidProcCfg|=1<<18;
+-                    } else banshee_regs->vidProcCfg|=1<<18;
++                    } else banshee_regs->vidProcCfg|=1<<18; /* Desktop = RGB 5:6:5 undithered */
+ 		    break;
+ 	    case 24: 
+-               	    banshee_regs->vidProcCfg|=2<<18;
++               	    banshee_regs->vidProcCfg|=2<<18; /* Desktop = RGB24 packed */
+ 		    break;
+ 	    case 32: 
+-               	    banshee_regs->vidProcCfg|=3<<18;
++               	    banshee_regs->vidProcCfg|=3<<18; /* Desktop = RGB32 */
+ 		    break;
+ 	    default: 
+ 		    break;
+     }
+     
+-    banshee_regs->vgaInit0&=0xfffffffb;
+-    if(modeinfo->bitsPerPixel!=8){
+-        banshee_regs->vgaInit0|=4;
++    banshee_regs->vgaInit0=0x1140;
++    banshee_regs->vgaInit1=0x00100000;
++
++    banshee_regs->vgaInit0&=0xfffffffb; /* DAC Depth = 6-bit */
++    if(modeinfo->bitsPerPixel>8){
++        banshee_regs->vgaInit0|=4; /* DAC Depth = 8-bit */
+     };
+ 
+     banshee_regs->pllCtrl0=comp_lmn(modetiming->pixelClock);
+-    moderegs[VGA_MISCOUTPUT]|=0x0c;
++    moderegs[VGA_MISCOUTPUT]|=0x0c; /* set pixel clock from pllCtrl0 */
+ 
+     banshee_regs->vidDesktopStartAddr=0;
+     banshee_regs->vidDesktopOverlayStride=modeinfo->lineWidth;    
+ 
+-    banshee_regs->vgaInit0=0x1140;
+-    banshee_regs->vgaInit1=0x00100000;
+-
+-    moderegs[41]=0;
+-
+-    if(modeinfo->bitsPerPixel==8){
+-       moderegs[79]=0;
+-    };
++    moderegs[41]=0; /* AR11 (overlay attribute) */
+ 
+     banshee_is_linear=0;
+ 
+ return ;
+ }
+ 
++extern ModeTable *__svgalib_standard_vga_modes;
++
++static int lastmodemodel=0;
++
+ static int banshee_setmode(int mode, int prv_mode)
+ {
+     unsigned char *moderegs;
++    const unsigned char *vgaregs;
+     ModeTiming modetiming;
+     ModeInfo *modeinfo;
+ 
+     if (IS_IN_STANDARD_VGA_DRIVER(mode)) {
+-
+-	return __svgalib_vga_driverspecs.setmode(mode, prv_mode);
++	if (!__svgalib_vga_driverspecs.modeavailable(mode))
++	    return 1;
++	if (mode == TEXT)
++	    return 0;
++	vgaregs = LOOKUPMODE(__svgalib_standard_vga_modes, mode);
++	if (vgaregs == NULL || vgaregs == DISABLE_MODE)
++	    return 1;
+     }
+-    if (!banshee_modeavailable(mode))
++    else if (!banshee_modeavailable(mode))
+ 	return 1;
+ 
+     modeinfo = __svgalib_createModeInfoStructureForSvgalibMode(mode);
++    if (modeinfo->bitsPerPixel==0 && modeinfo->colorBits==8)
++	modeinfo->bitsPerPixel=8; /* workaround for getmodetiming for X-modes */
++    if (modeinfo->bytesPerPixel==0) lastmodemodel=modeinfo->colorBits; /* not 8+bpp linear */
++    else lastmodemodel=0;
+ 
+     if (__svgalib_getmodetiming(&modetiming, modeinfo, cardspecs)) {
+ 	free(modeinfo);
+ 	return 1;
+     }
+ 
+     moderegs = malloc(BANSHEE_TOTAL_REGS);
+ 
+     banshee_initializemode(moderegs, &modetiming, modeinfo, mode);
+ 
++    if (IS_IN_STANDARD_VGA_DRIVER(mode)) {
++	memcpy(moderegs,vgaregs,60); /* VGA_TOTAL_REGS */
++	((HWRecPtr)(moderegs+62))->vidProcCfg&=0xffffff7e; /* Processor off, VGA on */
++	((HWRecPtr)(moderegs+62))->vgaInit0&=0xffffefff; /* Ext. Video Shift Out = no */
++	((HWRecPtr)(moderegs+62))->vgaInit1&=0xffefffff; /* disable A0000 Seq. Chain4 */
++    }
+     __svgalib_setregs(moderegs);	/* Set standard regs. */
+     banshee_setregs(moderegs, mode);		/* Set extended regs. */
+     free(moderegs);
+ 
++    if (!IS_IN_STANDARD_VGA_DRIVER(mode))
+     __svgalib_InitializeAcceleratorInterface(modeinfo);
+ 
+     free(modeinfo);
+@@ -339,8 +369,18 @@
+ 
+ static void banshee_setdisplaystart(int address)
+ { 
++    switch(lastmodemodel) {
++    case 4:
++	__svgalib_outatt(0x33,(__svgalib_inatt(0x33)&0xf0) | (address & 7));
++	address >>= 1;
++	break;
++    case 8:
++	__svgalib_outatt(0x33,(__svgalib_inatt(0x33)&0xf0) | ((address & 3)<<1) );
++	break;
++    }
+   __svgalib_outcrtc(0x0c,((address>>2) & 0x00FF00)>>8);
+   __svgalib_outcrtc(0x0d,(address>>2) & 0x00FF);
++  if (!lastmodemodel)
+   outl(banshee_io_base+0xe4,address);
+ }
+ 
+@@ -357,7 +398,8 @@
+ 
+ static int banshee_linear(int op, int param)
+ {
+-if (op==LINEAR_ENABLE || op==LINEAR_DISABLE){ banshee_is_linear=1-banshee_is_linear; return 0;}
++if (op==LINEAR_ENABLE) { banshee_is_linear=1; return 0; }
++if (op==LINEAR_DISABLE) { banshee_is_linear=0; return 0;}
+ if (op==LINEAR_QUERY_BASE) return banshee_linear_base;
+ if (op == LINEAR_QUERY_RANGE || op == LINEAR_QUERY_GRANULARITY) return 0;		/* No granularity or range. */
+     else return -1;		/* Unknown function. */
+@@ -470,7 +512,7 @@
+ static int banshee_init(int force, int par1, int par2)
+ {
+     unsigned long buf[64];
+-    int found=0;
++    int found=0,Voodoo5=0;
+ 
+     if (force) {
+ 	banshee_memory = par1;
+@@ -480,11 +522,12 @@
+     };
+     
+     found=(!__svgalib_pci_find_vendor_vga(0x121a,buf,0))&&
+-            (((buf[0]>>16)==0x0003)||
+-            ((buf[0]>>16)==0x0009)||
+-            ((buf[0]>>16)==0x0005));
++            (((buf[0]>>16)==0x0003)|| /* Banshee */
++            ((buf[0]>>16)==0x0009)|| /* Voodoo4/Voodoo5 */
++            ((buf[0]>>16)==0x0005)); /* Voodoo3 */
+     
+     if (found){
++       if ((buf[0]>>16)==0x0009) Voodoo5=1;
+        banshee_linear_base=buf[5]&0xffffff00;
+        banshee_io_base=buf[6]&0xff00;
+        __svgalib_io_reloc=banshee_io_base-0x300;
+@@ -496,6 +539,12 @@
+        
+        draminit0=inl(banshee_io_base+0x18);
+        draminit1=inl(banshee_io_base+0x1c);
++       if(Voodoo5) {
++	  banshee_memory=1024*
++             4*(1+((draminit0>>26)&1))*   /* chips */
++	     (1<<((draminit0 & 0x38000000) >> 28))* /* psize */
++	     2*(1+((draminit0>>30)&1)); /* banks */
++       } else {
+        if(draminit1&0x40000000) {
+           /* SDRAM */
+           banshee_memory=16*1024;
+@@ -505,6 +554,7 @@
+              (1+((draminit0>>27)&1))* /* SGRAM type - 8MBIT or 16MBIT */
+              (1+((draminit0>>26)&1)); /* Number of sgram chips (4 or 8) */
+        }
++       }
+     }
+     
+     banshee_unlock();
+@@ -515,14 +565,13 @@
+     
+     cardspecs = malloc(sizeof(CardSpecs));
+     cardspecs->videoMemory = banshee_memory;
+-    cardspecs->maxPixelClock4bpp = 270000;	
++    cardspecs->maxPixelClock4bpp = 135000;	
+     cardspecs->maxPixelClock8bpp = 270000;	
+     cardspecs->maxPixelClock16bpp = 270000;	
+     cardspecs->maxPixelClock24bpp = 270000;
+     cardspecs->maxPixelClock32bpp = 270000;
+     cardspecs->flags = CLOCK_PROGRAMMABLE;
+     cardspecs->maxHorizontalCrtc = 4088;
+-    cardspecs->maxPixelClock4bpp = 0;
+     cardspecs->nClocks =0;
+     cardspecs->mapClock = banshee_map_clock;
+     cardspecs->mapHorizontalCrtc = banshee_map_horizontal_crtc;
+diff -Nur svgalib-1.9.13.orig/src/vga.c svgalib-1.9.13/src/vga.c
+--- svgalib-1.9.13.orig/src/vga.c	Mon Apr  8 23:58:48 2002
++++ svgalib-1.9.13/src/vga.c	Tue Apr  9 00:09:42 2002
+@@ -2475,7 +2475,7 @@
+ void vga_setdisplaystart(int a)
+ {
+     currentdisplaystart = a;
+-    if (CHIPSET != VGA && CHIPSET != EGA)
++    if (CHIPSET != VGA && CHIPSET != EGA && CHIPSET != BANSHEE)
+ 	if (MODEX || CI.colors == 16) {
+ 	    /* We are currently using a Mode X-like mode on a */
+ 	    /* SVGA card, use the standard VGA function */
+diff -Nur svgalib-1.9.13.orig/src/vgadrv.c svgalib-1.9.13/src/vgadrv.c
+--- svgalib-1.9.13.orig/src/vgadrv.c	Mon Apr  8 23:58:48 2002
++++ svgalib-1.9.13/src/vgadrv.c	Tue Apr  9 00:09:00 2002
+@@ -159,6 +159,7 @@
+ /* *INDENT-ON* */
+ };
+ 
++ModeTable *__svgalib_standard_vga_modes = vga_modes;
+ 
+ /* Fill in chipset-specific modeinfo */
+ 
