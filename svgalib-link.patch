@@ -1,13 +1,13 @@
---- svgalib-1.9.18/src/Makefile.orig	2002-07-06 19:59:26.000000000 +0200
-+++ svgalib-1.9.18/src/Makefile	2003-10-07 21:11:07.396847880 +0200
-@@ -439,6 +439,7 @@
+--- svgalib-1.9.20/src/Makefile.orig	2005-02-03 12:31:43.000000000 +0100
++++ svgalib-1.9.20/src/Makefile	2005-03-21 23:41:20.799157376 +0100
+@@ -449,6 +449,7 @@
  	$(CC) -shared -Wl,-soname,libvga.so.$(MAJOR_VER) \
  	-Xlinker --retain-symbols-file -Xlinker ../src/exports \
- 	  -o libvga.so.$(VERSION) $(ALLOBJS) -lm
+ 	-Wl,-Bsymbolic -o libvga.so.$(VERSION) $(ALLOBJS) -lm
 +	ln -sf libvga.so.$(VERSION) libvga.so
  
  $(sharedlibdir)/libvga.so.$(VERSION): libvga.so.$(VERSION)
- 	$(INSTALL_PROGRAM) $< $(sharedlibdir)/$<
+ 	$(INSTALL_SHLIB) $< $(sharedlibdir)/$<
 --- svgalib-1.9.18/gl/Makefile.orig	1999-07-18 10:14:45.000000000 +0200
 +++ svgalib-1.9.18/gl/Makefile	2003-10-07 21:11:01.242783440 +0200
 @@ -29,8 +29,9 @@

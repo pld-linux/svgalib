@@ -1,6 +1,6 @@
---- svgalib-1.9.9/Makefile.cfg~	Tue Apr 24 19:54:02 2001
-+++ svgalib-1.9.9/Makefile.cfg	Sat May 26 15:30:39 2001
-@@ -25,7 +25,7 @@
+--- svgalib-1.9.20/Makefile.cfg.orig	2005-02-03 12:29:22.000000000 +0100
++++ svgalib-1.9.20/Makefile.cfg	2005-03-21 23:13:48.717311992 +0100
+@@ -44,7 +44,7 @@
  # Common prefix for installation directories.
  # NOTE: This directory must exist when you start the install.
  TOPDIR=
@@ -9,7 +9,7 @@
  exec_prefix = $(prefix)
  
  # Directory where the shared stubs and static library will be installed.
-@@ -44,7 +44,7 @@
+@@ -63,7 +63,7 @@
  includedir = $(prefix)/include
  
  # Directory where the man files will be installed.
@@ -17,9 +17,9 @@
 +mandir = $(prefix)/share/man
  
  # Target binary format.
- # TARGET_FORMAT = a.out
-@@ -71,7 +71,7 @@
- ROOT_VC_SHORTCUT = y
+ TARGET_FORMAT = elf
+@@ -97,7 +97,7 @@
+ # LIBC_MEMCPY = y
  
  # Uncomment this if you want to compile and install the static libs.
 -# INSTALLSTATICLIB = installstaticlib
@@ -27,14 +27,16 @@
  
  # Comment this out if you don't want to install the shared libs.
  # If you do not install the shared nor the static libs, 'make static'
-@@ -282,9 +282,9 @@
+@@ -315,10 +315,10 @@
  
  # Utilites used.
  AR	  = ar
 -INSTALL_PROGRAM	= install -c -s -m 755 -o root -g bin
--INSTALL_SHLIB	= install -c -m 755 -o root -g bin
--INSTALL_DATA	= install -c -m 644 -o root -g bin
+-INSTALL_SCRIPT	= install -c -m 755 -o root -g bin
+-INSTALL_SHLIB	= install -c -m 755 -o root -g root
+-INSTALL_DATA	= install -c -m 644 -o root -g root
 +INSTALL_PROGRAM	= install -c -m 755
++INSTALL_SCRIPT	= install -c -m 755
 +INSTALL_SHLIB	= install -c -m 755
 +INSTALL_DATA	= install -c -m 644
  

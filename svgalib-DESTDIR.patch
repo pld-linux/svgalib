@@ -1,5 +1,5 @@
---- svgalib-1.9.19/Makefile.orig	2002-12-22 11:58:47.000000000 +0100
-+++ svgalib-1.9.19/Makefile	2003-10-07 18:17:06.368125512 +0200
+--- svgalib-1.9.20/Makefile.orig	2005-03-18 14:49:10.000000000 +0100
++++ svgalib-1.9.20/Makefile	2005-03-21 23:29:01.371567456 +0100
 @@ -77,125 +77,70 @@
  .PHONY: indent-gnu 
  
@@ -84,33 +84,33 @@
 +	@install -d $(DESTDIR)$(bindir)
 +	@echo Installing textmode utilities in $(DESTDIR)$(bindir):
  	@echo "restorefont:      Save/restore textmode font."
--	@cp utils/restorefont $(bindir)
-+	@cp utils/restorefont $(DESTDIR)$(bindir)
+-	@$(INSTALL_PROGRAM) utils/restorefont $(bindir)
++	@$(INSTALL_PROGRAM) utils/restorefont $(DESTDIR)$(bindir)
  	@echo "restorepalette:   Set standard VGA palette."
--	@cp utils/restorepalette $(bindir)
-+	@cp utils/restorepalette $(DESTDIR)$(bindir)
+-	@$(INSTALL_PROGRAM) utils/restorepalette $(bindir)
++	@$(INSTALL_PROGRAM) utils/restorepalette $(DESTDIR)$(bindir)
  	@echo "dumpreg:          Write ASCII dump of SVGA registers."
--	@cp utils/dumpreg $(bindir)
-+	@cp utils/dumpreg $(DESTDIR)$(bindir)
+-	@$(INSTALL_PROGRAM) utils/dumpreg $(bindir)
++	@$(INSTALL_PROGRAM) utils/dumpreg $(DESTDIR)$(bindir)
  	@echo "restoretextmode:  Save/restore textmode registers."
--	@cp utils/restoretextmode $(bindir)
-+	@cp utils/restoretextmode $(DESTDIR)$(bindir)
+-	@$(INSTALL_PROGRAM) utils/restoretextmode $(bindir)
++	@$(INSTALL_PROGRAM) utils/restoretextmode $(DESTDIR)$(bindir)
  	@echo "textmode:         Script that tries to restore textmode."
--	@cp utils/textmode $(bindir)
-+	@cp utils/textmode $(DESTDIR)$(bindir)
+-	@$(INSTALL_SCRIPT) utils/textmode $(bindir)
++	@$(INSTALL_SCRIPT) utils/textmode $(DESTDIR)$(bindir)
  	@echo "savetextmode:     Script that saves textmode information used by 'textmode'."
--	@cp utils/savetextmode $(bindir)
-+	@cp utils/savetextmode $(DESTDIR)$(bindir)
+-	@$(INSTALL_SCRIPT) utils/savetextmode $(bindir)
++	@$(INSTALL_SCRIPT) utils/savetextmode $(DESTDIR)$(bindir)
  ifeq ($(LRMI),lrmi)
  	@echo "mode3:       Restore textmode by setting VESA mode 3."
--	@cp lrmi-0.6m/mode3 $(bindir)
-+	@cp lrmi-0.6m/mode3 $(DESTDIR)$(bindir)
+-	@$(INSTALL_PROGRAM) lrmi-0.6m/mode3 $(bindir)
++	@$(INSTALL_PROGRAM) lrmi-0.6m/mode3 $(DESTDIR)$(bindir)
  endif
 -	@echo "Installing keymap utilities in $(bindir):"
 +	@echo "Installing keymap utilities in $(DESTDIR)$(bindir):"
  	@echo "svgakeymap:       Perl script that generates scancode conversion maps."
--	@cp utils/svgakeymap $(bindir)
-+	@cp utils/svgakeymap $(DESTDIR)$(bindir)
+-	@$(INSTALL_SCRIPT) utils/svgakeymap $(bindir)
++	@$(INSTALL_SCRIPT) utils/svgakeymap $(DESTDIR)$(bindir)
  
  installconfig:
 -	@if [ ! -d $(datadir) ]; then \
@@ -168,7 +168,7 @@
  	fi
  
  installman:
-@@ -210,8 +155,8 @@
+@@ -213,8 +158,8 @@
  lib3dkit-install:
  	(cd threeDKit/; $(MAKE) install)
  	 
@@ -232,19 +232,18 @@ diff -Nur svgalib-1.9.14.orig/lrmi-0.6m/Makefile svgalib-1.9.14/lrmi-0.6m/Makefi
  
  .PHONY: clean
  clean:
-diff -Nur svgalib-1.9.14.orig/threeDKit/Makefile svgalib-1.9.14/threeDKit/Makefile
---- svgalib-1.9.14.orig/threeDKit/Makefile	Wed Apr  3 09:57:18 2002
-+++ svgalib-1.9.14/threeDKit/Makefile	Mon Apr 29 20:16:56 2002
+--- svgalib-1.9.20/threeDKit/Makefile.orig	2004-09-16 19:54:17.000000000 +0200
++++ svgalib-1.9.20/threeDKit/Makefile	2005-03-21 23:32:39.444415344 +0100
 @@ -55,18 +55,17 @@
  	$(CC) -shared -Wl,-soname,lib3dkit.so.$(MAJOR_VER) \
  	  -o lib3dkit.so.$(VERSION) $(OBJECTS) -lm
  
 -$(sharedlibdir)/lib3dkit.so.$(VERSION): lib3dkit.so.$(VERSION)
--	$(INSTALL_PROGRAM) $< $(sharedlibdir)/$<
+-	$(INSTALL_SHLIB) $< $(sharedlibdir)/$<
 -	(cd $(sharedlibdir); ln -sf lib3dkit.so.$(VERSION) `echo lib3dkit.so.$(VERSION) | sed 's/\.so\..*/.so/'` )
 -	ldconfig
 +$(DESTDIR)$(sharedlibdir)/lib3dkit.so.$(VERSION): lib3dkit.so.$(VERSION)
-+	$(INSTALL_PROGRAM) $< $(DESTDIR)$(sharedlibdir)/$<
++	$(INSTALL_SHLIB) $< $(DESTDIR)$(sharedlibdir)/$<
 +	(cd $(DESTDIR)$(sharedlibdir); ln -sf lib3dkit.so.$(VERSION) `echo lib3dkit.so.$(VERSION) | sed 's/\.so\..*/.so/'` )
  
 -install: $(sharedlibdir)/lib3dkit.so.$(VERSION) installheaders
@@ -262,9 +261,9 @@ diff -Nur svgalib-1.9.14.orig/threeDKit/Makefile svgalib-1.9.14/threeDKit/Makefi
  
  endif	  
  
---- svgalib-1.9.19/kernel/svgalib_helper/Makefile.orig	2004-05-12 21:55:58.000000000 +0200
-+++ svgalib-1.9.19/kernel/svgalib_helper/Makefile	2004-05-18 00:19:41.484386136 +0200
-@@ -45,9 +45,9 @@
+--- svgalib-1.9.20/kernel/svgalib_helper/Makefile.orig	2005-03-18 11:58:21.000000000 +0100
++++ svgalib-1.9.20/kernel/svgalib_helper/Makefile	2005-03-21 23:33:38.656413752 +0100
+@@ -50,9 +50,9 @@
  	mknod -m 666 /dev/svga3 c $(SVGALIB_HELPER_MAJOR) 3
  	mknod -m 666 /dev/svga4 c $(SVGALIB_HELPER_MAJOR) 4
  
@@ -273,9 +272,9 @@ diff -Nur svgalib-1.9.14.orig/threeDKit/Makefile svgalib-1.9.14/threeDKit/Makefi
  
  modules_install: $(MODNAME)
 -	mkdir -p /lib/modules/$(VER)/kernel/misc
--	install -m 0644 -c $(TARGET).o /lib/modules/$(VER)/kernel/misc ||	install -m 0644 -c $(TARGET).ko /lib/modules/$(VER)/kernel/misc
+-	install -m 0644 -c $(TARGET).ko /lib/modules/$(VER)/kernel/misc ||	install -m 0644 -c $(TARGET).o /lib/modules/$(VER)/kernel/misc
 +	install -m 0755 -d $(DESTDIR)/lib/modules/$(VER)/kernel/misc
-+	install -m 0644 -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/kernel/misc ||	install -m 0644 -c $(TARGET).ko $(DESTDIR)/lib/modules/$(VER)/kernel/misc
++	install -m 0644 -c $(TARGET).ko $(DESTDIR)/lib/modules/$(VER)/kernel/misc ||	install -m 0644 -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/kernel/misc
  
 --- svgalib-1.9.18/kernel/svgalib_helper/Makefile.alt.orig	2003-08-03 16:42:23.000000000 +0200
 +++ svgalib-1.9.18/kernel/svgalib_helper/Makefile.alt	2003-10-07 18:21:46.267574328 +0200
