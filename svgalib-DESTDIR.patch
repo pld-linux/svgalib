@@ -439,3 +439,25 @@ diff -ur svgalib-1.9.5.orig/lrmi-0.6m/Makefile svgalib-1.9.5/lrmi-0.6m/Makefile
  
  .PHONY: clean
  clean:
+--- svgalib-1.9.5/kernel/svgalib_helper/Makefile~	Thu Jul 27 19:01:15 2000
++++ svgalib-1.9.5/kernel/svgalib_helper/Makefile	Thu Jul 27 19:03:41 2000
+@@ -27,7 +27,7 @@
+ $(TARGET).o: $(SRC:.c=.o)
+ 	$(LD) -r $^ -o $@
+ 
+-install: device modules_install
++install: modules_install
+ 
+ modules_install: $(TARGET).o
+ 	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc $(DESTDIR)/lib/modules/misc
+--- svgalib-1.9.5/kernel/svgalib_helper/Makefile~	Thu Jul 27 19:04:08 2000
++++ svgalib-1.9.5/kernel/svgalib_helper/Makefile	Thu Jul 27 19:09:50 2000
+@@ -3,7 +3,7 @@
+ SVGALIB_HELPER_MAJOR = 209
+ 
+ # Change it here or specify it on the "make" commandline
+-INCLUDEDIR = /usr/src/linux-2.3.99/include
++INCLUDEDIR = /usr/src/linux/include
+ 
+ ifeq ($(DEBUG),y)
+   DEBFLAGS = -O -g -DSCULL_DEBUG # "-O" is needed to expand inlines
