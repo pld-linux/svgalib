@@ -1,0 +1,11 @@
+--- svgalib-1.9.14/threeDKit/Makefile.orig	Wed May  8 14:47:56 2002
++++ svgalib-1.9.14/threeDKit/Makefile	Wed May  8 14:48:47 2002
+@@ -14,7 +14,7 @@
+ # Compiler Section (overrides Makefile.cfg)
+ #----------------------------------------------------------------------
+ 
+-INCLUDES += -I$(srcdir)/src
++INCLUDES += -I$(srcdir)/src -I$(srcdir)/gl
+ 
+ #----------------------------------------------------------------------
+ # Rules Section
