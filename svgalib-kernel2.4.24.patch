@@ -1,0 +1,11 @@
+--- kernel/svgalib_helper/kernel26compat.h~	2004-01-06 20:35:46.000000000 +0000
++++ kernel/svgalib_helper/kernel26compat.h	2004-01-06 20:39:56.000000000 +0000
+@@ -9,7 +9,7 @@
+ 
+ # define my_io_remap_page_range(vma, start, ofs, len, prot) io_remap_page_range(start,ofs,len,prot)
+ 
+-typedef void irqreturn_t;
++// typedef void irqreturn_t;
+ # define IRQ_NONE
+ # define IRQ_HANDLED
+ 
