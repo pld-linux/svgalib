@@ -25,7 +25,6 @@ Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-smp.patch
 Patch4:		%{name}-threeDKit-make.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
-Conflicts:	%{name}-helper < %{version}, %{name}-helper > %{version}
 ExclusiveArch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
