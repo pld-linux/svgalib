@@ -5,7 +5,7 @@
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 %define		_kernel_ver_str	%(echo %{_kernel_ver} | sed s/-/_/g)
-%define		_rel		7
+%define		_rel		8
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -24,6 +24,7 @@ Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-stderr.patch
 Patch4:		%{name}-kernver.patch
 Patch5:		%{name}-smp.patch
+Patch6:		%{name}-banshee.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 %{!?_without_dist_kernel:Buildrequires:		kernel-headers}
 Exclusivearch:	%{ix86} alpha
@@ -150,6 +151,7 @@ Biblioteki statyczne [S]VGA.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
