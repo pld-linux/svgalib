@@ -44,7 +44,7 @@ utilities use SVGAlib for their graphics.
 SVGAlib ist eine Library, die es Applikationen gestattet, auf einer
 Reihe von Plattformen Vollbild-Grafiken zu benutzen. Viele Games und
 Utilities nutzen diese Library für den Grafikzugriff, da sie für
-Maschinen mit wenig Speicher besser geeignet ist als X-Windows.
+Maschinen mit wenig Speicher besser geeignet ist als X-Window.
 
 %description -l es
 SVGAlib es una biblioteca que permite a las aplicaciones usar gráficos
@@ -85,7 +85,7 @@ rodar um sistema X Window.
 %description -l tr
 SVGAlib, deðiþik donaným platformlarý üzerinde, uygulamalarýn tam
 ekran çizim kullanmalarýný saðlayan bir kitaplýktýr. Az bellekli
-makinalar için X Windows'tan daha uygun olmasýnýn yanýsýra, pek çok
+makinalar için X-Window'tan daha uygun olmasýnýn yanýsýra, pek çok
 oyun ve yardýmcý programlar çizim eriþimi için bu kitaplýðý kullanýr.
 
 %description -l uk
@@ -269,7 +269,7 @@ rm -f src/svgalib_helper.h
 %{__make} CC=%{__cc} -C kernel/svgalib_helper \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
-mv -f kernel/svgalib_helper/svgalib_helper.o  kernel/svgalib_helper/svgalib_helper-up.o
+mv -f kernel/svgalib_helper/svgalib_helper.o kernel/svgalib_helper/svgalib_helper-up.o
 rm -f kernel/svgalib_helper/main.o
 
 # SMP
