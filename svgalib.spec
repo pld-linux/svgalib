@@ -297,10 +297,15 @@ rm -f src/svgalib_helper.h
 %endif
 
 %if %{with kernel}
+if grep '^#define CONFIG_REGPARM 1' %{_kernelsrcdir}/include/linux/autoconf*.h ; then
+	CREGPARM="-mregparm=3"
+else
+	CREGPARM=""
+fi
 # UP
 %{__make} -C kernel/svgalib_helper -f Makefile.alt \
 	CC="%{kgcc}" \
-	COPT="%{rpmcflags}" \
+	COPT="%{rpmcflags} $CREGPARM" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
 mv -f kernel/svgalib_helper/svgalib_helper.%{kmodext} \
@@ -310,7 +315,7 @@ rm -f kernel/svgalib_helper/*.*o
 # SMP
 %{__make} -C kernel/svgalib_helper -f Makefile.alt \
 	CC="%{kgcc}" \
-	COPT="%{rpmcflags} -D__SMP__ -DCONFIG_X86_LOCAL_APIC" \
+	COPT="%{rpmcflags} $CREGPARM -D__SMP__ -DCONFIG_X86_LOCAL_APIC" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 %endif
 
