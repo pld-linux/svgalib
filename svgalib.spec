@@ -5,7 +5,7 @@
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 %define		_kernel_ver_str	%(echo %{_kernel_ver} | sed s/-/_/g)
-%define		_rel		6
+%define		_rel		7
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -67,8 +67,7 @@ Summary(de):	Svgalibs Helferkernmodul
 Summary(pl):	Pomocniczy modu³ j±dra svgaliba
 Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
-%{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}}
-%{!?_without_dist_kernel:Conflicts:	kernel-smp}
+%{!?_without_dist_kernel:Requires:	kernel-up = %{_kernel_ver}}
 Obsoletes:	svgalib-helper
 Provides:	svgalib-helper = %{version}
 Prereq:		/sbin/depmod
@@ -86,8 +85,7 @@ Summary:	svgalib's helper kernel module for SMP
 Summary(pl):	Pomoczniczy modu³ j±dra svgalib dla SMP
 Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
-%{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}}
-%{!?_without_dist_kernel:Conflicts:	kernel-up}
+%{!?_without_dist_kernel:Requires:	kernel-smp = %{_kernel_ver}}
 Obsoletes:	svgalib-helper
 Provides:	svgalib-helper = %{version}
 Prereq:		/sbin/depmod
