@@ -1,9 +1,7 @@
-
+#
 # conditional build
 # _without_dist_kernel		without distribution kernel
-
-%define		_rel		4
-
+#
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library fЭr Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para grАficos en pantalla llena [S]VGA
@@ -16,6 +14,7 @@ Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
 Version:	1.9.14
 Release:	%{_rel}
+%define _rel	4
 License:	distributable
 Group:		Libraries
 Source0:	http://www.cs.bgu.ac.il/~zivav/svgalib/%{name}-%{version}.tar.gz
