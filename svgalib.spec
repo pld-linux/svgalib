@@ -18,6 +18,7 @@ Release:	%{_rel}
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
+# Source0-md5: e1599bb3222899d39ce1a2af36670a98
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
