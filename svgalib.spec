@@ -5,7 +5,7 @@ Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.9.2
-Release:	1
+Release:	2
 License:	distributable
 Group:		Libraries
 Group(pl):	Biblioteki
@@ -118,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT install
 make install -C kernel/svgalib_helper DESTDIR=$RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/var/state/svgalib
+install -d $RPM_BUILD_ROOT/var/lib/svgalib
 
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README \
@@ -140,7 +140,7 @@ rm -fr $RPM_BUILD_ROOT
 %doc doc/{CHANGES*,DESIGN.gz,READ*,TODO.gz} 0-README.gz
 
 %dir /etc/vga
-%dir /var/state/svgalib
+%dir /var/lib/svgalib
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
