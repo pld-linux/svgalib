@@ -4,20 +4,17 @@ Summary(fr):    Bibliothèque pour les graphiques plein écran [S]VGA
 Summary(pl):    Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):    Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
-Version:	1.3.1
-Release:	6
+Version:	1.4.0
+Release:	1
 Copyright:	distributable
 Group:		Libraries
 Group(pl):	Biblioteki
 Source:		ftp://metalab.unc.edu/pub/Linux/libs/graphics/%{name}-%{version}.tar.gz
 Patch0:		svgalib-pld.patch
-Patch1:		svgalib-glibc.patch
-Patch2:		svgalib-inc.patch
-Patch3:		svgalib-secu.patch
-Patch4:		svgalib-tmp2var.patch
+Patch1:		svgalib-inc.patch
+Patch2:		svgalib-tmp2var.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib
 Buildroot:	/tmp/%{name}-%{version}-root
-
 Exclusivearch: %{ix86} alpha
 
 %define	_sysconfdir	/etc/vga
@@ -97,11 +94,8 @@ Biblioteki statyczne [S]VGA.
 %setup -q
 gzip -d doc/man?/*gz
 %patch0 -p1 
-%patch1 -p1
-%patch2 -p0
-%patch3 -p1
-%patch4 -p1
-
+%patch1 -p0
+%patch2 -p1
 gzip doc/man*/*
 
 %build
@@ -120,29 +114,29 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_includedir}} \
 install utils/{convfont,dumpreg,restore*,fix132*,setmclk} \
 	$RPM_BUILD_ROOT%{_bindir}
 
-rm -f $RPM_BUILD_ROOT%{_bindir}/{*.c,*.o}
+rm -f	$RPM_BUILD_ROOT%{_bindir}/{*.c,*.o}
 
-strip $RPM_BUILD_ROOT%{_bindir}/*
+strip	$RPM_BUILD_ROOT%{_bindir}/*
 
 install utils/{runx,savetextmode,textmode} $RPM_BUILD_ROOT%{_bindir}
 
-cp -a doc/man* $RPM_BUILD_ROOT%{_mandir}
+cp -a doc/man*				$RPM_BUILD_ROOT%{_mandir}
 
-install sharedlib/lib*.so.* $RPM_BUILD_ROOT%{_libdir}
+install sharedlib/lib*.so.*		$RPM_BUILD_ROOT%{_libdir}
 
-ln -sf libvga.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libvga.so
-ln -sf libvgagl.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libvgagl.so
+ln -sf libvga.so.%{version}		$RPM_BUILD_ROOT%{_libdir}/libvga.so
+ln -sf libvgagl.so.%{version}		$RPM_BUILD_ROOT%{_libdir}/libvgagl.so
 
-install include/*.h $RPM_BUILD_ROOT%{_includedir}
-install gl/vgagl.h $RPM_BUILD_ROOT%{_includedir}
+install include/*.h			$RPM_BUILD_ROOT%{_includedir}
+install gl/vgagl.h			$RPM_BUILD_ROOT%{_includedir}
 
-install staticlib/*.a $RPM_BUILD_ROOT%{_libdir}
+install staticlib/*.a			$RPM_BUILD_ROOT%{_libdir}
 
-install libvga.config $RPM_BUILD_ROOT%{_sysconfdir}
-install et4000.regs $RPM_BUILD_ROOT%{_sysconfdir}/libvga.et4000
-install et6000.regs $RPM_BUILD_ROOT%{_sysconfdir}/libvga.et6000
+install src/config/libvga.config	$RPM_BUILD_ROOT%{_sysconfdir}
+install src/config/*.keymap		$RPM_BUILD_ROOT%{_sysconfdir}
+install src/config/et4000.regs		$RPM_BUILD_ROOT%{_sysconfdir}/libvga.et4000
 
-gzip -9nf doc/{CHANGES*,DESIGN,READ*,SECURITY*,TODO} 0-README 0-RELEASE
+gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README 0-RELEASE
 
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
@@ -158,7 +152,7 @@ rm -fr $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{CHANGES*,DESIGN.gz,READ*,SECURITY*,TODO.gz} 0-README.gz 0-RELEASE.gz
+%doc doc/{CHANGES*,DESIGN.gz,READ*,TODO.gz} 0-README.gz 0-RELEASE.gz
 
 %dir /etc/vga
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
