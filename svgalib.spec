@@ -30,6 +30,7 @@ Patch5:		%{name}-svgalib_helper_Makefile.patch
 Patch6:		%{name}-link.patch
 Patch7:		%{name}-module-alias.patch
 Patch8:		%{name}-linux26-minor.patch
+Patch9:		%{name}-kernel2.4.24.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel-headers
@@ -250,6 +251,7 @@ opartych na svgalib.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
