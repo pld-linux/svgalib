@@ -5,8 +5,8 @@
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 %define		_kernel_ver_str	%(echo %{_kernel_ver} | sed s/-/_/g)
-%define		smpstr		%{?_with_smp:-smp}
-%define		smp		%{?_with_smp:1}%{!?_with_smp:0}
+#%define		smpstr		%{?_with_smp:-smp}
+#%define		smp		%{?_with_smp:1}%{!?_with_smp:0}
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -68,7 +68,7 @@ ekran çizim kullanmalarýný saðlayan bir kitaplýktýr. Az bellekli
 makinalar için X Windows'tan daha uygun olmasýnýn yanýsýra, pek çok
 oyun ve yardýmcý programlar çizim eriþimi için bu kitaplýðý kullanýr.
 
-%package -n kernel%{smpstr}-video-svgalib_helper
+%package -n kernel-video-svgalib_helper
 Summary:	svgalib's helper kernel module
 Summary(de):	Svgalibs Helferkernmodul
 Summary(pl):	Pomocniczy modu³ j±dra svgaliba
@@ -77,16 +77,35 @@ Group(de):	Grundsätzlich/Kern
 Group(pl):	Podstawowe/J±dro
 Release:	%{release}@%{_kernel_ver_str}
 %{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}}
-%{!?_without_dist_kernel:Conflicts:	kernel-%{?_with_smp:up}%{!?_with_smp:smp}}
+%{!?_without_dist_kernel:Conflicts:	kernel-smp}
 Obsoletes:	svgalib-helper
 Provides:	svgalib-helper = %{version}
 Prereq:		/sbin/depmod
 
-%description -n kernel%{smpstr}-video-svgalib_helper
+%description -n kernel-video-svgalib_helper
 This package contains the kernel module necessary to run svgalib-based
 programs.
 
-%description -n kernel%{smpstr}-video-svgalib_helper -l pl
+%description -n kernel-video-svgalib_helper -l pl
+Ten pakiet zawiera modu³ j±dra potrzebny do uruchamiania programów
+opartych na svgalib.
+
+%package -n kernel-smp-video-svgalib_helper
+Summary:	svgalib's helper kernel module for SMP
+Summary(pl):	Pomoczniczy modu³ j±dra svgalib dla SMP
+Group:		Base/Kernel
+Release:	%{release}@%{_kernel_ver_str}
+%{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel-ver}, kernel > %{_lernel_ver}}
+%{!?_without_dist_kernel:Conflicts:	kernel-up}
+Obsoletes:	svgalib-helper
+Provides:	svgalib-helper = %{version}
+Prereq:		/sbin/depmod
+
+%description -n kernel-smp-video-svgalib_helper
+This package contains the kernel module necessary to run svgalib-based
+programs.
+
+%description -n kernel-smp-video-svgalib_helper
 Ten pakiet zawiera modu³ j±dra potrzebny do uruchamiania programów
 opartych na svgalib.
 
@@ -176,22 +195,33 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 
 %{__make} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
 
-%if %{smp}
-MOPT="$MOPT -D__KERNEL_SMP=1"
-%endif
+#%if %{smp}
+#MOPT="$MOPT -D__KERNEL_SMP=1"
+#%endif
 %{__make} -C kernel/svgalib_helper \
 	DEBFLAGS="$MOPT" \
+	INCLUDEDIR=%{_kernelsrcdir}/include
+
+mv kernel/svgalib_helper/svgalib_helper.o kernel/svgalib_helper/svgalib_helper-up.o
+
+%{__make} -C kernel/svgalib_helper \
+	DEBFLAGS="$MOPT -D__KERNEL_SMP=1"
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/var/lib/svgalib
+install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
+install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-%{__make} install -C kernel/svgalib_helper \
-	DESTDIR=$RPM_BUILD_ROOT \
-	INCLUDEDIR=%{_kernelsrcdir}/include
+#%{__make} install -C kernel/svgalib_helper \
+#	DESTDIR=$RPM_BUILD_ROOT \
+#	INCLUDEDIR=%{_kernelsrcdir}/include
+
+install kernel/svgalib_helper/svgalib_helper-up.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.o
+install kernel/svgalib_helper/svgalib_helper.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o
 chmod 644 $RPM_BUILD_ROOT/lib/modules/*/*/*
 
 # threeDKit is not really example, but "library" used in source form...
@@ -207,10 +237,16 @@ rm -rf $RPM_BUILD_ROOT
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
-%post -n kernel%{smpstr}-video-svgalib_helper
+%post -n kernel-video-svgalib_helper
 /sbin/depmod -a
 
-%postun -n kernel%{smpstr}-video-svgalib_helper
+%postun -n kernel-video-svgalib_helper
+/sbin/depmod -a
+
+%post -n kernel-smp-video-svgalib_helper
+/sbin/depmod -a
+
+%postun -n kernel-smp-video-svgalib_helper
 /sbin/depmod -a
 
 %files
@@ -224,9 +260,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %{_mandir}/man[1567]/*
 
-%files -n kernel%{smpstr}-video-svgalib_helper
+%files -n kernel-video-svgalib_helper
 %defattr(644,root,root,755)
-%attr(600,root,root) /lib/modules/*/misc/*.o
+%attr(600,root,root) /lib/modules/%{_kernel_ver}/misc/svgalib_helper.o
+
+%files -n kernel-smp-video-svgalib_helper
+%defattr(644,root,root,755)
+%attr(600,root,root) /lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o
 
 %files devel
 %defattr(644,root,root,755)
