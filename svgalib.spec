@@ -5,6 +5,7 @@
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 %define		_kernel_ver_str	%(echo %{_kernel_ver} | sed s/-/_/g)
+%define		_rel		4
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -13,7 +14,7 @@ Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.9.12
-Release:	3
+Release:	%{_rel}
 License:	distributable
 Group:		Libraries
 Group(de):	Libraries
@@ -29,6 +30,7 @@ Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-stderr.patch
 Patch4:		%{name}-kernver.patch
+Patch5:		%{name}-smp.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 %{!?_without_dist_kernel:Buildrequires:		kernel-headers}
 Exclusivearch:	%{ix86} alpha
@@ -73,7 +75,7 @@ Summary(pl):	Pomocniczy modu³ j±dra svgaliba
 Group:		Base/Kernel
 Group(de):	Grundsätzlich/Kern
 Group(pl):	Podstawowe/J±dro
-Release:	%{release}@%{_kernel_ver_str}
+Release:	%{_rel}@%{_kernel_ver_str}
 %{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}}
 %{!?_without_dist_kernel:Conflicts:	kernel-smp}
 Obsoletes:	svgalib-helper
@@ -92,7 +94,7 @@ opartych na svgalib.
 Summary:	svgalib's helper kernel module for SMP
 Summary(pl):	Pomoczniczy modu³ j±dra svgalib dla SMP
 Group:		Base/Kernel
-Release:	%{release}@%{_kernel_ver_str}
+Release:	%{_rel}@%{_kernel_ver_str}
 %{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel-ver}, kernel > %{_lernel_ver}}
 %{!?_without_dist_kernel:Conflicts:	kernel-up}
 Obsoletes:	svgalib-helper
@@ -172,6 +174,7 @@ Biblioteki statyczne [S]VGA.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -194,13 +197,12 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 %{__make} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
 
 %{__make} -C kernel/svgalib_helper \
-	DEBFLAGS="$MOPT" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
 mv kernel/svgalib_helper/svgalib_helper.o kernel/svgalib_helper/svgalib_helper-up.o
 
 %{__make} -C kernel/svgalib_helper \
-	DEBFLAGS="$MOPT -D__SMP__"
+	SMP=1 \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
 %install
