@@ -1,7 +1,7 @@
-diff -Nru svgalib-1.4.1/Makefile svgalib-1.4.1.new/Makefile
---- svgalib-1.4.1/Makefile	Wed Dec 29 18:31:31 1999
-+++ svgalib-1.4.1.new/Makefile	Wed Dec 29 18:31:54 1999
-@@ -132,49 +132,34 @@
+diff -urN svgalib-1.9.2.orig/Makefile svgalib-1.9.2/Makefile
+--- svgalib-1.9.2.orig/Makefile	Sun Mar 12 20:05:50 2000
++++ svgalib-1.9.2/Makefile	Sun Mar 12 20:10:56 2000
+@@ -134,49 +134,34 @@
  .PHONY: indent-gnu configaout
  
  installheaders:
@@ -70,7 +70,7 @@ diff -Nru svgalib-1.4.1/Makefile svgalib-1.4.1.new/Makefile
  
  ifdef INSTALLAOUTDIR
  
-@@ -190,7 +175,6 @@
+@@ -192,7 +177,6 @@
  		(cd $(TOPDIR)/$(INSTALLAOUTDIR); \
  		 ln -sf $$foo `echo $$foo | sed 's/\.so\..*/.so/'` ); \
  	done
@@ -78,21 +78,21 @@ diff -Nru svgalib-1.4.1/Makefile svgalib-1.4.1.new/Makefile
  
  else
  
-@@ -200,89 +184,82 @@
+@@ -202,89 +186,80 @@
  endif
  
  installstaticlib: static
 -	@echo Installing static libraries in $(libdir).
-+	@echo Installing static libraries in $(DESTDIR)$(libdir).
-+	install -d $(DESTDIR)$(libdir)
- 	@rm -f /usr/lib/libvga.a
+-	@rm -f /usr/lib/libvga.a
 -	@$(INSTALL_DATA) staticlib/libvga.a $(libdir)/libvga.a
 -	@chmod a+r $(libdir)/libvga.a
-+	@$(INSTALL_DATA) staticlib/libvga.a $(DESTDIR)$(libdir)/libvga.a
-+	@chmod a+r $(DESTDIR)$(libdir)/libvga.a
- 	@rm -f /usr/lib/libvgagl.a
+-	@rm -f /usr/lib/libvgagl.a
 -	@$(INSTALL_DATA) staticlib/libvgagl.a $(libdir)/libvgagl.a
 -	@chmod a+r $(libdir)/libvgagl.a
++	@echo Installing static libraries in $(DESTDIR)$(libdir).
++	install -d $(DESTDIR)$(libdir)
++	@$(INSTALL_DATA) staticlib/libvga.a $(DESTDIR)$(libdir)/libvga.a
++	@chmod a+r $(DESTDIR)$(libdir)/libvga.a
 +	@$(INSTALL_DATA) staticlib/libvgagl.a $(DESTDIR)$(libdir)/libvgagl.a
 +	@chmod a+r $(DESTDIR)$(libdir)/libvgagl.a
  
@@ -224,9 +224,21 @@ diff -Nru svgalib-1.4.1/Makefile svgalib-1.4.1.new/Makefile
  	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN)
  	@echo
  	@echo
-diff -Nru svgalib-1.4.1/doc/Makefile svgalib-1.4.1.new/doc/Makefile
---- svgalib-1.4.1/doc/Makefile	Wed Dec 29 18:31:31 1999
-+++ svgalib-1.4.1.new/doc/Makefile	Wed Dec 29 18:07:41 1999
+diff -urN svgalib-1.9.2.orig/Makefile.cfg svgalib-1.9.2/Makefile.cfg
+--- svgalib-1.9.2.orig/Makefile.cfg	Sun Mar 12 20:05:50 2000
++++ svgalib-1.9.2/Makefile.cfg	Sun Mar 12 20:11:43 2000
+@@ -25,7 +25,7 @@
+ # Common prefix for installation directories.
+ # NOTE: This directory must exist when you start the install.
+ TOPDIR=
+-prefix = $(TOPDIR)/usr/local
++prefix = $(TOPDIR)/usr
+ exec_prefix = $(prefix)
+ 
+ # Directory where the shared stubs and static library will be installed.
+diff -urN svgalib-1.9.2.orig/doc/Makefile svgalib-1.9.2/doc/Makefile
+--- svgalib-1.9.2.orig/doc/Makefile	Thu Dec  9 08:09:44 1999
++++ svgalib-1.9.2/doc/Makefile	Sun Mar 12 20:05:58 2000
 @@ -3,22 +3,22 @@
  srcdir    = ..
  VPATH     = $(srcdir)/doc
@@ -305,3 +317,34 @@ diff -Nru svgalib-1.4.1/doc/Makefile svgalib-1.4.1.new/doc/Makefile
  
  uninstall:
  	@echo Removing all svgalib man pages.
+diff -urN svgalib-1.9.2.orig/kernel/svgalib_helper/Makefile svgalib-1.9.2/kernel/svgalib_helper/Makefile
+--- svgalib-1.9.2.orig/kernel/svgalib_helper/Makefile	Wed Feb 23 13:20:48 2000
++++ svgalib-1.9.2/kernel/svgalib_helper/Makefile	Sun Mar 12 20:08:02 2000
+@@ -27,10 +27,9 @@
+ $(TARGET).o: $(SRC:.c=.o)
+ 	$(LD) -r $^ -o $@
+ 
+-install: device
+-	mkdir -p /lib/modules/$(VER)/misc /lib/modules/misc
+-	install -c $(TARGET).o /lib/modules/$(VER)/misc
+-	install -c $(TARGET).o /lib/modules/misc
++install:
++	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc
++	install -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/misc
+ 
+ device:
+ 	mknod /dev/svgalib_helper c $(SVGALIB_HELPER_MAJOR) 0
+diff -urN svgalib-1.9.2.orig/lrmi-0.6m/Makefile svgalib-1.9.2/lrmi-0.6m/Makefile
+--- svgalib-1.9.2.orig/lrmi-0.6m/Makefile	Fri Dec 31 14:05:38 1999
++++ svgalib-1.9.2/lrmi-0.6m/Makefile	Sun Mar 12 20:08:24 2000
+@@ -25,8 +25,8 @@
+ 	$(CC) $(CFLAGS) -o $@ $^
+ 
+ install: mode3 vga_reset
+-	install mode3 /sbin
+-	install vga_reset /sbin
++	install mode3 $(DESTDIR)/sbin
++	install vga_reset $(DESTDIR)/sbin
+ 
+ .PHONY: clean
+ clean:
