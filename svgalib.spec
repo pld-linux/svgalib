@@ -115,13 +115,13 @@ install -d $RPM_BUILD_ROOT/{etc/vga,usr/{bin,lib,include}} \
 	$RPM_BUILD_ROOT/var/state/svgalib
 
 install utils/{convfont,dumpreg,restore*,fix132*,setmclk} \
-	$RPM_BUILD_ROOT/usr/bin
+	$RPM_BUILD_ROOT%{_bindir}
 
-rm -f $RPM_BUILD_ROOT/usr/bin/{*.c,*.o}
+rm -f $RPM_BUILD_ROOT%{_bindir}/{*.c,*.o}
 
-strip $RPM_BUILD_ROOT/usr/bin/*
+strip $RPM_BUILD_ROOT%{_bindir}/*
 
-install utils/{runx,savetextmode,textmode} $RPM_BUILD_ROOT/usr/bin
+install utils/{runx,savetextmode,textmode} $RPM_BUILD_ROOT%{_bindir}
 
 cp -a doc/man* $RPM_BUILD_ROOT%{_mandir}
 
@@ -159,7 +159,7 @@ rm -fr $RPM_BUILD_ROOT
 
 %dir /etc/vga
 %config(noreplace) %verify(not size mtime md5) /etc/vga/*
-%attr(755,root,root) /usr/bin/*
+%attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/*.so.*.*
 %{_mandir}/man[1567]/*
 
