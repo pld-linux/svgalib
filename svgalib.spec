@@ -13,7 +13,7 @@ Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
 Version:	1.9.17
-%define _rel	3
+%define	_rel	4
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -268,7 +268,7 @@ rm -f src/svgalib_helper.h
 %{__make} CC=%{__cc} -C kernel/svgalib_helper \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
-mv -f kernel/svgalib_helper/svgalib_helper.o  kernel/svgalib_helper/svgalib_helper-up.o
+mv -f kernel/svgalib_helper/svgalib_helper.o kernel/svgalib_helper/svgalib_helper-up.o
 rm -f kernel/svgalib_helper/main.o
 
 # SMP
