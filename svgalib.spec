@@ -1,6 +1,7 @@
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
-%define		smpstr		%{?_with_smp:smp}%{!?_with_smp:up}
+%define		_kernel_ver_str	%(echo %{_kernel_ver} | sed s/-/_/g)
+%define		smpstr		%{?_with_smp:-smp}
 %define		smp		%{?_with_smp:1}%{!?_with_smp:0}
 
 Summary:	Library for full screen [S]VGA graphics
@@ -64,23 +65,24 @@ ekran çizim kullanmalarýný saðlayan bir kitaplýktýr. Az bellekli
 makinalar için X Windows'tan daha uygun olmasýnýn yanýsýra, pek çok
 oyun ve yardýmcý programlar çizim eriþimi için bu kitaplýðý kullanýr.
 
-%package helper
+%package -n kernel%{smpstr}-video-svgalib_helper
 Summary:	svgalib's helper kernel module
 Summary(de):	Svgalibs Helferkernmodul
 Summary(pl):	Pomocniczy modu³ j±dra svgaliba
 Group:		Base/Kernel
 Group(de):	Grundsätzlich/Kern
 Group(pl):	Podstawowe/J±dro
-Release:	%{release}@%{_kernel_ver}%{smpstr}
+Release:	%{release}@%{_kernel_ver_str}
 Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}
 Conflicts:	kernel-%{?_with_smp:up}%{!?_with_smp:smp}
+Obsoletes:	svgalib-helper
 Prereq:		/sbin/depmod
 
-%description helper
+%description -n kernel%{smpstr}-video-svgalib_helper
 This package contains the kernel module necessary to run svgalib-based
 programs.
 
-%description helper -l pl
+%description -n kernel%{smpstr}-video-svgalib_helper -l pl
 Ten pakiet zawiera modu³ j±dra potrzebny do uruchamiania programów
 opartych na svgalib.
 
@@ -205,10 +207,10 @@ gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
 
 %postun -p /sbin/ldconfig
 
-%post helper
+%post -n kernel%{smpstr}-video-svgalib_helper
 /sbin/depmod -a
 
-%postun helper
+%postun -n kernel%{smpstr}-video-svgalib_helper
 /sbin/depmod -a
 
 %clean
@@ -225,7 +227,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %{_mandir}/man[1567]/*
 
-%files helper
+%files -n kernel%{smpstr}-video-svgalib_helper
 %defattr(644,root,root,755)
 %if %{_kernel24}
 %attr(600,root,root) /lib/modules/*/kernel/drivers/char/*.o
