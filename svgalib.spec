@@ -1,3 +1,5 @@
+%define		_kernel_ver	%(grep UTS_RELEASE /usr/src/linux/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
+
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(fr):	Une librairie graphique SVGA plein ecran de bas niveau
@@ -22,7 +24,7 @@ URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 Prereq:		modutils
 Prereq:		/sbin/depmod
 Prereq:		/sbin/ldconfig
-%conflicts_kernel_ver
+Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}
 %{!?no_dist_kernel:Buildrequires:	kernel-headers}
 Exclusivearch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
