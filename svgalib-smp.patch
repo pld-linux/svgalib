@@ -1,20 +1,11 @@
-diff -uNr svgalib-1.9.12/kernel/svgalib_helper/Makefile svgalib-1.9.12.new/kernel/svgalib_helper/Makefile
---- svgalib-1.9.12/kernel/svgalib_helper/Makefile	Tue Jan  8 23:50:06 2002
-+++ svgalib-1.9.12.new/kernel/svgalib_helper/Makefile	Tue Jan  8 23:52:58 2002
-@@ -7,7 +7,15 @@
- 	exit 1
- endif
- 
-+# Comment/uncomment the following line to disable/enable SMP
-+#SMP = 1
-+
--CFLAGS = -O2 -DLINUX -Dlinux -D__KERNEL__ -DMODULE -Wall $(DEBFLAGS) 
-+ifeq ($(SMP),1)
-+  CFLAGS = -O2 -DLINUX -Dlinux -D__KERNEL__ -D__SMP__ -DMODULE -DCONFIG_X86_LOCAL_APIC -Wall $(DEBFLAGS)
-+else
-+  CFLAGS = -O2 -DLINUX -Dlinux -D__KERNEL__ -DMODULE -Wall $(DEBFLAGS)
-+endif
-+
- CFLAGS += -I$(INCLUDEDIR)
- CFLAGS += -DSVGALIB_HELPER_MAJOR=$(SVGALIB_HELPER_MAJOR)
- 
+--- svgalib-1.9.18/kernel/svgalib_helper/Makefile.alt.orig	2003-10-07 18:22:30.000000000 +0200
++++ svgalib-1.9.18/kernel/svgalib_helper/Makefile.alt	2003-10-07 19:32:32.463054496 +0200
+@@ -26,7 +26,7 @@
+ INCLUDES += -I$(INCLUDEDIR)
+ INCLUDES += -I$(INCLUDEDIR)/asm/mach-default
+                                                                                                   
+-CFLAGS = -O2 -DLINUX -Dlinux -D__KERNEL__ -DMODULE $(DEBFLAGS) -nostdinc -iwithprefix include
++CFLAGS = $(COPT) -DLINUX -Dlinux -D__KERNEL__ -DMODULE $(DEBFLAGS) -nostdinc -iwithprefix include
+ ifeq (2,$(VER_MAJOR))
+ 	ifeq (6,$(VER_MINOR))
+ 		CFLAGS += -DKBUILD_MODNAME="svgalib_helper"

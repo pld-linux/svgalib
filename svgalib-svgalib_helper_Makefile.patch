@@ -1,6 +1,6 @@
---- svgalib-1.9.17/kernel/svgalib_helper/Makefile~	Mon Mar 24 01:28:12 2003
-+++ svgalib-1.9.17/kernel/svgalib_helper/Makefile	Mon Mar 24 01:28:12 2003
-@@ -2,11 +2,6 @@
+--- svgalib-1.9.18/kernel/svgalib_helper/Makefile.alt.orig	2003-10-07 20:30:32.355030504 +0200
++++ svgalib-1.9.18/kernel/svgalib_helper/Makefile.alt	2003-10-07 20:30:39.901883208 +0200
+@@ -7,11 +7,6 @@
  
  MODVER = $(shell grep CONFIG_MODVERSIONS $(INCLUDEDIR)/linux/autoconf.h)
  
@@ -9,6 +9,6 @@
 -	exit 1
 -endif
 -
- # Comment/uncomment the following line to disable/enable SMP
- #SMP = 1
+ # Extract version number from headers.
+ VER = $(shell awk -F\" '/REL/ {print $$2}' $(INCLUDEDIR)/linux/version.h 2>/dev/null)
  

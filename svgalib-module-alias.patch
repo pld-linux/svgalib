@@ -1,0 +1,26 @@
+--- svgalib-1.9.18/kernel/svgalib_helper/main.c.orig	2003-10-04 12:34:20.000000000 +0200
++++ svgalib-1.9.18/kernel/svgalib_helper/main.c	2003-10-07 21:31:05.459714640 +0200
+@@ -38,6 +38,10 @@
+ #include "i810.h"
+ #include "interrupt.h"
+ 
++#ifdef KERNEL_2_6
++#include <linux/vermagic.h>
++#endif
++
+ int debug=0;
+ static int all_devices=0;
+ 
+@@ -648,5 +652,12 @@
+ MODULE_LICENSE("GPL");
+ #endif
+ 
++#ifdef VERMAGIC_STRING
++MODULE_INFO(vermagic, VERMAGIC_STRING);
++#endif
++#ifdef MODULE_ALIAS
++MODULE_ALIAS("char-major-" __stringify(SVGALIB_HELPER_MAJOR));
++#endif
++
+ MODULE_AUTHOR("Matan Ziv-Av <matan@svgalib.org>");
+ MODULE_DESCRIPTION("Generic hardware access to vga cards");

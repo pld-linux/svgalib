@@ -12,13 +12,13 @@ Summary(ru):	îÉÚËÏÕÒÏ×ÎÅ×ÁÑ ÂÉÂÌÉÏÔÅËÁ ÐÏÌÎÏÜËÒÁÎÎÏÊ SVGA ÇÒÁÆÉËÉ
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Summary(uk):	îÉÚØËÏÒ¦×ÎÅ×Á Â¦ÂÌ¦ÏÔÅËÁ ÐÏ×ÎÏÅËÒÁÎÎÏ§ SVGA ÇÒÁÆ¦ËÉ
 Name:		svgalib
-Version:	1.9.17
-%define _rel	2
+Version:	1.9.18
+%define _rel	1
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
-# Source0-md5: e1599bb3222899d39ce1a2af36670a98
+# Source0-md5:	5a1dc3dbf3182fb560959678dfba6181
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
@@ -27,12 +27,20 @@ Patch4:		%{name}-threeDKit-make.patch
 Patch5:		%{name}-nolrmi.patch
 Patch6:		%{name}-alpha.patch
 Patch7:		%{name}-svgalib_helper_Makefile.patch
+Patch8:		%{name}-link.patch
+Patch9:		%{name}-module-alias.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 ExclusiveArch:	%{ix86} alpha
 BuildRequires:	rpmbuild(macros) >= 1.118
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
+
+%if %(echo %{_kernel_ver} | grep -q '2\.[0-4]\.' ; echo $?)
+%define	kmodext	ko
+%else
+%define kmodext	o
+%endif
 
 %description
 The svgalib package provides the SVGAlib low-level graphics library
@@ -235,10 +243,12 @@ Bibliotecas estáticas para desenvolvimento com SVGAlib.
 %patch4 -p1
 %ifnarch %{ix86}
 # lrmi is x86-only
-%patch5 -p1
+#%patch5 -p1  -- probably obsolete
 %endif
-%patch6 -p1
+#%patch6 -p1  -- still neeed? needs update if so
 %patch7 -p1
+%patch8 -p1
+%patch9 -p1 -b .orig
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -252,29 +262,49 @@ NOASM=y
 MOPT="%{rpmcflags} %{!?debug:-fomit-frame-pointer} -pipe"
 LDFLAGS="%{rpmldflags}"; export LDFLAGS
 
-%{__make} CC=%{__cc} OPTIMIZE="$MOPT" NO_ASM="$NOASM" shared
-ln -sf libvga.so.%{version} sharedlib/libvga.so
-ln -sf libvgagl.so.%{version} sharedlib/libvgagl.so
+%{__make} shared \
+	CC="%{__cc}" \
+	OPTIMIZE="$MOPT" \
+	NO_ASM="$NOASM"
+#ln -sf libvga.so.%{version} sharedlib/libvga.so
+#ln -sf libvgagl.so.%{version} sharedlib/libvgagl.so
 
-%{__make} CC=%{__cc} LDFLAGS="-L../sharedlib $LDFLAGS" OPTIMIZE="$MOPT" -C utils
+%{__make} -C utils \
+	CC="%{__cc}" \
+	LDFLAGS="-L../sharedlib $LDFLAGS" \
+	OPTIMIZE="$MOPT"
+
 %ifarch %{ix86}
-%{__make} CC=%{__cc} CFLAGS="$LDFLAGS $MOPT" -C lrmi-0.6m
+%{__make} -C lrmi-0.6m \
+	CC="%{__cc}" \
+	CFLAGS="$LDFLAGS $MOPT"
 %endif
-%{__make} CC="%{__cc} -L../sharedlib $LDFLAGS $MOPT" -C threeDKit
+%{__make} -C threeDKit \
+	CC="%{__cc} -L../sharedlib $LDFLAGS $MOPT"
 rm -f src/svgalib_helper.h
-%{__make} CC=%{__cc} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
-%{__make} CC="%{__cc} $MOPT" -C threeDKit lib3dkit.a
+
+%{__make} static \
+	CC="%{__cc}" \
+	OPTIMIZE="$MOPT" \
+	NO_ASM="$NOASM"
+
+%{__make} -C threeDKit lib3dkit.a \
+	 CC="%{__cc} $MOPT"
 
 # UP
-%{__make} CC=%{__cc} -C kernel/svgalib_helper \
+%{__make} -C kernel/svgalib_helper -f Makefile.alt \
+	CC="%{kgcc}" \
+	COPT="%{rpmcflags}" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
-mv -f kernel/svgalib_helper/svgalib_helper.o kernel/svgalib_helper/svgalib_helper-up.o
-rm -f kernel/svgalib_helper/main.o
+mv -f kernel/svgalib_helper/svgalib_helper.%{kmodext} \
+	 kernel/svgalib_helper-up.%{kmodext}
+rm -f kernel/svgalib_helper/*.*o
 
 # SMP
-%{__make} CC=%{__cc} -C kernel/svgalib_helper \
-	SMP=1 \
+%{__make} -C kernel/svgalib_helper -f Makefile.alt \
+	CC="%{kgcc}" \
+	COPT="%{rpmcflags} -D__SMP__ -DCONFIG_X86_LOCAL_APIC" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
 %install
@@ -286,8 +316,10 @@ install -d $RPM_BUILD_ROOT/var/lib/svgalib \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install threeDKit/lib3dkit.a $RPM_BUILD_ROOT%{_libdir}
-install kernel/svgalib_helper/svgalib_helper-up.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.o
-install kernel/svgalib_helper/svgalib_helper.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o
+install kernel/svgalib_helper-up.%{kmodext} \
+	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}
+install kernel/svgalib_helper/svgalib_helper.%{kmodext} \
+	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -323,11 +355,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n kernel-video-svgalib_helper
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}/misc/svgalib_helper.o*
+/lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}*
 
 %files -n kernel-smp-video-svgalib_helper
 %defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o*
+/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}*
 
 %files devel
 %defattr(644,root,root,755)

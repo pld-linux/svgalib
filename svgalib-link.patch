@@ -1,0 +1,36 @@
+--- svgalib-1.9.18/src/Makefile.orig	2002-07-06 19:59:26.000000000 +0200
++++ svgalib-1.9.18/src/Makefile	2003-10-07 21:11:07.396847880 +0200
+@@ -439,6 +439,7 @@
+ 	$(CC) -shared -Wl,-soname,libvga.so.$(MAJOR_VER) \
+ 	-Xlinker --retain-symbols-file -Xlinker ../src/exports \
+ 	  -o libvga.so.$(VERSION) $(ALLOBJS) -lm
++	ln -sf libvga.so.$(VERSION) libvga.so
+ 
+ $(sharedlibdir)/libvga.so.$(VERSION): libvga.so.$(VERSION)
+ 	$(INSTALL_PROGRAM) $< $(sharedlibdir)/$<
+--- svgalib-1.9.18/gl/Makefile.orig	1999-07-18 10:14:45.000000000 +0200
++++ svgalib-1.9.18/gl/Makefile	2003-10-07 21:11:01.242783440 +0200
+@@ -29,8 +29,9 @@
+ .PHONY: all clean dep
+ 
+ libvgagl.so.$(VERSION): $(MODULES)
+-	$(CC) -s -shared -Wl,-soname,libvgagl.so.$(MAJOR_VER) -o libvgagl.so.$(VERSION) \
+-	  $(MODULES)
++	$(CC) -shared -Wl,-soname,libvgagl.so.$(MAJOR_VER) -o libvgagl.so.$(VERSION) \
++	  $(MODULES) -L. -lvga
++	ln -sf libvgagl.so.$(VERSION) libvgagl.so
+ 
+ libvgagl.a: $(MODULES)
+ 	rm -f libvgagl.a
+--- svgalib-1.9.18/threeDKit/Makefile.orig	2003-10-07 20:49:45.000000000 +0200
++++ svgalib-1.9.18/threeDKit/Makefile	2003-10-07 21:10:54.689779648 +0200
+@@ -53,7 +53,8 @@
+ # These rules are for ELF only.
+ lib3dkit.so.$(VERSION): $(OBJECTS)
+ 	$(CC) -shared -Wl,-soname,lib3dkit.so.$(MAJOR_VER) \
+-	  -o lib3dkit.so.$(VERSION) $(OBJECTS) -lm
++	  -o lib3dkit.so.$(VERSION) $(OBJECTS) -lm -L../sharedlib -lvga -lvgagl
++	ln -sf lib3dkit.so.$(VERSION) lib3dkit.so
+ 
+ $(DESTDIR)$(sharedlibdir)/lib3dkit.so.$(VERSION): lib3dkit.so.$(VERSION)
+ 	$(INSTALL_PROGRAM) $< $(DESTDIR)$(sharedlibdir)/$<
