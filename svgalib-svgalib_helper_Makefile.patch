@@ -1,0 +1,14 @@
+--- svgalib-1.9.17/kernel/svgalib_helper/Makefile~	Mon Mar 24 01:28:12 2003
++++ svgalib-1.9.17/kernel/svgalib_helper/Makefile	Mon Mar 24 01:28:12 2003
+@@ -2,11 +2,6 @@
+ 
+ MODVER = $(shell grep CONFIG_MODVERSIONS $(INCLUDEDIR)/linux/autoconf.h)
+ 
+-ifeq ($(MODVER),)
+-	@echo INCLUDEDIR is not set up correctly
+-	exit 1
+-endif
+-
+ # Comment/uncomment the following line to disable/enable SMP
+ #SMP = 1
+ 
