@@ -5,7 +5,7 @@ Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.9.9
-Release:	1
+Release:	1@%{_kernel_ver}
 License:	Distributable
 Group:		Libraries
 Group(de):	Libraries
@@ -21,13 +21,12 @@ URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 Prereq:		modutils
 Prereq:		/sbin/depmod
 Prereq:		/sbin/ldconfig
+%conflicts_kernel_ver
 %{!?no_dist_kernel:Buildrequires:	kernel-headers}
 Exclusivearch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
-%define		_kernel_ver	%(grep UTS_RELEASE /usr/src/linux/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
-%define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 
 %description
 The svgalib package provides the SVGAlib low-level graphics library
