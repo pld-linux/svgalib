@@ -4,7 +4,7 @@ Summary(fr):	Une librairie graphique SVGA plein ecran de bas niveau
 Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
-Version:	1.9.4
+Version:	1.9.5
 Release:	1
 License:	distributable
 Group:		Libraries
