@@ -1,0 +1,105 @@
+diff -urN svgalib-1.3.1/doc/man1/runx.1 svgalib-1.3.1.tmp2var/doc/man1/runx.1
+--- svgalib-1.3.1/doc/man1/runx.1	Thu Mar 26 21:14:36 1998
++++ svgalib-1.3.1.tmp2var/doc/man1/runx.1	Mon May 10 20:55:46 1999
+@@ -13,7 +13,7 @@
+ to run X.
+ .B runx
+ saves the VGA font data in
+-.IR /tmp/fontdata ,
++.IR /var/state/svgalib/fontdata ,
+ and restores it when you exit X.
+ 
+ The
+@@ -23,15 +23,15 @@
+ .RS
+ .B #!/bin/sh
+ .br
+-.B echo Saving font in /tmp/fontdata
++.B echo Saving font in $TMPDIR/fontdata
+ .br
+-.B restorefont -w /tmp/fontdata
++.B restorefont -w $TMPDIR/fontdata
+ .br
+ .B startx
+ .br
+-.B echo Restoring font from /tmp/fontdata
++.B echo Restoring font from $TMPDIR/fontdata
+ .br
+-.B restorefont -r /tmp/fontdata
++.B restorefont -r $TMPDIR/fontdata
+ .RE
+ 
+ Note that this doesn't help with syncing problems.
+diff -urN svgalib-1.3.1/doc/man1/savetextmode.1 svgalib-1.3.1.tmp2var/doc/man1/savetextmode.1
+--- svgalib-1.3.1/doc/man1/savetextmode.1	Thu Mar 26 21:14:36 1998
++++ svgalib-1.3.1.tmp2var/doc/man1/savetextmode.1	Mon May 10 20:59:27 1999
+@@ -10,7 +10,7 @@
+ .SH DESCRIPTION
+ These are simple scripts to save the SVGA register state when in textmode to the
+ files
+-.IR /tmp/fontdata " and " /tmp/textregs
++.IR $TMPDIR/fontdata " and " $TMPDIR/textregs
+ or to restore it from these files.
+ 
+ The actual utilities used are
+@@ -40,9 +40,9 @@
+ will understand.
+ 
+ .SH FILES
+-.I /tmp/fontdata
++.I $TMPDIR/fontdata
+ .br
+-.I /tmp/textregs
++.I $TMPDIR/textregs
+ 
+ .SH SEE ALSO
+ 
+diff -urN svgalib-1.3.1/doc/man7/svgalib.7 svgalib-1.3.1.tmp2var/doc/man7/svgalib.7
+--- svgalib-1.3.1/doc/man7/svgalib.7	Sat Dec 19 17:24:51 1998
++++ svgalib-1.3.1.tmp2var/doc/man7/svgalib.7	Mon May 10 21:01:51 1999
+@@ -104,7 +104,7 @@
+ If you run the
+ .BR savetextmode (1)
+ script to save textmode information to
+-.IR /tmp ,
++.IR $TMPDIR ,
+ you'll be able to restore textmode by running the
+ .BR textmode (1)
+ script.
+diff -urN svgalib-1.3.1/utils/runx svgalib-1.3.1.tmp2var/utils/runx
+--- svgalib-1.3.1/utils/runx	Sat Aug  2 08:37:04 1997
++++ svgalib-1.3.1.tmp2var/utils/runx	Mon May 10 21:26:33 1999
+@@ -5,8 +5,8 @@
+ # running X, and 'textmode' after. This will restore the textmode registers
+ # and the VGA palette in addition to the VGA font.
+ 
+-echo Saving font in /tmp/fontdata
+-restorefont -w /tmp/fontdata
++echo Saving font in $TMPDIR/fontdata
++restorefont -w $TMPDIR/fontdata
+ startx
+-echo Restoring font from /tmp/fontdata
+-restorefont -r /tmp/fontdata
++echo Restoring font from $TMPDIR/fontdata
++restorefont -r $TMPDIR/fontdata
+diff -urN svgalib-1.3.1/utils/savetextmode svgalib-1.3.1.tmp2var/utils/savetextmode
+--- svgalib-1.3.1/utils/savetextmode	Sat Dec  5 08:01:38 1998
++++ svgalib-1.3.1.tmp2var/utils/savetextmode	Mon May 10 21:26:33 1999
+@@ -1,4 +1,4 @@
+ #!/bin/sh
+-rm -f /etc/vga/textregs /etc/vga/fontdata
+-restoretextmode -w /etc/vga/textregs
+-restorefont -w /etc/vga/fontdata
++rm -f $TMPDIR/textregs $TMPDIR/fontdata
++restoretextmode -w $TMPDIR/textregs
++restorefont -w $TMPDIR/fontdata
+diff -urN svgalib-1.3.1/utils/textmode svgalib-1.3.1.tmp2var/utils/textmode
+--- svgalib-1.3.1/utils/textmode	Sat Dec  5 08:00:00 1998
++++ svgalib-1.3.1.tmp2var/utils/textmode	Mon May 10 21:26:33 1999
+@@ -1,4 +1,4 @@
+ #!/bin/sh
+-restoretextmode -r /etc/vga/textregs
+-restorefont -r /etc/vga/fontdata
++restoretextmode -r $TMPDIR/textregs
++restorefont -r $TMPDIR/fontdata
+ restorepalette
