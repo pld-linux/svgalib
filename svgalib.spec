@@ -2,7 +2,7 @@
 # conditional build
 # _without_dist_kernel		without distribution kernel
 
-%define		_rel		1
+%define		_rel		2
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -23,6 +23,7 @@ Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-smp.patch
+Patch4:		%{name}-threeDKit-make.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 %{!?_without_dist_kernel:Buildrequires:		kernel-headers}
 Requires:	%{name}-helper = %{version}
@@ -229,6 +230,7 @@ Bibliotecas estáticas para desenvolvimento com SVGAlib.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -242,23 +244,25 @@ NOASM=y
 MOPT="%{rpmcflags} %{!?debug:-fomit-frame-pointer} -pipe"
 LDFLAGS="%{rpmldflags}"; export LDFLAGS
 
-%{__make} OPTIMIZE="$MOPT" NO_ASM="$NOASM" shared
+%{__make} CC=%{__cc} OPTIMIZE="$MOPT" NO_ASM="$NOASM" shared
 ln -sf libvga.so.%{version} sharedlib/libvga.so
+ln -sf libvgagl.so.%{version} sharedlib/libvgagl.so
 
-(cd utils ; %{__make} LDFLAGS="-L../sharedlib $LDFLAGS" OPTIMIZE="$MOPT")
-(cd lrmi-0.6m ; %{__make} CFLAGS="$LDFLAGS $MOPT")
-
-%{__make} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
+%{__make} CC=%{__cc} LDFLAGS="-L../sharedlib $LDFLAGS" OPTIMIZE="$MOPT" -C utils
+%{__make} CC=%{__cc} CFLAGS="$LDFLAGS $MOPT" -C lrmi-0.6m
+%{__make} CC="%{__cc} -L../sharedlib $LDFLAGS $MOPT" -C threeDKit
+%{__make} CC=%{__cc} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
+%{__make} CC="%{__cc} $MOPT" -C threeDKit lib3dkit.a
 
 # UP
-%{__make} -C kernel/svgalib_helper \
+%{__make} CC=%{__cc} -C kernel/svgalib_helper \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
 mv -f kernel/svgalib_helper/svgalib_helper.o  kernel/svgalib_helper/svgalib_helper-up.o
 rm -f kernel/svgalib_helper/main.o
 
 # SMP
-%{__make} -C kernel/svgalib_helper \
+%{__make} CC=%{__cc} -C kernel/svgalib_helper \
 	SMP=1 \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
@@ -269,6 +273,7 @@ install -d $RPM_BUILD_ROOT/var/lib/svgalib \
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
+install threeDKit/lib3dkit.a $RPM_BUILD_ROOT/%{_libdir}/
 install kernel/svgalib_helper/svgalib_helper-up.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.o
 install kernel/svgalib_helper/svgalib_helper.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o
 
