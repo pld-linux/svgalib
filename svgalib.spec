@@ -105,18 +105,18 @@ gzip -d doc/man?/*gz
 
 %build
 LDFLAGS="-s"; export LDFLAGS
-make OPTIMIZE="$RPM_OPT_FLAGS -pipe" shared
+%{__make} OPTIMIZE="$RPM_OPT_FLAGS -pipe" shared
 ln -sf libvga.so.%{version} sharedlib/libvga.so
 (cd utils; make LDFLAGS="-L../sharedlib")
-make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static
+%{__make} OPTIMIZE="$RPM_OPT_FLAGS -pipe" static
 
-make -C kernel/svgalib_helper
+%{__make} -C kernel/svgalib_helper
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-make install DESTDIR=$RPM_BUILD_ROOT install
-make install -C kernel/svgalib_helper DESTDIR=$RPM_BUILD_ROOT
+%{__make} install DESTDIR=$RPM_BUILD_ROOT install
+%{__make} install -C kernel/svgalib_helper DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT/var/lib/svgalib
 
