@@ -5,7 +5,7 @@ Summary(pl):    Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):    Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.3.1
-Release:	5
+Release:	6
 Copyright:	distributable
 Group:		Libraries
 Group(pl):	Biblioteki
@@ -178,73 +178,11 @@ rm -fr $RPM_BUILD_ROOT
 %attr(644,root,root) %{_libdir}/*.a
 
 %changelog
-* Mon May 10 1999 Piotr Czerwiñski <pius@pld.org.pl>
-  [1.3.1-5]
-- more patches added,
-- moved temporary svgalib files to /var/state/svgalib,
-- added %preun section,
-- changes to the spec file,
-- FHS 2.0 compliant changes.
-
-* Wed Jan 20 1999 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
-  [1.3.1-4d]
-- updated to stable version, 
-- compressed man pages && documentation,
-- added Prereq: /sbin/ldconfig,
-- added Group(pl),
-
-  by Micha³ Zalewski <lcamtuf@dione.ids.pl>
-
-- fixed group of shared libraries & ELF binaries.  
-
-* Mon Nov 02 1998 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
- [1.3.1-1d]
-- updated to latest snapshoot - 1.3.1.19981020,
-- added fiew missing ELF Binaries,
-- shared libraries moved to /lib
-- minor changes.
-
-* Fri Oct 15 1998 Wojtek ¦lusarczyk <wojtek@SHADOW.EU.ORG>
- [1.3.0-3d]
-- build against Tornado,
-- translation modified for pl,
-- added missing %defattr support in %files static,
-- minor changes.
-
-* Thu Sep 24  1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
- [1.3.0-3]
-- changed Buildroot to /tmp/%%{name}-%%{version}-root,
-- added using %%{name} and %%{version} in Source,
-- added static subpackage,
-- changeded dependences to "Requires: %%{name} = %%{version}" in devel
-  subpackage,
-- added alpha to Exclusivearch list,
-- added using $RPM_OPT_FLAGS during compile,
-- added full %attr description in %files.
-- added modification witch allow build package from non-root account
-  (svgalib-non-root.patch),
-- added striping shared libraries.
-
-* Sun Aug 23 1998 Jeff Johnson <jbj@redhat.com>
-- verify dumpreg is not setuid (problem #760)
-- specfile fiddles
-
-* Thu Jul 30 1998 Cristian Gafton <gafton@redhat.com>
-- upgraded to 1.3.0
-- security patch
-
-* Thu May 07 1998 Prospector System <bugs@redhat.com>
-- translations modified for de, fr, tr
-
-* Thu Apr 30 1998 Cristian Gafton <gafton@redhat.com>
-- devel package moved to Development/Libraries
-
-* Mon Apr 06 1998 Erik Troan <ewt@redhat.com>
-- updated to svgalib 1.2.13
-- uses a build root
-
-* Mon Nov  3 1997 Michael Fulbright <msf@redhat.com>
-- removed Mach64 from configuration, as the driver does not work
-
-* Tue Oct 14 1997 Donnie Barnes <djb@redhat.com>
-- spec file cleanups
+* Mon May 24 1999 Piotr Czerwiñski <pius@pld.org.pl> 
+  [1.3.1-6]
+- package is FHS 2.0 compliant,
+- spec file based on RH version, 
+- modified for PLD use by me, 
+  Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>,
+  Wojtek ¦lusarczyk <wojtek@shadow.eu.org> 
+  and Micha³ Zalewski <lcamtuf@dione.ids.pl>.
