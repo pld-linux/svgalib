@@ -1,0 +1,37 @@
+--- svgalib-1.9.19/kernel/svgalib_helper/main.c.orig	2004-05-18 13:56:05.000000000 +0200
++++ svgalib-1.9.19/kernel/svgalib_helper/main.c	2004-05-18 14:09:17.000000000 +0200
+@@ -417,7 +417,7 @@
+ 	vma->vm_pgoff = off >> PAGE_SHIFT;
+ 	/* This is an IO map - tell maydump to skip this VMA */
+ 	vma->vm_flags |= VM_IO;
+-#if defined(__sparc_v9__)
++#if defined(__sparc__) || defined(__sparc_v9__)
+ 	vma->vm_flags |= (VM_SHM | VM_LOCKED);
+ 	if (my_io_remap_page_range(vma, vma->vm_start, off,
+ 				vma->vm_end - vma->vm_start, vma->vm_page_prot, 0))
+--- svgalib-1.9.19/kernel/svgalib_helper/kernel26compat.h.orig	2004-05-18 14:27:22.000000000 +0200
++++ svgalib-1.9.19/kernel/svgalib_helper/kernel26compat.h	2004-05-18 14:29:13.000000000 +0200
+@@ -10,6 +10,9 @@
+ # if defined (PG_chainlock)
+ #  define my_io_remap_page_range(vma, start, ofs, len, prot) \
+ 		io_remap_page_range(vma,start,ofs,len,prot)
++# elif defined(__sparc__) || defined(__sparc_v9__)
++#  define my_io_remap_page_range(vma, from, to, size, prot, space) \
++		io_remap_page_range(from,to,size,prot,space)
+ # else
+ #  define my_io_remap_page_range(vma, start, ofs, len, prot) \
+ 		io_remap_page_range(start,ofs,len,prot)
+@@ -28,8 +31,13 @@
+ #  define KERNEL_2_6
+ # endif
+ 
++# if defined(__sparc__) || defined(__sparc_v9__)
++#  define my_io_remap_page_range(vma, from, to, size, prot, space) \
++		io_remap_page_range(vma,from,to,size,prot,space)
++# else
+ # define my_io_remap_page_range(vma, start, ofs, len, prot) \
+ 		io_remap_page_range(vma,start,ofs,len,prot)
++# endif
+ 
+ # define pci_present() 1
+ 
