@@ -5,10 +5,11 @@ Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.9.5
-Release:	3
+Release:	4
 License:	distributable
 Group:		Libraries
 Group(de):	Libraries
+Group(es):	Bibliotecas
 Group(fr):	Librairies
 Group(pl):	Biblioteki
 Source0:	ftp://metalab.unc.edu/pub/Linux/libs/graphics/%{name}-%{version}.tar.gz
@@ -116,13 +117,23 @@ gzip -d doc/man?/*gz
 %patch3 -p1
 
 %build
-%{!?debug:LDFLAGS="-s"; export LDFLAGS}
-%{__make} OPTIMIZE="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -pipe" shared
-ln -sf libvga.so.%{version} sharedlib/libvga.so
-(cd utils; make LDFLAGS="-L../sharedlib")
-%{__make} OPTIMIZE="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -pipe" static
+%ifarch %{ix86}
+NOASM=n
+%else
+NOASM=y
+%endif
+MOPT="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS -fomit-frame-pointer} -pipe"
+LDFLAGS="%{!?debug:-s}"; export LDFLAGS
 
-%{__make} -C kernel/svgalib_helper
+%{__make} OPTIMIZE="$MOPT" NO_ASM="$NOASM" shared
+ln -sf libvga.so.%{version} sharedlib/libvga.so
+
+(cd utils ; %{__make} LDFLAGS="-L../sharedlib $LDFLAGS" OPTIMIZE="$MOPT")
+(cd lrmi-0.6m ; %{__make} CFLAGS="$LDFLAGS $MOPT")
+
+%{__make} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
+
+%{__make} DEBFLAGS="$MOPT" -C kernel/svgalib_helper
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -130,6 +141,11 @@ install -d $RPM_BUILD_ROOT/var/lib/svgalib
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 %{__make} install -C kernel/svgalib_helper DESTDIR=$RPM_BUILD_ROOT
+
+# threeDKit is not really example, but "library" used in source form...
+# (but threeDKit directory contains also 2 examples)
+install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
+cp -rf demos threeDKit $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
 
@@ -161,6 +177,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/*.h
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_mandir}/man3/*
+%{_examplesdir}/%{name}-%{version}
 
 %files static
 %defattr(644,root,root,755)
