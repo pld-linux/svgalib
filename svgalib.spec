@@ -1,21 +1,23 @@
+%define date 19981020
 Summary:     Library for full screen [S]VGA graphics
 Summary(de): Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(fr): Bibliothèque pour les graphiques plein écran [S]VGA
+Summary(pl): Biblioteki do pe³noekranowej grafiki [S]VGA
 Summary(tr): Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:        svgalib
-Version:     1.3.0
-Release:     3
+Version:     1.3.1
+Release:     %{date}.1
 Copyright:   distributable
 Group:       Libraries
-Source:      ftp://sunsite.unc.edu/pub/Linux/libs/graphics/%{name}-%{version}.tar.gz
-Patch0:      svgalib-1.3.0-config.patch
+Source:      http://www.cs.bgu.ac.il/~zivav/svgalib/%{name}-%{version}.%{date}.tar.gz
+Patch0:      svgalib-config.patch
 Patch1:      svgalib-1.2.13-buildroot.patch
 Patch2:      svgalib-1.3.0-secu.patch
-Patch3:      svgalib-1.3.0-glibc.patch
-Patch4:      svgalib-non-root.patch
+Patch3:      svgalib-non-root.patch
+URL:         http://www.cs.bgu.ac.il/~zivav/svgalib/
 Buildroot:   /tmp/%{name}-%{version}-root
 Exclusivearch: i386 alpha
-Exclusiveos:   Linux
+Exclusiveos: Linux
 
 %description
 SVGAlib is a library which allows applications to use full screen
@@ -29,6 +31,11 @@ Reihe von Plattformen Vollbild-Grafiken  zu benutzen. Viele Games
 und Utilities nutzen diese Library für den Grafikzugriff, da sie 
 für Maschinen mit wenig Speicher besser geeignet ist als X-Windows.
 
+%description -l pl
+Biblioteki do robienia aplikacji korzystaj±cych z pe³noekranowej grafiki
+[S]VGA. Wiele gier i programów u¿ytkowych korzysta z tej biblioteki, gdy¿
+wymagaj± mniej pamiêci ni¿ X Window System.
+
 %description -l tr
 SVGAlib, deðiþik donaným platformlarý üzerinde, uygulamalarýn tam ekran
 çizim kullanmalarýný saðlayan bir kitaplýktýr. Az bellekli makinalar için
@@ -39,6 +46,7 @@ programlar çizim eriþimi için bu kitaplýðý kullanýr.
 Summary:     development libraries and include files for [S]VGA graphics
 Summary(de): Entwicklungs-Libraries und INCLUDE-Dateien für (S)VGA-Grafik. 
 Summary(fr): Bibliothèques et en-têtes de développement pour graphiques [S]VGA.
+Summary(pl): Pliki nag³ówkowe i dokumentacja dla [S]VGA
 Summary(tr): [S]VGA grafikleri için geliþtirme kitaplýklarý ve baþlýk dosyalarý
 Group:       Development/Libraries
 Requires:    %{name} = %{version}
@@ -59,12 +67,16 @@ Bibliothèques et en-têtes pour construire des programmes utilisant SVGAlib.
 SVGAlib permet au programmes d'utiliser des graphiques plein écran sur une
 grande variété de plates-formes matérielles et sans le surcoût qu'entraîne X.
 
+%description -l pl devel
+Pliki nag³ówkowe i dokumentacja dla [S]VGA.
+
 %description -l tr devel
 Bu paket, SVGAlib kitaplýðýný kullanan programlar geliþtirmek için gereken
 baþlýk dosyalarýný ve statik kitaplýklarý içerir.
 
 %package static
 Summary:     Static [S]VGA graphics librarires
+Summary(pl): Biblioteki statyczne [S]VGA
 Group:       Development/Libraries
 Requires:    %{name}-devel = %{version}
 
@@ -76,8 +88,10 @@ Static [S]VGA graphics librarires.
 %patch0 -p1 -b .config
 %patch1 -p1 -b .buildroot
 %patch2 -p1 -b .secu
-%patch3 -p1 -b .glibc
-%patch4 -p1
+%patch3 -p1
+
+%description -l pl static
+Biblioteki statyczne [S]VGA.
 
 %build
 make static shared OPTIMIZE="$RPM_OPT_FLAGS -fomit-frame-pointer -pipe"
@@ -89,6 +103,11 @@ install -d $RPM_BUILD_ROOT/{etc/vga,usr/{bin,include,lib,man/man{1,3,5,6,7}}}
 export PATH=/sbin:$PATH
 make install \
 	INSTALL_PREFIX="$RPM_BUILD_ROOT" \
+	includedir="$RPM_BUILD_ROOT/usr/include" \
+	sharedlibdir="$RPM_BUILD_ROOT/usr/lib" \
+	exec_prefix="$RPM_BUILD_ROOT/usr" \
+	datadir="$RPM_BUILD_ROOT/etc/vga" \
+	mandir="$RPM_BUILD_ROOT/usr/man" \
 	INSTALL_PROGRAM="install -s" \
 	INSTALL_SHLIB="install -s" \
 	INSTALL_DATA="install -c"
@@ -112,13 +131,18 @@ rm -fr $RPM_BUILD_ROOT
 %files devel
 %defattr(644, root, root, 755)
 /usr/include/*
-/usr/lib/*.so
+%attr(755, root, root) /usr/lib/*.so
 %attr(644, root,  man) /usr/man/man3/*
 
 %files static
-/usr/lib/*.a
+%attr(644, root, root)/usr/lib/*.a
 
 %changelog
+* Tue Dec  1 1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+  [1.3.1-19981020.1]
+- added gziping man pages,
+- added missing %attr in static %files.
+
 * Thu Sep 24  1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [1.3.0-3]
 - changed Buildroot to /tmp/%%{name}-%%{version}-root,
