@@ -1,0 +1,31 @@
+--- svgalib-1.9.14/Makefile.cfg.orig	Sun Apr 21 15:28:51 2002
++++ svgalib-1.9.14/Makefile.cfg	Wed Aug 14 15:28:01 2002
+@@ -132,7 +132,7 @@
+ INCLUDE_NV3_DRIVER = y
+ INCLUDE_G400_DRIVER = y
+ INCLUDE_R128_DRIVER = y
+-INCLUDE_VESA_DRIVER = y
++#INCLUDE_VESA_DRIVER = y
+ INCLUDE_MX_DRIVER = y
+ INCLUDE_RENDITION_DRIVER = y
+ INCLUDE_RAGE_DRIVER = y
+--- svgalib-1.9.14/Makefile.orig	Wed Aug 14 16:01:27 2002
++++ svgalib-1.9.14/Makefile	Wed Aug 14 16:07:26 2002
+@@ -162,7 +162,7 @@
+ 	@$(INSTALL_DATA) staticlib/libvga.a $(DESTDIR)$(libdir)/libvga.a
+ 	@$(INSTALL_DATA) staticlib/libvgagl.a $(DESTDIR)$(libdir)/libvgagl.a
+ 
+-installutils: textutils lrmi
++installutils: textutils
+ 	@if [ ! -d $(DESTDIR)$(bindir) ]; then \
+ 		echo No $(DESTDIR)$(bindir) directory, creating it.; \
+ 		install -d $(DESTDIR)$(bindir); \
+@@ -180,8 +180,6 @@
+ 	@cp utils/textmode $(DESTDIR)$(bindir)
+ 	@echo "savetextmode:     Script that saves textmode information used by 'textmode'."
+ 	@cp utils/savetextmode $(DESTDIR)$(bindir)
+-	@echo "mode3:       Restore textmode by setting VESA mode 3."
+-	@cp lrmi-0.6m/mode3 $(DESTDIR)$(bindir)
+ 	@echo "Installing keymap utilities in $(DESTDIR)$(bindir):"
+ 	@echo "svgakeymap:       Perl script that generates scancode conversion maps."
+ 	@cp utils/svgakeymap $(DESTDIR)$(bindir)
