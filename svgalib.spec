@@ -76,6 +76,7 @@ Release:	%{release}@%{_kernel_ver_str}
 Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}
 Conflicts:	kernel-%{?_with_smp:up}%{!?_with_smp:smp}
 Obsoletes:	svgalib-helper
+Provides:	svgalib-helper
 Prereq:		/sbin/depmod
 
 %description -n kernel%{smpstr}-video-svgalib_helper
