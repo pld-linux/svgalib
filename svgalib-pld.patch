@@ -1,0 +1,73 @@
+diff -urN svgalib-1.3.1/Makefile svgalib-1.3.1.new/Makefile
+--- svgalib-1.3.1/Makefile	Sat Dec 19 16:26:46 1998
++++ svgalib-1.3.1.new/Makefile	Mon May 10 21:15:08 1999
+@@ -397,8 +397,7 @@
+ 		-- libvgagl; \
+ 	 mkimage -a 0x63b00000 -l libvga -v $(VERSION) -j 0x00001000 -g 4096 \
+ 		-- $(MKIMAGEFLAGS) libvga.a libvgagl.a \
+-		`$(CC) --print-libgcc-file-name` -lc -lm; \
+-	 strip libvga.so.$(VERSION) \
++		`$(CC) --print-libgcc-file-name` -lc -lm;
+ 	)
+ 
+ endif	# DISTRIBUTION
+diff -urN svgalib-1.3.1/Makefile.cfg svgalib-1.3.1.new/Makefile.cfg
+--- svgalib-1.3.1/Makefile.cfg	Mon Dec 21 19:08:58 1998
++++ svgalib-1.3.1.new/Makefile.cfg	Mon May 10 21:18:48 1999
+@@ -42,7 +42,7 @@
+ includedir = $(prefix)/include
+ 
+ # Directory where the man files will be installed.
+-mandir = $(prefix)/man
++mandir = $(prefix)/share/man
+ 
+ # Target binary format.
+ # TARGET_FORMAT = a.out
+@@ -51,7 +51,7 @@
+ # Uncomment the next line if your are compiling with a version of
+ # (GNU) glibc:
+ 
+-# USEGLIBC = yes
++USEGLIBC = yes
+ 
+ # Uncomment this if you want root processes to be able to always get a new
+ # VC. Alas, some games misuse suid root privs and become root, svgalib cannot
+@@ -85,7 +85,7 @@
+ ONE_MAP = y
+ 
+ # Uncomment this if you want to compile and install the static libs.
+-# INSTALLSTATICLIB = installstaticlib
++INSTALLSTATICLIB = installstaticlib
+ 
+ # Comment this out if you don't want to install the shared libs.
+ # If you do not install the shared nor the static libs, 'make static'
+@@ -97,7 +97,7 @@
+ # a.out image is available install it in the first directory named something
+ # like *aout/ in /etc/ld.so.conf.
+ # If you want this, do not comment out the next line:
+-INSTALLAOUTLIB = installaoutcompat
++#INSTALLAOUTLIB = installaoutcompat
+ 
+ # Comment this out if you want to keep old shared images. Old header files,
+ # library stubs and static libraries CANNOT be kept in public locations
+@@ -115,8 +115,8 @@
+ # the Makefiles will try to figure out if your system supports gzipped man
+ # pages and install them when possible.
+ 
+-# MANFORMAT = compressed
+-# MANFORMAT = uncompressed
++MANFORMAT = compressed
++#MANFORMAT = uncompressed
+ 
+ # This is the command to update the man pages whatis database.
+ # This is a slow command. If you are not very patient, simple
+@@ -262,6 +262,6 @@
+ 
+ # Utilites used.
+ AR	  = ar
+-INSTALL_PROGRAM	= install -c -s -m 755 -o root -g bin
+-INSTALL_SHLIB	= install -c -m 755 -o root -g bin
+-INSTALL_DATA	= install -c -m 644 -o root -g bin
++INSTALL_PROGRAM	= install -c -s -m 755
++INSTALL_SHLIB	= install -c -m 755
++INSTALL_DATA	= install -c -m 644
