@@ -6,7 +6,7 @@ Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.9.2
 Release:	1
-Copyright:	distributable
+License:	distributable
 Group:		Libraries
 Group(pl):	Biblioteki
 Source:		ftp://metalab.unc.edu/pub/Linux/libs/graphics/%{name}-%{version}.tar.gz
@@ -14,7 +14,7 @@ Patch0:		svgalib-pld.patch
 Patch1:		svgalib-tmp2TMPDIR.patch
 Patch2:		svgalib-DESTDIR.patch
 Patch3:		svgalib-stderr.patch
-URL:		http://www.cs.bgu.ac.il/~zivav/svgalib
+URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 Buildroot:	/tmp/%{name}-%{version}-root
 Exclusivearch:	%{ix86} alpha
 
