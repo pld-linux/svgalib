@@ -125,8 +125,8 @@ NOASM=n
 %else
 NOASM=y
 %endif
-MOPT="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS -fomit-frame-pointer} -pipe"
-LDFLAGS="%{!?debug:-s}"; export LDFLAGS
+MOPT="%{rpmcflags} %{!?debug:-fomit-frame-pointer} -pipe"
+LDFLAGS="%{rpmldflags}"; export LDFLAGS
 
 %{__make} OPTIMIZE="$MOPT" NO_ASM="$NOASM" shared
 ln -sf libvga.so.%{version} sharedlib/libvga.so
