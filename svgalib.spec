@@ -1,3 +1,7 @@
+
+# conditional build
+# _without_dist_kernel		without distribution kernel
+
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 %define		_kernel_ver_str	%(echo %{_kernel_ver} | sed s/-/_/g)
@@ -29,7 +33,7 @@ Patch3:		%{name}-stderr.patch
 Patch4:		%{name}-kernver.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 Requires:	svgalib-helper = %{version}
-%{!?no_dist_kernel:Buildrequires:	kernel-headers}
+%{!?_without_dist_kernel:Buildrequires:		kernel-headers}
 Exclusivearch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -73,8 +77,8 @@ Group:		Base/Kernel
 Group(de):	Grundsätzlich/Kern
 Group(pl):	Podstawowe/J±dro
 Release:	%{release}@%{_kernel_ver_str}
-Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}
-Conflicts:	kernel-%{?_with_smp:up}%{!?_with_smp:smp}
+%{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}}
+%{!?_without_dist_kernel:Conflicts:	kernel-%{?_with_smp:up}%{!?_with_smp:smp}}
 Obsoletes:	svgalib-helper
 Provides:	svgalib-helper = %{version}
 Prereq:		/sbin/depmod
