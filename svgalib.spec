@@ -1,23 +1,21 @@
-%define date 19981020
-Summary:     Library for full screen [S]VGA graphics
-Summary(de): Library für Vollbildschirm-[S]VGA-Grafiken
-Summary(fr): Bibliothèque pour les graphiques plein écran [S]VGA
-Summary(pl): Biblioteki do pe³noekranowej grafiki [S]VGA
-Summary(tr): Tam-ekran [S]VGA çizimleri kitaplýðý
-Name:        svgalib
-Version:     1.3.1
-Release:     %{date}.1
-Copyright:   distributable
-Group:       Libraries
-Source:      http://www.cs.bgu.ac.il/~zivav/svgalib/%{name}-%{version}.%{date}.tar.gz
-Patch0:      svgalib-config.patch
-Patch1:      svgalib-buildroot.patch
-Patch2:      svgalib-secu.patch
-Patch3:      svgalib-non-root.patch
-URL:         http://www.cs.bgu.ac.il/~zivav/svgalib/
-Buildroot:   /tmp/%{name}-%{version}-root
+Summary:	Library for full screen [S]VGA graphics
+Name:		svgalib
+Version:	1.3.1
+Release:	3d
+Copyright:	distributable
+Group:		Libraries
+Group(pl):	Biblioteki
+URL:		http://www.cs.bgu.ac.il/~zivav/svgalib
+Source:		%{name}-%{version}.tar.gz
+Patch:		%{name}-%{version}-pld.patch
+Prereq:		/sbin/ldconfig
+Buildroot:	/tmp/%{name}-%{version}-root
+Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
+Summary(fr):	Bibliothèque pour les graphiques plein écran [S]VGA
+Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
+Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
+
 Exclusivearch: i386 alpha
-Exclusiveos: Linux
 
 %description
 SVGAlib is a library which allows applications to use full screen
@@ -25,16 +23,17 @@ graphics on a variety of hardware platforms. Many games and utilities
 are avaiable which take advantage of SVGAlib for graphics access, as
 it is more suitable for machines with little memory then X Windows is.
 
+%description -l pl
+Biblioteki dla pe³noekranowej grafiki [S]VGA. Wiele gier i programów 
+u¿ytkowych korzysta z tych bibliotek, gdy¿ wymagaj± mniej pamiêci ni¿
+X Window System. Biblioteki te s± w trakcie wycofywania poniewa¿ 
+programy pisane z ich u¿yciem wymagaj± SUID'a. 
+
 %description -l de
 SVGAlib ist eine Library, die es Applikationen gestattet, auf einer
 Reihe von Plattformen Vollbild-Grafiken  zu benutzen. Viele Games
 und Utilities nutzen diese Library für den Grafikzugriff, da sie 
 für Maschinen mit wenig Speicher besser geeignet ist als X-Windows.
-
-%description -l pl
-Biblioteki do robienia aplikacji korzystaj±cych z pe³noekranowej grafiki
-[S]VGA. Wiele gier i programów u¿ytkowych korzysta z tej biblioteki, gdy¿
-wymagaj± mniej pamiêci ni¿ X Window System.
 
 %description -l tr
 SVGAlib, deðiþik donaným platformlarý üzerinde, uygulamalarýn tam ekran
@@ -44,17 +43,21 @@ programlar çizim eriþimi için bu kitaplýðý kullanýr.
 
 %package devel
 Summary:     development libraries and include files for [S]VGA graphics
+Group:       Development/Libraries
+Group(pl):   Programowanie/Biblioteki
+Requires:    %{name} = %{version}
 Summary(de): Entwicklungs-Libraries und INCLUDE-Dateien für (S)VGA-Grafik. 
 Summary(fr): Bibliothèques et en-têtes de développement pour graphiques [S]VGA.
-Summary(pl): Pliki nag³ówkowe i dokumentacja dla [S]VGA
+Summary(pl): Pliki nag³ówkowe i dokumentacja dla [S]VGA 
 Summary(tr): [S]VGA grafikleri için geliþtirme kitaplýklarý ve baþlýk dosyalarý
-Group:       Development/Libraries
-Requires:    %{name} = %{version}
 
 %description devel
 These are the libraries and header files that are needed to build programs
 which use SVGAlib. SVGAlib allows programs to use full screen graphics
 on a variety of hardware platforms and without the overhead X requires.
+
+%description -l pl devel
+Pliki nag³ówkowe i dokumentacja dla [S]VGA.
 
 %description -l de devel
 Dies sind die Libraries und Header-Dateien, die zum Erstellen von Programmen
@@ -67,52 +70,68 @@ Bibliothèques et en-têtes pour construire des programmes utilisant SVGAlib.
 SVGAlib permet au programmes d'utiliser des graphiques plein écran sur une
 grande variété de plates-formes matérielles et sans le surcoût qu'entraîne X.
 
-%description -l pl devel
-Pliki nag³ówkowe i dokumentacja dla [S]VGA.
-
 %description -l tr devel
 Bu paket, SVGAlib kitaplýðýný kullanan programlar geliþtirmek için gereken
 baþlýk dosyalarýný ve statik kitaplýklarý içerir.
 
 %package static
-Summary:     Static [S]VGA graphics librarires
-Summary(pl): Biblioteki statyczne [S]VGA
-Group:       Development/Libraries
-Requires:    %{name}-devel = %{version}
+Summary:	Static [S]VGA graphics librarires
+Group:		Development/Libraries
+Group(pl):	Programowanie/Biblioteki
+Requires:	%{name}-devel = %{version}
+Summary(pl):	Biblioteki statyczne [S]VGA
 
 %description static
 Static [S]VGA graphics librarires.
 
-%prep
-%setup -q
-%patch0 -p1 -b .config
-%patch1 -p1 -b .buildroot
-%patch2 -p1 -b .secu
-%patch3 -p1
-
 %description -l pl static
 Biblioteki statyczne [S]VGA.
 
+%prep
+%setup -q
+%patch -p1 
+
 %build
-make static shared OPTIMIZE="$RPM_OPT_FLAGS -fomit-frame-pointer -pipe"
+make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static shared 
+(cd utils; make)
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{etc/vga,usr/{bin,include,lib,man/man{1,3,5,6,7}}}
 
-export PATH=/sbin:$PATH
-make install \
-	INSTALL_PREFIX="$RPM_BUILD_ROOT" \
-	includedir="$RPM_BUILD_ROOT/usr/include" \
-	sharedlibdir="$RPM_BUILD_ROOT/usr/lib" \
-	exec_prefix="$RPM_BUILD_ROOT/usr" \
-	datadir="$RPM_BUILD_ROOT/etc/vga" \
-	mandir="$RPM_BUILD_ROOT/usr/man" \
-	INSTALL_PROGRAM="install -s" \
-	INSTALL_SHLIB="install -s" \
-	INSTALL_DATA="install -c"
+install -d $RPM_BUILD_ROOT/{lib,etc/vga,usr/{bin,lib,include}}
+install -d $RPM_BUILD_ROOT/usr/man/man{1,3,5,6,7}
 
-strip $RPM_BUILD_ROOT/usr/{bin/*,lib/lib*.so.*.*} || :
+install -s utils/{convfont,dumpreg,restore*,fix132*,setmclk} \
+	$RPM_BUILD_ROOT/usr/bin
+
+rm -f $RPM_BUILD_ROOT/usr/bin/{*.c,*.o}
+
+install utils/{runx,savetextmode,textmode} $RPM_BUILD_ROOT/usr/bin
+
+cp -a doc/man* $RPM_BUILD_ROOT/usr/man
+
+install sharedlib/lib*.so.* $RPM_BUILD_ROOT/lib
+
+ln -sf libvga.so.1.3.1 $RPM_BUILD_ROOT/lib/libvga.so
+ln -sf libvga.so.1.3.1 $RPM_BUILD_ROOT/lib/libvga.so.1
+
+ln -sf libvgagl.so.1.3.1 $RPM_BUILD_ROOT/lib/libvgagl.so
+ln -sf libvgagl.so.1.3.1 $RPM_BUILD_ROOT/lib/libvgagl.so.1
+
+cp include/*.h $RPM_BUILD_ROOT/usr/include
+cp gl/vgagl.h $RPM_BUILD_ROOT/usr/include
+
+install staticlib/*.a $RPM_BUILD_ROOT/lib
+
+install libvga.config $RPM_BUILD_ROOT/etc/vga
+install et4000.regs $RPM_BUILD_ROOT/etc/vga/libvga.et4000
+install et6000.regs $RPM_BUILD_ROOT/etc/vga/libvga.et6000
+
+chmod 755 $RPM_BUILD_ROOT/lib/*.so.*
+
+gunzip		$RPM_BUILD_ROOT/usr/man/{man1/*,man3/*,man5/*,man6/*,man7/*}
+bzip2 -9	$RPM_BUILD_ROOT/usr/man/{man1/*,man3/*,man5/*,man6/*,man7/*}
+bzip2 -9	doc/{CHANGES*,DESIGN,READ*,SECURITY*} 0-README 0-RELEASE
 
 %clean
 rm -fr $RPM_BUILD_ROOT
@@ -121,41 +140,67 @@ rm -fr $RPM_BUILD_ROOT
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(644, root, root, 755)
-%config /etc/vga/*
-%doc doc/{CHANGES*,DESIGN,FILES,Makefile,README*,SECURITY*,TODO} 0-README 0-RELEASE
-%attr(755, root, root) /usr/bin/*
-%attr(755, root, root) /usr/lib/lib*.so.*.*
-%attr(644, root,  man) /usr/man/man[1567]/*
+%defattr(644,root,root,755)
+%doc doc/{CHANGES*,DESIGN.bz2,READ*,SECURITY*} 0-README.bz2 0-RELEASE.bz2
+
+%dir /etc/vga
+%config(noreplace) %verify(not size mtime md5) /etc/vga/*
+
+%attr(755,root,root) /usr/bin/*
+%attr(755,root,root) /lib/*.so.*
+
+%attr(644,root, man) /usr/man/man[1567]/*
 
 %files devel
-%defattr(644, root, root, 755)
-/usr/include/*
-%attr(755, root, root) /usr/lib/*.so
-%attr(644, root,  man) /usr/man/man3/*
+%defattr(644,root,root,755)
+
+/usr/include/*.h
+
+%attr(755,root,root) /lib/*.so
+%attr(644,root, man) /usr/man/man3/*
 
 %files static
-%attr(644, root, root)/usr/lib/*.a
+%attr(644,root,root) /lib/*.a
 
 %changelog
-* Tue Dec  1 1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-  [1.3.1-19981020.1]
-- added gzipping man pages,
-- added missing %attr in static %files.
+* Wed Jan 20 1999 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
+[1.3.1-4d]
+- updated to stable version, 
+- compressed man pages && documentation,
+- added Prereq: /sbin/ldconfig,
+- added Group(pl),
+
+  by Micha³ Zalewski <lcamtuf@dione.ids.pl>
+
+- fixed group of shared libraries & ELF binaries.  
+
+* Mon Nov 02 1998 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
+[1.3.1-1d]
+- updated to latest snapshoot - 1.3.1.19981020,
+- added fiew missing ELF Binaries,
+- shared libraries moved to /lib
+- minor changes.
+
+* Fri Oct 15 1998 Wojtek ¦lusarczyk <wojtek@SHADOW.EU.ORG>
+[1.3.0-3d]
+- build against Tornado,
+- translation modified for pl,
+- added missing %defattr support in %files static,
+- minor changes.
 
 * Thu Sep 24  1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-  [1.3.0-3]
+[1.3.0-3]
 - changed Buildroot to /tmp/%%{name}-%%{version}-root,
 - added using %%{name} and %%{version} in Source,
 - added static subpackage,
-- changed dependencies to "Requires: %%{name} = %%{version}" in devel
+- changeded dependences to "Requires: %%{name} = %%{version}" in devel
   subpackage,
 - added alpha to Exclusivearch list,
 - added using $RPM_OPT_FLAGS during compile,
 - added full %attr description in %files.
-- added modification which allows build package from non-root account
+- added modification witch allow build package from non-root account
   (svgalib-non-root.patch),
-- added stripping shared libraries.
+- added striping shared libraries.
 
 * Sun Aug 23 1998 Jeff Johnson <jbj@redhat.com>
 - verify dumpreg is not setuid (problem #760)
