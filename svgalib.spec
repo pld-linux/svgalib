@@ -15,7 +15,7 @@ Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.9.12
-Release:	2
+Release:	3
 License:	distributable
 Group:		Libraries
 Group(de):	Libraries
@@ -32,7 +32,6 @@ Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-stderr.patch
 Patch4:		%{name}-kernver.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
-Requires:	svgalib-helper = %{version}
 %{!?_without_dist_kernel:Buildrequires:		kernel-headers}
 Exclusivearch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
