@@ -1,6 +1,6 @@
-diff -urN svgalib-1.9.4/Makefile svgalib-1.9.4.new/Makefile
---- svgalib-1.9.4/Makefile	Fri Jun 16 18:51:15 2000
-+++ svgalib-1.9.4.new/Makefile	Fri Jun 16 18:50:18 2000
+diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
+--- svgalib-1.9.5.orig/Makefile	Thu Jul 27 18:47:39 2000
++++ svgalib-1.9.5/Makefile	Thu Jul 27 18:53:40 2000
 @@ -134,49 +134,34 @@
  .PHONY: indent-gnu configaout
  
@@ -78,7 +78,7 @@ diff -urN svgalib-1.9.4/Makefile svgalib-1.9.4.new/Makefile
  
  else
  
-@@ -202,89 +186,80 @@
+@@ -202,83 +186,74 @@
  endif
  
  installstaticlib: static
@@ -90,7 +90,7 @@ diff -urN svgalib-1.9.4/Makefile svgalib-1.9.4.new/Makefile
 -	@$(INSTALL_DATA) staticlib/libvgagl.a $(libdir)/libvgagl.a
 -	@chmod a+r $(libdir)/libvgagl.a
 +	@echo Installing static libraries in $(DESTDIR)$(libdir).
-+	install -d $(DESTDIR)$(libdir)
++	@install -d $(DESTDIR)$(libdir)
 +	@$(INSTALL_DATA) staticlib/libvga.a $(DESTDIR)$(libdir)/libvga.a
 +	@chmod a+r $(DESTDIR)$(libdir)/libvga.a
 +	@$(INSTALL_DATA) staticlib/libvgagl.a $(DESTDIR)$(libdir)/libvgagl.a
@@ -116,30 +116,30 @@ diff -urN svgalib-1.9.4/Makefile svgalib-1.9.4.new/Makefile
 +	@echo Installing textmode utilities in $(DESTDIR)$(bindir):
  	@echo "restorefont:      Save/restore textmode font."
 -	@cp utils/restorefont $(bindir)
-+	@install -s utils/restorefont $(DESTDIR)$(bindir)
++	@cp utils/restorefont $(DESTDIR)$(bindir)
  	@echo "restorepalette:   Set standard VGA palette."
 -	@cp utils/restorepalette $(bindir)
-+	@install -s utils/restorepalette $(DESTDIR)$(bindir)
++	@cp utils/restorepalette $(DESTDIR)$(bindir)
  	@echo "dumpreg:          Write ASCII dump of SVGA registers."
 -	@cp utils/dumpreg $(bindir)
-+	@install -s utils/dumpreg $(DESTDIR)$(bindir)
++	@cp utils/dumpreg $(DESTDIR)$(bindir)
  	@echo "restoretextmode:  Save/restore textmode registers."
 -	@cp utils/restoretextmode $(bindir)
-+	@install -s utils/restoretextmode $(DESTDIR)$(bindir)
++	@cp utils/restoretextmode $(DESTDIR)$(bindir)
  	@echo "textmode:         Script that tries to restore textmode."
 -	@cp utils/textmode $(bindir)
-+	@install utils/textmode $(DESTDIR)$(bindir)
++	@cp utils/textmode $(DESTDIR)$(bindir)
  	@echo "savetextmode:     Script that saves textmode information used by 'textmode'."
 -	@cp utils/savetextmode $(bindir)
-+	@install utils/savetextmode $(DESTDIR)$(bindir)
++	@cp utils/savetextmode $(DESTDIR)$(bindir)
  	@echo "mode3:       Restore textmode by setting VESA mode 3."
 -	@cp lrmi-0.6m/mode3 $(bindir)
 -	@echo "Installing keymap utilities in $(bindir):"
-+	@install -s lrmi-0.6m/mode3 $(DESTDIR)$(bindir)
++	@cp lrmi-0.6m/mode3 $(DESTDIR)$(bindir)
 +	@echo "Installing keymap utilities in $(DESTDIR)$(bindir):"
  	@echo "svgakeymap:       Perl script that generates scancode conversion maps."
 -	@cp utils/svgakeymap $(bindir)
-+	@install utils/svgakeymap $(DESTDIR)$(bindir)
++	@cp utils/svgakeymap $(DESTDIR)$(bindir)
  
  installconfig:
 -	@if [ ! -d $(datadir) ]; then \
@@ -217,16 +217,20 @@ diff -urN svgalib-1.9.4/Makefile svgalib-1.9.4.new/Makefile
  	fi
  
  installman:
- 	(cd doc; $(MAKE) -f $(srcdir)/doc/Makefile srcdir="$(srcdir)" install )
+@@ -287,8 +262,8 @@
+ installmodule:
+ 	(cd kernel/svgalib_helper ; $(MAKE) install )
  	 
 -install: uninstall $(INSTALLAOUTLIB) installheaders $(INSTALLSHAREDLIB) installconfig \
+-	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) installmodule
 +install: $(INSTALLAOUTLIB) installheaders $(INSTALLSHAREDLIB) installconfig \
- 	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN)
++	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN)
  	@echo
  	@echo
-diff -urN svgalib-1.9.4/Makefile.cfg svgalib-1.9.4.new/Makefile.cfg
---- svgalib-1.9.4/Makefile.cfg	Fri Jun 16 18:51:15 2000
-+++ svgalib-1.9.4.new/Makefile.cfg	Fri Jun 16 18:50:18 2000
+ 	@echo Now run "'make demoprogs'" to make the test and demo programs in
+diff -ur svgalib-1.9.5.orig/Makefile.cfg svgalib-1.9.5/Makefile.cfg
+--- svgalib-1.9.5.orig/Makefile.cfg	Thu Jul 27 18:47:39 2000
++++ svgalib-1.9.5/Makefile.cfg	Thu Jul 27 18:48:12 2000
 @@ -25,7 +25,7 @@
  # Common prefix for installation directories.
  # NOTE: This directory must exist when you start the install.
@@ -236,9 +240,99 @@ diff -urN svgalib-1.9.4/Makefile.cfg svgalib-1.9.4.new/Makefile.cfg
  exec_prefix = $(prefix)
  
  # Directory where the shared stubs and static library will be installed.
-diff -urN svgalib-1.9.4/doc/Makefile svgalib-1.9.4.new/doc/Makefile
---- svgalib-1.9.4/doc/Makefile	Thu Dec  9 08:09:44 1999
-+++ svgalib-1.9.4.new/doc/Makefile	Fri Jun 16 18:50:18 2000
+diff -ur svgalib-1.9.5.orig/Makefile~ svgalib-1.9.5/Makefile~
+--- svgalib-1.9.5.orig/Makefile~	Fri Apr 21 22:49:17 2000
++++ svgalib-1.9.5/Makefile~	Thu Jul 27 18:48:12 2000
+@@ -134,49 +134,34 @@
+ .PHONY: indent-gnu configaout
+ 
+ installheaders:
+-	@echo Installing header files in $(includedir).
+-	@if [ -f /usr/include/vga.h ]; then \
+-		rm -f /usr/include/vga.h /usr/include/vgagl.h; \
+-		echo Old header files in /usr/include removed.; \
+-	fi
+-	@cp $(srcdir)/src/vga.h $(includedir)/vga.h
+-	@chmod a+r $(includedir)/vga.h
+-	@cp $(srcdir)/gl/vgagl.h $(includedir)/vgagl.h
+-	@chmod a+r $(includedir)/vgagl.h
+-	@cp $(srcdir)/src/mouse/vgamouse.h $(includedir)/vgamouse.h
+-	@chmod a+r $(includedir)/vgamouse.h
+-	@cp $(srcdir)/src/joystick/vgajoystick.h $(includedir)/vgajoystick.h
+-	@chmod a+r $(includedir)/vgajoystick.h
+-	@cp $(srcdir)/src/keyboard/vgakeyboard.h $(includedir)/vgakeyboard.h
+-	@chmod a+r $(includedir)/vgakeyboard.h
++	@echo Installing header files in $(DESTDIR)$(includedir).
++	install -d $(DESTDIR)$(includedir)
++	@cp $(srcdir)/src/vga.h $(DESTDIR)$(includedir)/vga.h
++	@chmod a+r $(DESTDIR)$(includedir)/vga.h
++	@cp $(srcdir)/gl/vgagl.h $(DESTDIR)$(includedir)/vgagl.h
++	@chmod a+r $(DESTDIR)$(includedir)/vgagl.h
++	@cp $(srcdir)/src/mouse/vgamouse.h $(DESTDIR)$(includedir)/vgamouse.h
++	@chmod a+r $(DESTDIR)$(includedir)/vgamouse.h
++	@cp $(srcdir)/src/joystick/vgajoystick.h $(DESTDIR)$(includedir)/vgajoystick.h
++	@chmod a+r $(DESTDIR)$(includedir)/vgajoystick.h
++	@cp $(srcdir)/src/keyboard/vgakeyboard.h $(DESTDIR)$(includedir)/vgakeyboard.h
++	@chmod a+r $(DESTDIR)$(includedir)/vgakeyboard.h
+ 
+ installsharedlib: $(SHAREDLIBS) $(SVGALIBSHAREDSTUBS)
+ ifeq (a.out, $(TARGET_FORMAT))
+-	@echo Installing shared library stubs in $(libdir).
++	@echo Installing shared library stubs in $(DESTDIR)$(libdir).
+ 	-@for foo in $(notdir $(SVGALIBSHAREDSTUBS)); do \
+-		$(INSTALL_DATA) sharedlib/$$foo $(libdir)/$$foo; \
+-		chmod a+r $(libdir)/$$foo; \
++		$(INSTALL_DATA) sharedlib/$$foo $(DESTDIR)$(libdir)/$$foo; \
++		chmod a+r $(DESTDIR)$(libdir)/$$foo; \
+ 	done
+ endif
+-	@if [ -f /usr/lib/libvga.sa ]; then \
+-		rm -f /usr/lib/libvga.sa /usr/lib/libvgagl.sa; \
+-		echo Old stubs in /usr/lib removed.; \
+-	fi
+-	@rm -f $(OBSOLETESHAREDIMAGES)
+-ifndef KEEPSHAREDLIBS
+-	@echo "Removing shared library images (old & current)..."
+-	@for i in $(OBSOLETELDIRS); do \
+-	    rm -f `echo $(OBSOLETESHAREDIMAGES) | sed s?/lib/?$$i?g`; \
+-         done
+-endif
+-	@echo Installing shared library image as \
+-		$(addprefix $(sharedlibdir)/,$(notdir $(SHAREDLIBS))).
++	@echo Installing shared library in $(DESTDIR)$(libdir).
++	@ mkdir -p $(DESTDIR)$(libdir)
+ 	@for foo in $(notdir $(SHAREDLIBS)); do \
+-		$(INSTALL_SHLIB) sharedlib/$$foo $(sharedlibdir)/$$foo; \
+-		(cd $(sharedlibdir); \
++		$(INSTALL_SHLIB) sharedlib/$$foo $(DESTDIR)$(libdir)/$$foo; \
++		(cd $(DESTDIR)$(libdir); \
+ 		 ln -sf $$foo `echo $$foo | sed 's/\.so\..*/.so/'` ); \
+ 	done
+-	@ldconfig
+ 
+ ifdef INSTALLAOUTDIR
+ 
+@@ -192,7 +177,6 @@
+ 		(cd $(TOPDIR)/$(INSTALLAOUTDIR); \
+ 		 ln -sf $$foo `echo $$foo | sed 's/\.so\..*/.so/'` ); \
+ 	done
+-	@ldconfig
+ 
+ else
+ 
+@@ -404,8 +388,7 @@
+ 		-- libvgagl; \
+ 	 mkimage -a 0x63b00000 -l libvga -v $(VERSION) -j 0x00001000 -g 4096 \
+ 		-- $(MKIMAGEFLAGS) libvga.a libvgagl.a \
+-		`$(CC) --print-libgcc-file-name` -lc -lm; \
+-	 strip libvga.so.$(VERSION) \
++		`$(CC) --print-libgcc-file-name` -lc -lm;
+ 	)
+ 
+ endif	# DISTRIBUTION
+diff -ur svgalib-1.9.5.orig/doc/Makefile svgalib-1.9.5/doc/Makefile
+--- svgalib-1.9.5.orig/doc/Makefile	Thu Dec  9 08:09:44 1999
++++ svgalib-1.9.5/doc/Makefile	Thu Jul 27 18:48:12 2000
 @@ -3,22 +3,22 @@
  srcdir    = ..
  VPATH     = $(srcdir)/doc
@@ -317,25 +411,23 @@ diff -urN svgalib-1.9.4/doc/Makefile svgalib-1.9.4.new/doc/Makefile
  
  uninstall:
  	@echo Removing all svgalib man pages.
-diff -urN svgalib-1.9.4/kernel/svgalib_helper/Makefile svgalib-1.9.4.new/kernel/svgalib_helper/Makefile
---- svgalib-1.9.4/kernel/svgalib_helper/Makefile	Sun Apr 16 16:05:36 2000
-+++ svgalib-1.9.4.new/kernel/svgalib_helper/Makefile	Fri Jun 16 18:50:59 2000
-@@ -27,9 +27,9 @@
- $(TARGET).o: $(SRC:.c=.o)
- 	$(LD) -r $^ -o $@
+diff -ur svgalib-1.9.5.orig/kernel/svgalib_helper/Makefile svgalib-1.9.5/kernel/svgalib_helper/Makefile
+--- svgalib-1.9.5.orig/kernel/svgalib_helper/Makefile	Tue May 30 07:05:29 2000
++++ svgalib-1.9.5/kernel/svgalib_helper/Makefile	Thu Jul 27 18:54:21 2000
+@@ -30,8 +30,8 @@
+ install: device modules_install
  
--install: device $(TARGET).o
+ modules_install: $(TARGET).o
 -	mkdir -p /lib/modules/$(VER)/misc /lib/modules/misc
 -	install -c $(TARGET).o /lib/modules/$(VER)/misc
-+install: $(TARGET).o
 +	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc $(DESTDIR)/lib/modules/misc
 +	install -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/misc
  
  device:
  	rm -f /dev/svgalib_helper* /dev/svga /dev/svga?
-diff -urN svgalib-1.9.4/lrmi-0.6m/Makefile svgalib-1.9.4.new/lrmi-0.6m/Makefile
---- svgalib-1.9.4/lrmi-0.6m/Makefile	Sun Apr 16 16:05:09 2000
-+++ svgalib-1.9.4.new/lrmi-0.6m/Makefile	Fri Jun 16 18:50:18 2000
+diff -ur svgalib-1.9.5.orig/lrmi-0.6m/Makefile svgalib-1.9.5/lrmi-0.6m/Makefile
+--- svgalib-1.9.5.orig/lrmi-0.6m/Makefile	Sun Apr 16 16:05:09 2000
++++ svgalib-1.9.5/lrmi-0.6m/Makefile	Thu Jul 27 18:48:12 2000
 @@ -25,8 +25,8 @@
  	$(CC) $(CFLAGS) -o $@ $^
  
