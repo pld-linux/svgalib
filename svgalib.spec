@@ -26,7 +26,7 @@ Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Summary(uk):	îÉÚØËÏÒ¦×ÎÅ×Á Â¦ÂÌ¦ÏÔÅËÁ ÐÏ×ÎÏÅËÒÁÎÎÏ§ SVGA ÇÒÁÆ¦ËÉ
 Name:		svgalib
 Version:	1.9.19
-%define _rel	4
+%define _rel	5
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -42,6 +42,7 @@ Patch6:		%{name}-link.patch
 Patch7:		%{name}-module-alias.patch
 Patch8:		%{name}-sparc.patch
 Patch9:		%{name}-depend.patch
+Patch10:	%{name}-linux26.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel-headers >= 2.4.0
@@ -267,6 +268,7 @@ opartych na svgalib.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
