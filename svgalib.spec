@@ -32,6 +32,7 @@ Patch5:		%{name}-svgalib_helper_Makefile.patch
 Patch6:		%{name}-link.patch
 Patch7:		%{name}-module-alias.patch
 Patch8:		%{name}-sparc.patch
+Patch9:		%{name}-depend.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel-headers >= 2.4.0
@@ -256,6 +257,7 @@ opartych na svgalib.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -274,8 +276,6 @@ LDFLAGS="%{rpmldflags}"; export LDFLAGS
 	CC="%{__cc}" \
 	OPTIMIZE="$MOPT" \
 	NO_ASM="$NOASM"
-#ln -sf libvga.so.%{version} sharedlib/libvga.so
-#ln -sf libvgagl.so.%{version} sharedlib/libvgagl.so
 
 %{__make} -C utils \
 	CC="%{__cc}" \
