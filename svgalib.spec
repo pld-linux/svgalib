@@ -153,7 +153,7 @@ rm -fr $RPM_BUILD_ROOT
 - added alpha to Exclusivearch list,
 - added using $RPM_OPT_FLAGS during compile,
 - added full %attr description in %files.
-- added modification which allow build package from non-root account
+- added modification which allows build package from non-root account
   (svgalib-non-root.patch),
 - added stripping shared libraries.
 
