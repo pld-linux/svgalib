@@ -2,7 +2,7 @@
 # conditional build
 # _without_dist_kernel		without distribution kernel
 
-%define		_rel		2
+%define		_rel		3
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -25,8 +25,7 @@ Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-smp.patch
 Patch4:		%{name}-threeDKit-make.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
-%{!?_without_dist_kernel:Buildrequires:		kernel-headers}
-Requires:	%{name}-helper = %{version}
+Conflicts:	%{name}-helper < %{version}, {name}-helper > %{version}
 ExclusiveArch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
