@@ -1,7 +1,7 @@
 #
 # Conditional build:
-# _without_dist_kernel		without distribution kernel
-#
+%bcond_without dist_kernel	# without distribution kernel
+
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -13,7 +13,7 @@ Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplığı
 Summary(uk):	îÉÚØËÏÒ¦×ÎÅ×Á Â¦ÂÌ¦ÏÔÅËÁ ĞÏ×ÎÏÅËÒÁÎÎÏ§ SVGA ÇÒÁÆ¦ËÉ
 Name:		svgalib
 Version:	1.9.18
-%define _rel	1
+%define _rel	2
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -115,7 +115,9 @@ Summary(pl):	Pomocniczy modu³ j±dra svgaliba
 Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
 Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
-%{!?_without_dist_kernel:%requires_releq_kernel_up}
+%if ! %{with dist_kernel}
+%requires_releq_kernel_up
+%endif  
 Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}
 Obsoletes:	svgalib-helper
@@ -133,7 +135,9 @@ Summary:	svgalib's helper kernel module for SMP
 Summary(pl):	Pomoczniczy modu³ j±dra svgalib dla SMP
 Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
-%{!?_without_dist_kernel:%requires_releq_kernel_smp}
+%if ! %{with dist_kernel}
+%requires_releq_kernel_smp
+%endif
 Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}
 Obsoletes:	svgalib-helper
