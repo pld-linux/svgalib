@@ -10,8 +10,8 @@ Summary(fr):	Une librairie graphique SVGA plein ecran de bas niveau
 Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
-Version:	1.9.11
-Release:	2
+Version:	1.9.12
+Release:	1
 License:	Distributable
 Group:		Libraries
 Group(de):	Libraries
@@ -108,7 +108,7 @@ The svgalib-devel package contains the libraries and header files
 needed to build programs which will use the SVGAlib low-level graphics
 library.
 
-%description -l de devel
+%description devel -l de
 Dies sind die Libraries und Header-Dateien, die zum Erstellen von
 Programmen erforderlich sind, die SVGAlib verwenden. Mit SVGAlib
 können Programme Vollbildgrafiken auf einer Reihe von Plattformen
@@ -119,10 +119,10 @@ Le package svgalib-devel contient les librairies et les fichiers
 d'entêtes nécessaires pour construire des programmes qui utiliseront
 la librairie graphique plein écran de bas-niveau SVGAlib.
 
-%description -l pl devel
+%description devel -l pl
 Pliki nag³ówkowe i dokumentacja dla [S]VGA.
 
-%description -l tr devel
+%description devel -l tr
 Bu paket, SVGAlib kitaplýðýný kullanan programlar geliþtirmek için
 gereken baþlýk dosyalarýný ve statik kitaplýklarý içerir.
 
@@ -142,7 +142,7 @@ Requires:	%{name}-devel = %{version}
 %description static
 Static [S]VGA graphics librarires.
 
-%description -l pl static
+%description static -l pl
 Biblioteki statyczne [S]VGA.
 
 %prep
@@ -186,16 +186,10 @@ install -d $RPM_BUILD_ROOT/var/lib/svgalib
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-%if %{_kernel24}
-    install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/char
-    cp kernel/svgalib_helper/svgalib_helper.o \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/char
-%else
-    %{__make} install -C kernel/svgalib_helper \
+%{__make} install -C kernel/svgalib_helper \
 	DESTDIR=$RPM_BUILD_ROOT \
 	INCLUDEDIR=%{_kernelsrcdir}/include
-    chmod 644 $RPM_BUILD_ROOT/lib/modules/*/*/*
-%endif
+chmod 644 $RPM_BUILD_ROOT/lib/modules/*/*/*
 
 # threeDKit is not really example, but "library" used in source form...
 # (but threeDKit directory contains also 2 examples)
@@ -204,8 +198,10 @@ cp -rf demos threeDKit $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
 
-%post -p /sbin/ldconfig
+%clean
+rm -rf $RPM_BUILD_ROOT
 
+%post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %post -n kernel%{smpstr}-video-svgalib_helper
@@ -213,9 +209,6 @@ gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
 
 %postun -n kernel%{smpstr}-video-svgalib_helper
 /sbin/depmod -a
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
@@ -230,11 +223,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n kernel%{smpstr}-video-svgalib_helper
 %defattr(644,root,root,755)
-%if %{_kernel24}
-%attr(600,root,root) /lib/modules/*/kernel/drivers/char/*.o
-%else
 %attr(600,root,root) /lib/modules/*/misc/*.o
-%endif
 
 %files devel
 %defattr(644,root,root,755)
