@@ -27,16 +27,7 @@
  
  # Comment this out if you don't want to install the shared libs.
  # If you do not install the shared nor the static libs, 'make static'
-@@ -83,7 +83,7 @@
- # a.out image is available install it in the first directory named something
- # like *aout/ in /etc/ld.so.conf.
- # If you want this, do not comment out the next line:
--INSTALLAOUTLIB = installaoutcompat
-+#INSTALLAOUTLIB = installaoutcompat
- 
- # Comment this out if you want to keep old shared images. Old header files,
- # library stubs and static libraries CANNOT be kept in public locations
-@@ -282,6 +282,6 @@
+@@ -282,9 +282,9 @@
  
  # Utilites used.
  AR	  = ar
@@ -46,3 +37,6 @@
 +INSTALL_PROGRAM	= install -c -m 755
 +INSTALL_SHLIB	= install -c -m 755
 +INSTALL_DATA	= install -c -m 644
+ 
+ ifneq ($(ARCH),i386)
+ 	NO_ASM = y

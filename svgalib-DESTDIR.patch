@@ -1,8 +1,8 @@
 diff -Nur svgalib-1.9.14.orig/Makefile svgalib-1.9.14/Makefile
 --- svgalib-1.9.14.orig/Makefile	Sat Apr 27 18:03:17 2002
 +++ svgalib-1.9.14/Makefile	Mon Apr 29 20:23:12 2002
-@@ -113,50 +113,22 @@
- .PHONY: indent-gnu configaout
+@@ -113,123 +113,75 @@
+ .PHONY: indent-gnu
  
  installheaders:
 -	@echo Installing header files in $(includedir).
@@ -30,13 +30,6 @@ diff -Nur svgalib-1.9.14.orig/Makefile svgalib-1.9.14/Makefile
 +	@install $(srcdir)/src/keyboard/vgakeyboard.h $(DESTDIR)$(includedir)/vgakeyboard.h
  
  installsharedlib: $(SHAREDLIBS) $(SVGALIBSHAREDSTUBS)
--ifeq (a.out, $(TARGET_FORMAT))
--	@echo Installing shared library stubs in $(libdir).
--	-@for foo in $(notdir $(SVGALIBSHAREDSTUBS)); do \
--		$(INSTALL_DATA) sharedlib/$$foo $(libdir)/$$foo; \
--		chmod a+r $(libdir)/$$foo; \
--	done
--endif
 -	@if [ -f /usr/lib/libvga.sa ]; then \
 -		rm -f /usr/lib/libvga.sa /usr/lib/libvgagl.sa; \
 -		echo Old stubs in /usr/lib removed.; \
@@ -61,13 +54,9 @@ diff -Nur svgalib-1.9.14.orig/Makefile svgalib-1.9.14/Makefile
 -	@./fixldsoconf
 -	@ldconfig
  
- ifdef INSTALLAOUTDIR
- 
-@@ -183,83 +155,57 @@
- endif
- 
  installstaticlib: static
 -	@echo Installing static libraries in $(libdir).
+-	@mkdir -p $(libdir)
 -	@rm -f /usr/lib/libvga.a
 -	@$(INSTALL_DATA) staticlib/libvga.a $(libdir)/libvga.a
 -	@chmod a+r $(libdir)/libvga.a
@@ -84,7 +73,7 @@ diff -Nur svgalib-1.9.14.orig/Makefile svgalib-1.9.14/Makefile
  installutils: textutils lrmi
 -	@if [ ! -d $(bindir) ]; then \
 -		echo No $(bindir) directory, creating it.; \
--		mkdir $(bindir); \
+-		mkdir -p $(bindir); \
 -	fi
 -	@if [ -f /usr/bin/restorefont ]; then \
 -		echo Removing old utilities in /usr/bin.; \
@@ -189,9 +178,9 @@ diff -Nur svgalib-1.9.14.orig/Makefile svgalib-1.9.14/Makefile
  lib3dkit-install:
  	(cd threeDKit/; $(MAKE) install)
  	 
--install: uninstall $(INSTALLAOUTLIB) installheaders $(INSTALLSHAREDLIB) installconfig \
+-install: uninstall installheaders $(INSTALLSHAREDLIB) installconfig \
 -	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) installmodule $(INSTALLDEV) \
-+install: $(INSTALLAOUTLIB) installheaders $(INSTALLSHAREDLIB) installconfig \
++install: installheaders $(INSTALLSHAREDLIB) installconfig \
 +	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) installmodule \
  	lib3dkit-install
  	@echo
@@ -204,7 +193,7 @@ diff -Nur svgalib-1.9.14.orig/doc/Makefile svgalib-1.9.14/doc/Makefile
  	cat $(THREED) | grep -v '^\.so ' | troff -man -T$@ > 3d.$@
  
 -install: gzip
--	mkdir -p $(mandir)/man1 $(mandir)/man3 $(mandir)/man5\
+-	mkdir -p $(mandir)/man1 $(mandir)/man3 $(mandir)/man5 \
 -		 $(mandir)/man6 $(mandir)/man7 $(mandir)/man8
 -	$(INSTALL_DATA) $(srcdir)/doc/man1/* $(mandir)/man1
 -	$(INSTALL_DATA) $(srcdir)/doc/man3/* $(mandir)/man3
@@ -212,7 +201,7 @@ diff -Nur svgalib-1.9.14.orig/doc/Makefile svgalib-1.9.14/doc/Makefile
 -	$(INSTALL_DATA) $(srcdir)/doc/man6/* $(mandir)/man6
 -	$(INSTALL_DATA) $(srcdir)/doc/man7/* $(mandir)/man7
 -	$(INSTALL_DATA) $(srcdir)/doc/man8/* $(mandir)/man8
--	for dir in man?; do\
+-	for dir in man? ; do \
 -		echo gunzipping manpages in $$dir;\
 -		for file in $$dir/*; do \
 -			gunzip $$file; \
@@ -246,10 +235,10 @@ diff -Nur svgalib-1.9.14.orig/kernel/svgalib_helper/Makefile svgalib-1.9.14/kern
 +install: modules_install
  
  modules_install: $(TARGET).o
--	mkdir -p /lib/modules/$(VER)/misc 
--	install -c $(TARGET).o /lib/modules/$(VER)/misc
-+	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc 
-+	install -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/misc
+-	mkdir -p /lib/modules/$(VER)/kernel/misc 
+-	install -m 0644 -c $(TARGET).o /lib/modules/$(VER)/kernel/misc
++	mkdir -p $(DESTDIR)/lib/modules/$(VER)/kernel/misc 
++	install -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/kernel/misc
  
  device:
  	rm -f /dev/svgalib_helper* /dev/svga /dev/svga?

@@ -1,26 +1,18 @@
 diff -uNr svgalib-1.9.12/kernel/svgalib_helper/Makefile svgalib-1.9.12.new/kernel/svgalib_helper/Makefile
 --- svgalib-1.9.12/kernel/svgalib_helper/Makefile	Tue Jan  8 23:50:06 2002
 +++ svgalib-1.9.12.new/kernel/svgalib_helper/Makefile	Tue Jan  8 23:52:58 2002
-@@ -1,5 +1,10 @@
- # Comment/uncomment the following line to disable/enable debugging
- #DEBUG = y
-+
+@@ -7,7 +7,15 @@
+ 	exit 1
+ endif
+ 
 +# Comment/uncomment the following line to disable/enable SMP
 +#SMP = 1
 +
-+
- SVGALIB_HELPER_MAJOR = 209
- 
- # Change it here or specify it on the "make" commandline
-@@ -11,7 +16,12 @@
-   DEBFLAGS = -O2
- endif
- 
--CFLAGS = -D__KERNEL__ -DMODULE -Wall $(DEBFLAGS)
+-CFLAGS = -O2 -DLINUX -Dlinux -D__KERNEL__ -DMODULE -Wall $(DEBFLAGS) 
 +ifeq ($(SMP),1)
-+  CFLAGS = -D__KERNEL__ -D__SMP__ -DMODULE -DCONFIG_X86_LOCAL_APIC -Wall $(DEBFLAGS)
++  CFLAGS = -O2 -DLINUX -Dlinux -D__KERNEL__ -D__SMP__ -DMODULE -DCONFIG_X86_LOCAL_APIC -Wall $(DEBFLAGS)
 +else
-+  CFLAGS = -D__KERNEL__ -DMODULE -Wall $(DEBFLAGS)
++  CFLAGS = -O2 -DLINUX -Dlinux -D__KERNEL__ -DMODULE -Wall $(DEBFLAGS)
 +endif
 +
  CFLAGS += -I$(INCLUDEDIR)
