@@ -1,7 +1,7 @@
-diff -Nur svgalib-1.9.9.orig/Makefile svgalib-1.9.9/Makefile
---- svgalib-1.9.9.orig/Makefile	Sat May 26 15:14:04 2001
-+++ svgalib-1.9.9/Makefile	Sat May 26 15:29:26 2001
-@@ -112,49 +112,24 @@
+diff -Nur svgalib-1.9.13.orig/Makefile svgalib-1.9.13/Makefile
+--- svgalib-1.9.13.orig/Makefile	Wed Jan 30 11:14:31 2002
++++ svgalib-1.9.13/Makefile	Mon Apr  8 23:30:44 2002
+@@ -113,49 +113,24 @@
  .PHONY: indent-gnu configaout
  
  installheaders:
@@ -64,7 +64,7 @@ diff -Nur svgalib-1.9.9.orig/Makefile svgalib-1.9.9/Makefile
  
  ifdef INSTALLAOUTDIR
  
-@@ -180,83 +158,57 @@
+@@ -181,83 +156,57 @@
  endif
  
  installstaticlib: static
@@ -186,20 +186,18 @@ diff -Nur svgalib-1.9.9.orig/Makefile svgalib-1.9.9/Makefile
  	fi
  
  installman:
-@@ -265,8 +214,8 @@
- installmodule:
- 	(cd kernel/svgalib_helper ; $(MAKE) install )
+@@ -269,7 +218,7 @@
+ lib3dkit-install:
+ 	(cd threeDKit/; $(MAKE) install)
  	 
 -install: uninstall $(INSTALLAOUTLIB) installheaders $(INSTALLSHAREDLIB) installconfig \
--	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) installmodule
 +install: $(INSTALLAOUTLIB) installheaders $(INSTALLSHAREDLIB) installconfig \
-+	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN)
+ 	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) installmodule lib3dkit-install
  	@echo
  	@echo
- 	@echo Now run "'make demoprogs'" to make the test and demo programs in
-diff -Nur svgalib-1.9.9.orig/doc/Makefile svgalib-1.9.9/doc/Makefile
---- svgalib-1.9.9.orig/doc/Makefile	Fri Jul  7 14:43:58 2000
-+++ svgalib-1.9.9/doc/Makefile	Sat May 26 15:37:49 2001
+diff -Nur svgalib-1.9.13.orig/doc/Makefile svgalib-1.9.13/doc/Makefile
+--- svgalib-1.9.13.orig/doc/Makefile	Fri Jul  7 14:43:58 2000
++++ svgalib-1.9.13/doc/Makefile	Mon Apr  8 23:29:57 2002
 @@ -65,26 +65,15 @@
  	cat $(VGAGL) | grep -v '^\.so ' | troff -man -T$@ > vgagl.$@
  	cat $(THREED) | grep -v '^\.so ' | troff -man -T$@ > 3d.$@
@@ -236,10 +234,10 @@ diff -Nur svgalib-1.9.9.orig/doc/Makefile svgalib-1.9.9/doc/Makefile
  
  uninstall:
  	@echo Removing all svgalib man pages.
-diff -Nur svgalib-1.9.9.orig/kernel/svgalib_helper/Makefile svgalib-1.9.9/kernel/svgalib_helper/Makefile
---- svgalib-1.9.9.orig/kernel/svgalib_helper/Makefile	Sat May  5 10:05:00 2001
-+++ svgalib-1.9.9/kernel/svgalib_helper/Makefile	Sat May 26 15:48:37 2001
-@@ -30,11 +30,11 @@
+diff -Nur svgalib-1.9.13.orig/kernel/svgalib_helper/Makefile svgalib-1.9.13/kernel/svgalib_helper/Makefile
+--- svgalib-1.9.13.orig/kernel/svgalib_helper/Makefile	Wed Apr  3 11:00:28 2002
++++ svgalib-1.9.13/kernel/svgalib_helper/Makefile	Mon Apr  8 23:29:57 2002
+@@ -32,11 +32,11 @@
  $(TARGET).o: $(SRC:.c=.o)
  	$(LD) -r $^ -o $@
  
@@ -254,9 +252,9 @@ diff -Nur svgalib-1.9.9.orig/kernel/svgalib_helper/Makefile svgalib-1.9.9/kernel
  
  device:
  	rm -f /dev/svgalib_helper* /dev/svga /dev/svga?
-diff -Nur svgalib-1.9.9.orig/lrmi-0.6m/Makefile svgalib-1.9.9/lrmi-0.6m/Makefile
---- svgalib-1.9.9.orig/lrmi-0.6m/Makefile	Sun Apr 16 16:05:09 2000
-+++ svgalib-1.9.9/lrmi-0.6m/Makefile	Sat May 26 15:47:56 2001
+diff -Nur svgalib-1.9.13.orig/lrmi-0.6m/Makefile svgalib-1.9.13/lrmi-0.6m/Makefile
+--- svgalib-1.9.13.orig/lrmi-0.6m/Makefile	Sun Apr 16 16:05:09 2000
++++ svgalib-1.9.13/lrmi-0.6m/Makefile	Mon Apr  8 23:29:57 2002
 @@ -25,8 +25,8 @@
  	$(CC) $(CFLAGS) -o $@ $^
  
@@ -268,3 +266,33 @@ diff -Nur svgalib-1.9.9.orig/lrmi-0.6m/Makefile svgalib-1.9.9/lrmi-0.6m/Makefile
  
  .PHONY: clean
  clean:
+diff -Nur svgalib-1.9.13.orig/threeDKit/Makefile svgalib-1.9.13/threeDKit/Makefile
+--- svgalib-1.9.13.orig/threeDKit/Makefile	Wed Apr  3 09:57:18 2002
++++ svgalib-1.9.13/threeDKit/Makefile	Mon Apr  8 23:32:22 2002
+@@ -55,18 +55,17 @@
+ 	$(CC) -shared -Wl,-soname,lib3dkit.so.$(MAJOR_VER) \
+ 	  -o lib3dkit.so.$(VERSION) $(OBJECTS) -lm
+ 
+-$(sharedlibdir)/lib3dkit.so.$(VERSION): lib3dkit.so.$(VERSION)
+-	$(INSTALL_PROGRAM) $< $(sharedlibdir)/$<
+-	(cd $(sharedlibdir); ln -sf lib3dkit.so.$(VERSION) `echo lib3dkit.so.$(VERSION) | sed 's/\.so\..*/.so/'` )
+-	ldconfig
++$(DESTDIR)$(sharedlibdir)/lib3dkit.so.$(VERSION): lib3dkit.so.$(VERSION)
++	$(INSTALL_PROGRAM) $< $(DESTDIR)$(sharedlibdir)/$<
++	(cd $(DESTDIR)$(sharedlibdir); ln -sf lib3dkit.so.$(VERSION) `echo lib3dkit.so.$(VERSION) | sed 's/\.so\..*/.so/'` )
+ 
+-install: $(sharedlibdir)/lib3dkit.so.$(VERSION) installheaders
++install: $(DESTDIR)$(sharedlibdir)/lib3dkit.so.$(VERSION) installheaders
+ 
+ installheaders:
+-	@cp 3dkit.h $(includedir)/3dkit.h
+-	@chmod a+r $(includedir)/3dkit.h
+-	@cp triangle.h $(includedir)/triangle.h
+-	@chmod a+r $(includedir)/triangle.h
++	@cp 3dkit.h $(DESTDIR)$(includedir)/3dkit.h
++	@chmod a+r $(DESTDIR)$(includedir)/3dkit.h
++	@cp triangle.h $(DESTDIR)$(includedir)/triangle.h
++	@chmod a+r $(DESTDIR)$(includedir)/triangle.h
+ 
+ endif	  
+ 

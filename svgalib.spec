@@ -2,7 +2,7 @@
 # conditional build
 # _without_dist_kernel		without distribution kernel
 
-%define		_rel		12
+%define		_rel		1
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library fЭr Vollbildschirm-[S]VGA-Grafiken
@@ -14,7 +14,7 @@ Summary(ru):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
-Version:	1.9.12
+Version:	1.9.13
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -23,9 +23,8 @@ Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-stderr.patch
-Patch4:		%{name}-kernver.patch
-Patch5:		%{name}-smp.patch
-Patch6:		%{name}-banshee.patch
+Patch4:		%{name}-smp.patch
+Patch5:		%{name}-banshee.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 %{!?_without_dist_kernel:Buildrequires:		kernel-headers}
 Requires:	%{name}-helper = %{version}
@@ -234,7 +233,6 @@ Bibliotecas estАticas para desenvolvimento com SVGAlib.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -278,18 +276,13 @@ install -d $RPM_BUILD_ROOT/var/lib/svgalib \
 install kernel/svgalib_helper/svgalib_helper-up.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.o
 install kernel/svgalib_helper/svgalib_helper.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o
 
-# threeDKit is not really example, but "library" used in source form...
-# (but threeDKit directory contains also 2 examples)
-install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
-cp -rf demos threeDKit $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
-
 gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
 
 %post -n kernel-video-svgalib_helper
 /sbin/depmod -a
@@ -327,7 +320,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/*.h
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_mandir}/man3/*
-%{_examplesdir}/%{name}-%{version}
 
 %files static
 %defattr(644,root,root,755)

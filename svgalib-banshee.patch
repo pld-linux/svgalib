@@ -1,6 +1,6 @@
-diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
---- svgalib-1.9.12.orig/src/banshee.c	Fri Feb 22 21:22:38 2002
-+++ svgalib-1.9.12/src/banshee.c	Sun Feb 24 02:07:49 2002
+diff -Nur svgalib-1.9.13.orig/src/banshee.c svgalib-1.9.13/src/banshee.c
+--- svgalib-1.9.13.orig/src/banshee.c	Mon Apr  8 23:58:48 2002
++++ svgalib-1.9.13/src/banshee.c	Tue Apr  9 00:07:51 2002
 @@ -48,11 +48,18 @@
  static void banshee_getmodeinfo(int mode, vga_modeinfo *modeinfo)
  {
@@ -32,7 +32,7 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
      outl(banshee_io_base+0x5c,restore->vidProcCfg);
  
  }
-@@ -201,100 +208,120 @@
+@@ -201,100 +208,122 @@
  
      vd    = modetiming->CrtcVDisplay - 1;
      vt = modetiming->CrtcVTotal - 2;
@@ -59,7 +59,7 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
 -    if (modetiming->flags & DOUBLESCAN)
 -	    banshee_regs->vidProcCfg |= 0x10;
 +    if (modetiming->flags & INTERLACED)
-+	    banshee_regs->vidProcCfg |= 0x8; /* Interlace enabled [not Voodoo3] */
++	    banshee_regs->vidProcCfg |= 0x8; /* Interlace enabled [V3/V4/V5 but not Banshee] */
  
 +    if (modetiming->flags & DOUBLESCAN) {
 +	    banshee_regs->vidProcCfg |= 0x10; /* Double Scan */
@@ -131,7 +131,8 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
  }
  
 +extern ModeTable *__svgalib_standard_vga_modes;
-+extern int *__svgalib_vgadrv_lastmode;
++
++static int lastmodemodel=0;
 +
  static int banshee_setmode(int mode, int prv_mode)
  {
@@ -157,13 +158,14 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
  
      modeinfo = __svgalib_createModeInfoStructureForSvgalibMode(mode);
 +    if (modeinfo->bitsPerPixel==0 && modeinfo->colorBits==8)
-+	modeinfo->bitsPerPixel=8; /* forkaround for getmodetiming for X-modes */
++	modeinfo->bitsPerPixel=8; /* workaround for getmodetiming for X-modes */
++    if (modeinfo->bytesPerPixel==0) lastmodemodel=modeinfo->colorBits; /* not 8+bpp linear */
++    else lastmodemodel=0;
  
      if (__svgalib_getmodetiming(&modetiming, modeinfo, cardspecs)) {
  	free(modeinfo);
  	return 1;
      }
-+    *__svgalib_vgadrv_lastmode = mode; /* used for VGA modes setdisplaystart */
  
      moderegs = malloc(BANSHEE_TOTAL_REGS);
  
@@ -183,7 +185,26 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
      __svgalib_InitializeAcceleratorInterface(modeinfo);
  
      free(modeinfo);
-@@ -357,7 +384,8 @@
+@@ -339,8 +369,18 @@
+ 
+ static void banshee_setdisplaystart(int address)
+ { 
++    switch(lastmodemodel) {
++    case 4:
++	__svgalib_outatt(0x33,(__svgalib_inatt(0x33)&0xf0) | (address & 7));
++	address >>= 1;
++	break;
++    case 8:
++	__svgalib_outatt(0x33,(__svgalib_inatt(0x33)&0xf0) | ((address & 3)<<1) );
++	break;
++    }
+   __svgalib_outcrtc(0x0c,((address>>2) & 0x00FF00)>>8);
+   __svgalib_outcrtc(0x0d,(address>>2) & 0x00FF);
++  if (!lastmodemodel)
+   outl(banshee_io_base+0xe4,address);
+ }
+ 
+@@ -357,7 +398,8 @@
  
  static int banshee_linear(int op, int param)
  {
@@ -193,7 +214,7 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
  if (op==LINEAR_QUERY_BASE) return banshee_linear_base;
  if (op == LINEAR_QUERY_RANGE || op == LINEAR_QUERY_GRANULARITY) return 0;		/* No granularity or range. */
      else return -1;		/* Unknown function. */
-@@ -470,7 +498,7 @@
+@@ -470,7 +512,7 @@
  static int banshee_init(int force, int par1, int par2)
  {
      unsigned long buf[64];
@@ -202,7 +223,7 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
  
      if (force) {
  	banshee_memory = par1;
-@@ -480,11 +508,12 @@
+@@ -480,11 +522,12 @@
      };
      
      found=(!__svgalib_pci_find_vendor_vga(0x121a,buf,0))&&
@@ -218,7 +239,7 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
         banshee_linear_base=buf[5]&0xffffff00;
         banshee_io_base=buf[6]&0xff00;
         __svgalib_io_reloc=banshee_io_base-0x300;
-@@ -496,6 +525,12 @@
+@@ -496,6 +539,12 @@
         
         draminit0=inl(banshee_io_base+0x18);
         draminit1=inl(banshee_io_base+0x1c);
@@ -231,7 +252,7 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
         if(draminit1&0x40000000) {
            /* SDRAM */
            banshee_memory=16*1024;
-@@ -505,6 +540,7 @@
+@@ -505,6 +554,7 @@
               (1+((draminit0>>27)&1))* /* SGRAM type - 8MBIT or 16MBIT */
               (1+((draminit0>>26)&1)); /* Number of sgram chips (4 or 8) */
         }
@@ -239,7 +260,7 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
      }
      
      banshee_unlock();
-@@ -515,14 +551,13 @@
+@@ -515,14 +565,13 @@
      
      cardspecs = malloc(sizeof(CardSpecs));
      cardspecs->videoMemory = banshee_memory;
@@ -255,9 +276,21 @@ diff -Nur svgalib-1.9.12.orig/src/banshee.c svgalib-1.9.12/src/banshee.c
      cardspecs->nClocks =0;
      cardspecs->mapClock = banshee_map_clock;
      cardspecs->mapHorizontalCrtc = banshee_map_horizontal_crtc;
-diff -Nur svgalib-1.9.12.orig/src/vgadrv.c svgalib-1.9.12/src/vgadrv.c
---- svgalib-1.9.12.orig/src/vgadrv.c	Fri Feb 22 21:22:38 2002
-+++ svgalib-1.9.12/src/vgadrv.c	Sun Feb 24 02:09:15 2002
+diff -Nur svgalib-1.9.13.orig/src/vga.c svgalib-1.9.13/src/vga.c
+--- svgalib-1.9.13.orig/src/vga.c	Mon Apr  8 23:58:48 2002
++++ svgalib-1.9.13/src/vga.c	Tue Apr  9 00:09:42 2002
+@@ -2475,7 +2475,7 @@
+ void vga_setdisplaystart(int a)
+ {
+     currentdisplaystart = a;
+-    if (CHIPSET != VGA && CHIPSET != EGA)
++    if (CHIPSET != VGA && CHIPSET != EGA && CHIPSET != BANSHEE)
+ 	if (MODEX || CI.colors == 16) {
+ 	    /* We are currently using a Mode X-like mode on a */
+ 	    /* SVGA card, use the standard VGA function */
+diff -Nur svgalib-1.9.13.orig/src/vgadrv.c svgalib-1.9.13/src/vgadrv.c
+--- svgalib-1.9.13.orig/src/vgadrv.c	Mon Apr  8 23:58:48 2002
++++ svgalib-1.9.13/src/vgadrv.c	Tue Apr  9 00:09:00 2002
 @@ -159,6 +159,7 @@
  /* *INDENT-ON* */
  };
@@ -266,11 +299,3 @@ diff -Nur svgalib-1.9.12.orig/src/vgadrv.c svgalib-1.9.12/src/vgadrv.c
  
  /* Fill in chipset-specific modeinfo */
  
-@@ -212,6 +213,7 @@
- /* Set a mode */
- 
- static int lastmode;
-+int *__svgalib_vgadrv_lastmode=&lastmode;
- 
- static int setmode(int mode, int prv_mode)
- {
