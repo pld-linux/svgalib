@@ -13,7 +13,7 @@ Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
 Version:	1.9.17
-%define _rel	0.1
+%define _rel	1
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -25,6 +25,7 @@ Patch3:		%{name}-smp.patch
 Patch4:		%{name}-threeDKit-make.patch
 Patch5:		%{name}-nolrmi.patch
 Patch6:		%{name}-alpha.patch
+Patch7:		%{name}-svgalib_helper_Makefile.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 ExclusiveArch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -235,6 +236,7 @@ Bibliotecas estАticas para desenvolvimento com SVGAlib.
 %patch5 -p1
 %endif
 %patch6 -p1
+%patch7 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
