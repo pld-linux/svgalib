@@ -15,7 +15,7 @@ Patch1:		svgalib-tmp2TMPDIR.patch
 Patch2:		svgalib-DESTDIR.patch
 Patch3:		svgalib-stderr.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
-Buildroot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Exclusivearch:	%{ix86} alpha
 
 %define		_sysconfdir	/etc/vga
