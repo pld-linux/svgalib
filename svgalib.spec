@@ -282,9 +282,10 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/var/lib/svgalib \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
-install threeDKit/lib3dkit.a $RPM_BUILD_ROOT/%{_libdir}/
+install threeDKit/lib3dkit.a $RPM_BUILD_ROOT%{_libdir}
 install kernel/svgalib_helper/svgalib_helper-up.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.o
 install kernel/svgalib_helper/svgalib_helper.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o
 
