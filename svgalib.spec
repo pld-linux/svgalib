@@ -11,8 +11,8 @@ Copyright:   distributable
 Group:       Libraries
 Source:      http://www.cs.bgu.ac.il/~zivav/svgalib/%{name}-%{version}.%{date}.tar.gz
 Patch0:      svgalib-config.patch
-Patch1:      svgalib-1.2.13-buildroot.patch
-Patch2:      svgalib-1.3.0-secu.patch
+Patch1:      svgalib-buildroot.patch
+Patch2:      svgalib-secu.patch
 Patch3:      svgalib-non-root.patch
 URL:         http://www.cs.bgu.ac.il/~zivav/svgalib/
 Buildroot:   /tmp/%{name}-%{version}-root
