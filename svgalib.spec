@@ -148,7 +148,7 @@ rm -fr $RPM_BUILD_ROOT
 - changed Buildroot to /tmp/%%{name}-%%{version}-root,
 - added using %%{name} and %%{version} in Source,
 - added static subpackage,
-- changeded dependences to "Requires: %%{name} = %%{version}" in devel
+- changed dependencies to "Requires: %%{name} = %%{version}" in devel
   subpackage,
 - added alpha to Exclusivearch list,
 - added using $RPM_OPT_FLAGS during compile,
