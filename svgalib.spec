@@ -4,15 +4,14 @@ Summary(fr):    Bibliothèque pour les graphiques plein écran [S]VGA
 Summary(pl):    Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):    Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
-Version:	1.4.0
+Version:	1.4.1
 Release:	1
 Copyright:	distributable
 Group:		Libraries
 Group(pl):	Biblioteki
 Source:		ftp://metalab.unc.edu/pub/Linux/libs/graphics/%{name}-%{version}.tar.gz
 Patch0:		svgalib-pld.patch
-Patch1:		svgalib-inc.patch
-Patch2:		svgalib-tmp2var.patch
+Patch1:		svgalib-tmp2var.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib
 Buildroot:	/tmp/%{name}-%{version}-root
 Exclusivearch: %{ix86} alpha
@@ -94,14 +93,13 @@ Biblioteki statyczne [S]VGA.
 %setup -q
 gzip -d doc/man?/*gz
 %patch0 -p1 
-%patch1 -p0
-%patch2 -p1
+%patch1 -p1
 gzip doc/man*/*
 
 %build
 make OPTIMIZE="$RPM_OPT_FLAGS -pipe" shared 
 ln -sf libvga.so.%{version} sharedlib/libvga.so
-(cd utils; make)
+(cd utils; make LDFLAGS="-L../sharedlib")
 make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static 
 
 %install
@@ -136,7 +134,7 @@ install src/config/libvga.config	$RPM_BUILD_ROOT%{_sysconfdir}
 install src/config/*.keymap		$RPM_BUILD_ROOT%{_sysconfdir}
 install src/config/et4000.regs		$RPM_BUILD_ROOT%{_sysconfdir}/libvga.et4000
 
-gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README 0-RELEASE
+gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
 
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
@@ -152,7 +150,7 @@ rm -fr $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{CHANGES*,DESIGN.gz,READ*,TODO.gz} 0-README.gz 0-RELEASE.gz
+%doc doc/{CHANGES*,DESIGN.gz,READ*,TODO.gz} 0-README.gz
 
 %dir /etc/vga
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
