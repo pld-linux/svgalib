@@ -125,15 +125,15 @@ install utils/{runx,savetextmode,textmode} $RPM_BUILD_ROOT/usr/bin
 
 cp -a doc/man* $RPM_BUILD_ROOT%{_mandir}
 
-install sharedlib/lib*.so.* $RPM_BUILD_ROOT/usr/lib
+install sharedlib/lib*.so.* $RPM_BUILD_ROOT%{_libdir}
 
-ln -sf libvga.so.%{version} $RPM_BUILD_ROOT/usr/lib/libvga.so
-ln -sf libvgagl.so.%{version} $RPM_BUILD_ROOT/usr/lib/libvgagl.so
+ln -sf libvga.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libvga.so
+ln -sf libvgagl.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libvgagl.so
 
 install include/*.h $RPM_BUILD_ROOT/usr/include
 install gl/vgagl.h $RPM_BUILD_ROOT/usr/include
 
-install staticlib/*.a $RPM_BUILD_ROOT/usr/lib
+install staticlib/*.a $RPM_BUILD_ROOT%{_libdir}
 
 install libvga.config $RPM_BUILD_ROOT/etc/vga
 install et4000.regs $RPM_BUILD_ROOT/etc/vga/libvga.et4000
@@ -160,7 +160,7 @@ rm -fr $RPM_BUILD_ROOT
 %dir /etc/vga
 %config(noreplace) %verify(not size mtime md5) /etc/vga/*
 %attr(755,root,root) /usr/bin/*
-%attr(755,root,root) /usr/lib/*.so.*.*
+%attr(755,root,root) %{_libdir}/*.so.*.*
 %{_mandir}/man[1567]/*
 
 %attr(1777,root,root) %dir /var/state/svgalib
@@ -168,11 +168,11 @@ rm -fr $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 /usr/include/*.h
-%attr(755,root,root) /usr/lib/*.so
+%attr(755,root,root) %{_libdir}/*.so
 %{_mandir}/man3/*
 
 %files static
-%attr(644,root,root) /usr/lib/*.a
+%attr(644,root,root) %{_libdir}/*.a
 
 %changelog
 * Mon May 10 1999 Piotr Czerwiñski <pius@pld.org.pl>
