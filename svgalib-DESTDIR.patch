@@ -328,7 +328,7 @@ diff -urN svgalib-1.9.4/kernel/svgalib_helper/Makefile svgalib-1.9.4.new/kernel/
 -	mkdir -p /lib/modules/$(VER)/misc /lib/modules/misc
 -	install -c $(TARGET).o /lib/modules/$(VER)/misc
 +install: $(TARGET).o
-+	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc /lib/modules/misc
++	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc $(DESTDIR)/lib/modules/misc
 +	install -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/misc
  
  device:
