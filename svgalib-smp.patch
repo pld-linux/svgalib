@@ -18,7 +18,7 @@ diff -uNr svgalib-1.9.12/kernel/svgalib_helper/Makefile svgalib-1.9.12.new/kerne
  
 -CFLAGS = -D__KERNEL__ -DMODULE -Wall $(DEBFLAGS)
 +ifeq ($(SMP),1)
-+  CFLAGS = -D__KERNEL__ -D__SMP__ -DMODULE -Wall $(DEBFLAGS)
++  CFLAGS = -D__KERNEL__ -D__SMP__ -DMODULE -DCONFIG_X86_LOCAL_APIC -Wall $(DEBFLAGS)
 +else
 +  CFLAGS = -D__KERNEL__ -DMODULE -Wall $(DEBFLAGS)
 +endif
