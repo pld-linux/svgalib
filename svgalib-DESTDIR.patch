@@ -1,6 +1,6 @@
-diff -urN svgalib-1.9.2.orig/Makefile svgalib-1.9.2/Makefile
---- svgalib-1.9.2.orig/Makefile	Sun Mar 12 20:05:50 2000
-+++ svgalib-1.9.2/Makefile	Sun Mar 12 20:10:56 2000
+diff -urN svgalib-1.9.4/Makefile svgalib-1.9.4.new/Makefile
+--- svgalib-1.9.4/Makefile	Fri Jun 16 18:51:15 2000
++++ svgalib-1.9.4.new/Makefile	Fri Jun 16 18:50:18 2000
 @@ -134,49 +134,34 @@
  .PHONY: indent-gnu configaout
  
@@ -224,9 +224,9 @@ diff -urN svgalib-1.9.2.orig/Makefile svgalib-1.9.2/Makefile
  	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN)
  	@echo
  	@echo
-diff -urN svgalib-1.9.2.orig/Makefile.cfg svgalib-1.9.2/Makefile.cfg
---- svgalib-1.9.2.orig/Makefile.cfg	Sun Mar 12 20:05:50 2000
-+++ svgalib-1.9.2/Makefile.cfg	Sun Mar 12 20:11:43 2000
+diff -urN svgalib-1.9.4/Makefile.cfg svgalib-1.9.4.new/Makefile.cfg
+--- svgalib-1.9.4/Makefile.cfg	Fri Jun 16 18:51:15 2000
++++ svgalib-1.9.4.new/Makefile.cfg	Fri Jun 16 18:50:18 2000
 @@ -25,7 +25,7 @@
  # Common prefix for installation directories.
  # NOTE: This directory must exist when you start the install.
@@ -236,9 +236,9 @@ diff -urN svgalib-1.9.2.orig/Makefile.cfg svgalib-1.9.2/Makefile.cfg
  exec_prefix = $(prefix)
  
  # Directory where the shared stubs and static library will be installed.
-diff -urN svgalib-1.9.2.orig/doc/Makefile svgalib-1.9.2/doc/Makefile
---- svgalib-1.9.2.orig/doc/Makefile	Thu Dec  9 08:09:44 1999
-+++ svgalib-1.9.2/doc/Makefile	Sun Mar 12 20:05:58 2000
+diff -urN svgalib-1.9.4/doc/Makefile svgalib-1.9.4.new/doc/Makefile
+--- svgalib-1.9.4/doc/Makefile	Thu Dec  9 08:09:44 1999
++++ svgalib-1.9.4.new/doc/Makefile	Fri Jun 16 18:50:18 2000
 @@ -3,22 +3,22 @@
  srcdir    = ..
  VPATH     = $(srcdir)/doc
@@ -317,26 +317,25 @@ diff -urN svgalib-1.9.2.orig/doc/Makefile svgalib-1.9.2/doc/Makefile
  
  uninstall:
  	@echo Removing all svgalib man pages.
-diff -urN svgalib-1.9.2.orig/kernel/svgalib_helper/Makefile svgalib-1.9.2/kernel/svgalib_helper/Makefile
---- svgalib-1.9.2.orig/kernel/svgalib_helper/Makefile	Wed Feb 23 13:20:48 2000
-+++ svgalib-1.9.2/kernel/svgalib_helper/Makefile	Sun Mar 12 20:08:02 2000
-@@ -27,10 +27,9 @@
+diff -urN svgalib-1.9.4/kernel/svgalib_helper/Makefile svgalib-1.9.4.new/kernel/svgalib_helper/Makefile
+--- svgalib-1.9.4/kernel/svgalib_helper/Makefile	Sun Apr 16 16:05:36 2000
++++ svgalib-1.9.4.new/kernel/svgalib_helper/Makefile	Fri Jun 16 18:50:59 2000
+@@ -27,9 +27,9 @@
  $(TARGET).o: $(SRC:.c=.o)
  	$(LD) -r $^ -o $@
  
--install: device
+-install: device $(TARGET).o
 -	mkdir -p /lib/modules/$(VER)/misc /lib/modules/misc
 -	install -c $(TARGET).o /lib/modules/$(VER)/misc
--	install -c $(TARGET).o /lib/modules/misc
-+install:
-+	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc
++install: $(TARGET).o
++	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc /lib/modules/misc
 +	install -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/misc
  
  device:
- 	mknod /dev/svgalib_helper c $(SVGALIB_HELPER_MAJOR) 0
-diff -urN svgalib-1.9.2.orig/lrmi-0.6m/Makefile svgalib-1.9.2/lrmi-0.6m/Makefile
---- svgalib-1.9.2.orig/lrmi-0.6m/Makefile	Fri Dec 31 14:05:38 1999
-+++ svgalib-1.9.2/lrmi-0.6m/Makefile	Sun Mar 12 20:08:24 2000
+ 	rm -f /dev/svgalib_helper* /dev/svga /dev/svga?
+diff -urN svgalib-1.9.4/lrmi-0.6m/Makefile svgalib-1.9.4.new/lrmi-0.6m/Makefile
+--- svgalib-1.9.4/lrmi-0.6m/Makefile	Sun Apr 16 16:05:09 2000
++++ svgalib-1.9.4.new/lrmi-0.6m/Makefile	Fri Jun 16 18:50:18 2000
 @@ -25,8 +25,8 @@
  	$(CC) $(CFLAGS) -o $@ $^
  
