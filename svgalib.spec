@@ -200,10 +200,10 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 %{__make} -C kernel/svgalib_helper \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
-mv kernel/svgalib_helper/svgalib_helper.o kernel/svgalib_helper/svgalib_helper-up.o
+mv kernel/svgalib_helper/svgalib_helper.o  kernel/svgalib_helper/svgalib_helper-up.o
+rm -f kernel/svgalib_helper/main.o
 
 # SMP
-%{__make} -C kernel/svgalib_helper clean
 %{__make} -C kernel/svgalib_helper \
 	SMP=1 \
 	INCLUDEDIR=%{_kernelsrcdir}/include
