@@ -17,20 +17,6 @@ Version:	1.9.12
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
-Group(cs):	Knihovny
-Group(da):	Biblioteker
-Group(de):	Bibliotheken
-Group(es):	Bibliotecas
-Group(fr):	Librairies
-Group(it):	Librerie
-Group(ja):	¥é¥¤¥Ö¥é¥ê
-Group(no):	Biblioteker
-Group(pl):	Biblioteki
-Group(pt):	Bibliotecas
-Group(pt_BR):	Bibliotecas
-Group(ru):	âÉÂÌÉÏÔÅËÉ
-Group(sv):	Bibliotek
-Group(uk):	â¦ÂÌ¦ÏÔÅËÉ
 Source0:	http://www.cs.bgu.ac.il/~zivav/svgalib/%{name}-%{version}.tar.gz
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
@@ -80,18 +66,6 @@ Summary:	svgalib's helper kernel module
 Summary(de):	Svgalibs Helferkernmodul
 Summary(pl):	Pomocniczy modu³ j±dra svgaliba
 Group:		Base/Kernel
-Group(cs):	Základ/Jádro
-Group(da):	Basal/Kerne
-Group(de):	Grundsätzlich/Kern
-Group(es):	Base/Núcleo
-Group(fr):	Base/Noyau
-Group(it):	Base/Kernel
-Group(ja):	¥Ù¡¼¥¹/¥«¡¼¥Í¥ë
-Group(no):	Basis/Kjerne
-Group(pl):	Podstawowe/J±dro
-Group(pt):	Base/Núcleo
-Group(ru):	âÁÚÏ×ÙÊ ÎÁÂÏÒ/ñÄÒÏ
-Group(sv):	Bas/Kärna
 Release:	%{_rel}@%{_kernel_ver_str}
 %{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}}
 %{!?_without_dist_kernel:Conflicts:	kernel-smp}
@@ -111,18 +85,6 @@ opartych na svgalib.
 Summary:	svgalib's helper kernel module for SMP
 Summary(pl):	Pomoczniczy modu³ j±dra svgalib dla SMP
 Group:		Base/Kernel
-Group(cs):	Základ/Jádro
-Group(da):	Basal/Kerne
-Group(de):	Grundsätzlich/Kern
-Group(es):	Base/Núcleo
-Group(fr):	Base/Noyau
-Group(it):	Base/Kernel
-Group(ja):	¥Ù¡¼¥¹/¥«¡¼¥Í¥ë
-Group(no):	Basis/Kjerne
-Group(pl):	Podstawowe/J±dro
-Group(pt):	Base/Núcleo
-Group(ru):	âÁÚÏ×ÙÊ ÎÁÂÏÒ/ñÄÒÏ
-Group(sv):	Bas/Kärna
 Release:	%{_rel}@%{_kernel_ver_str}
 %{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}}
 %{!?_without_dist_kernel:Conflicts:	kernel-up}
@@ -145,20 +107,6 @@ Summary(fr):	Outils pour développer des programmes utilisant SVGAlib
 Summary(pl):	Pliki nag³ówkowe i dokumentacja dla [S]VGA
 Summary(tr):	[S]VGA grafikleri için geliştirme kitaplıkları ve başlık dosyaları
 Group:		Development/Libraries
-Group(cs):	Vıvojové prostøedky/Knihovny
-Group(da):	Udvikling/Biblioteker
-Group(de):	Entwicklung/Bibliotheken
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(it):	Sviluppo/Librerie
-Group(ja):	³«È¯/¥é¥¤¥Ö¥é¥ê
-Group(no):	Utvikling/Bibliotek
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(pt):	Desenvolvimento/Bibliotecas
-Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
-Group(sv):	Utveckling/Bibliotek
-Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Requires:	%{name} = %{version}
 
 %description devel
@@ -188,20 +136,6 @@ gereken başlık dosyalarını ve statik kitaplıkları içerir.
 Summary:	Static [S]VGA graphics librarires
 Summary(pl):	Biblioteki statyczne [S]VGA
 Group:		Development/Libraries
-Group(cs):	Vıvojové prostøedky/Knihovny
-Group(da):	Udvikling/Biblioteker
-Group(de):	Entwicklung/Bibliotheken
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(it):	Sviluppo/Librerie
-Group(ja):	³«È¯/¥é¥¤¥Ö¥é¥ê
-Group(no):	Utvikling/Bibliotek
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(pt):	Desenvolvimento/Bibliotecas
-Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
-Group(sv):	Utveckling/Bibliotek
-Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Requires:	%{name}-devel = %{version}
 
 %description static
