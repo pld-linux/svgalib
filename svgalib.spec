@@ -1,4 +1,5 @@
 %define		_kernel_ver	%(grep UTS_RELEASE /usr/src/linux/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
+%define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
