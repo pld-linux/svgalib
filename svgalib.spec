@@ -4,7 +4,7 @@ Summary(fr):	Une librairie graphique SVGA plein ecran de bas niveau
 Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
-Version:	1.4.1
+Version:	1.9.2
 Release:	1
 Copyright:	distributable
 Group:		Libraries
@@ -13,11 +13,13 @@ Source:		ftp://metalab.unc.edu/pub/Linux/libs/graphics/%{name}-%{version}.tar.gz
 Patch0:		svgalib-pld.patch
 Patch1:		svgalib-tmp2TMPDIR.patch
 Patch2:		svgalib-DESTDIR.patch
+Patch3:		svgalib-stderr.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib
 Buildroot:	/tmp/%{name}-%{version}-root
 Exclusivearch:	%{ix86} alpha
 
 %define		_sysconfdir	/etc/vga
+%define		_kernel_ver	%(grep UTS_RELEASE /usr/src/linux/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 
 %description
 The svgalib package provides the SVGAlib low-level graphics library for
@@ -40,8 +42,7 @@ jeux et utilitaires utilisent SVGAlib pour leurs graphismes.
 %description -l pl
 Biblioteki dla pe³noekranowej grafiki [S]VGA. Wiele gier i programów
 u¿ytkowych korzysta z tych bibliotek, gdy¿ wymagaj± mniej pamiêci ni¿ X
-Window System. Biblioteki te s± w trakcie wycofywania poniewa¿  programy
-pisane z ich u¿yciem wymagaj± SUID'a.
+Window System.
 
 %description -l tr
 SVGAlib, deðiþik donaným platformlarý üzerinde, uygulamalarýn tam ekran
@@ -100,6 +101,7 @@ gzip -d doc/man?/*gz
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 LDFLAGS="-s"; export LDFLAGS
@@ -108,17 +110,27 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 (cd utils; make LDFLAGS="-L../sharedlib")
 make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static
 
+make -C kernel/svgalib_helper
+
 %install
 rm -rf $RPM_BUILD_ROOT
 
-make DESTDIR=$RPM_BUILD_ROOT install
+make install DESTDIR=$RPM_BUILD_ROOT install
+make install -C kernel/svgalib_helper DESTDIR=$RPM_BUILD_ROOT
+
+install -d $RPM_BUILD_ROOT/var/state/svgalib
 
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README \
 	$RPM_BUILD_ROOT%{_mandir}/man?/*
 
-%post   -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%post
+/sbin/ldconfig
+/sbin/depmod -a
+
+%postun
+/sbin/ldconfig
+/sbin/depmod -a
 
 %clean
 rm -fr $RPM_BUILD_ROOT
@@ -128,9 +140,11 @@ rm -fr $RPM_BUILD_ROOT
 %doc doc/{CHANGES*,DESIGN.gz,READ*,TODO.gz} 0-README.gz
 
 %dir /etc/vga
+%dir /var/state/svgalib
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
+%attr(600,root,root) /lib/modules/*/misc/*.o
 %{_mandir}/man[1567]/*
 
 %files devel
