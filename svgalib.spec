@@ -117,10 +117,10 @@ gzip -d doc/man?/*gz
 
 %build
 %{!?debug:LDFLAGS="-s"; export LDFLAGS}
-%{__make} OPTIMIZE="%{?debug:-O -g}%{!?debug:$RPM_OPT_FLAGS} -pipe" shared
+%{__make} OPTIMIZE="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -pipe" shared
 ln -sf libvga.so.%{version} sharedlib/libvga.so
 (cd utils; make LDFLAGS="-L../sharedlib")
-%{__make} OPTIMIZE="%{?debug:-O -g}%{!?debug:$RPM_OPT_FLAGS} -pipe" static
+%{__make} OPTIMIZE="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -pipe" static
 
 %{__make} -C kernel/svgalib_helper
 
