@@ -5,7 +5,7 @@
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 %define		_kernel_ver_str	%(echo %{_kernel_ver} | sed s/-/_/g)
-%define		_rel		8
+%define		_rel		9
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -27,7 +27,7 @@ Patch5:		%{name}-smp.patch
 Patch6:		%{name}-banshee.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 %{!?_without_dist_kernel:Buildrequires:		kernel-headers}
-Exclusivearch:	%{ix86} alpha
+ExclusiveArch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
@@ -68,10 +68,10 @@ Summary(de):	Svgalibs Helferkernmodul
 Summary(pl):	Pomocniczy modu³ j±dra svgaliba
 Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
-%{!?_without_dist_kernel:Requires:	kernel-up = %{_kernel_ver}}
-Obsoletes:	svgalib-helper
-Provides:	svgalib-helper = %{version}
 Prereq:		/sbin/depmod
+%{!?_without_dist_kernel:%requires_releq_kernel_up}
+Provides:	svgalib-helper = %{version}
+Obsoletes:	svgalib-helper
 
 %description -n kernel-video-svgalib_helper
 This package contains the kernel module necessary to run svgalib-based
@@ -86,10 +86,10 @@ Summary:	svgalib's helper kernel module for SMP
 Summary(pl):	Pomoczniczy modu³ j±dra svgalib dla SMP
 Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
-%{!?_without_dist_kernel:Requires:	kernel-smp = %{_kernel_ver}}
-Obsoletes:	svgalib-helper
-Provides:	svgalib-helper = %{version}
 Prereq:		/sbin/depmod
+%{!?_without_dist_kernel:%requires_releq_kernel_smp}
+Provides:	svgalib-helper = %{version}
+Obsoletes:	svgalib-helper
 
 %description -n kernel-smp-video-svgalib_helper
 This package contains the kernel module necessary to run svgalib-based
@@ -177,7 +177,7 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 %{__make} -C kernel/svgalib_helper \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
-mv kernel/svgalib_helper/svgalib_helper.o  kernel/svgalib_helper/svgalib_helper-up.o
+mv -f kernel/svgalib_helper/svgalib_helper.o  kernel/svgalib_helper/svgalib_helper-up.o
 rm -f kernel/svgalib_helper/main.o
 
 # SMP
