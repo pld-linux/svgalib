@@ -20,6 +20,9 @@ Buildroot:	/tmp/%{name}-%{version}-root
 
 Exclusivearch: %{ix86} alpha
 
+%define	_sysconfdir	/etc/vga
+%define	_localstatedir	/var/state/%{name}
+
 %description
 SVGAlib is a library which allows applications to use full screen
 graphics on a variety of hardware platforms. Many games and utilities
@@ -110,9 +113,9 @@ make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/{etc/vga,usr/{bin,lib,include}} \
-	$RPM_BUILD_ROOT%{_mandir}/man{1,3,5,6,7} \
-	$RPM_BUILD_ROOT/var/state/svgalib
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_includedir}} \
+	$RPM_BUILD_ROOT%{_mandir}/man{1,3,5,6,7},%{_sysconfdir}} \
+	$RPM_BUILD_ROOT%{_localstatedir}
 
 install utils/{convfont,dumpreg,restore*,fix132*,setmclk} \
 	$RPM_BUILD_ROOT%{_bindir}
@@ -135,9 +138,9 @@ install gl/vgagl.h $RPM_BUILD_ROOT%{_includedir}
 
 install staticlib/*.a $RPM_BUILD_ROOT%{_libdir}
 
-install libvga.config $RPM_BUILD_ROOT/etc/vga
-install et4000.regs $RPM_BUILD_ROOT/etc/vga/libvga.et4000
-install et6000.regs $RPM_BUILD_ROOT/etc/vga/libvga.et6000
+install libvga.config $RPM_BUILD_ROOT%{_sysconfdir}
+install et4000.regs $RPM_BUILD_ROOT%{_sysconfdir}/libvga.et4000
+install et6000.regs $RPM_BUILD_ROOT%{_sysconfdir}/libvga.et6000
 
 gzip -9nf doc/{CHANGES*,DESIGN,READ*,SECURITY*,TODO} 0-README 0-RELEASE
 
@@ -146,8 +149,8 @@ gzip -9nf doc/{CHANGES*,DESIGN,READ*,SECURITY*,TODO} 0-README 0-RELEASE
 
 %preun
 if [ "$1" = "0" ]; then
-	rm -f /var/state/svgalib/fontdata
-	rm -f /var/state/svgalib/textregs
+	rm -f %{_localstatedir}/fontdata
+	rm -f %{_localstatedir}/textregs
 fi
 
 %clean
@@ -158,12 +161,12 @@ rm -fr $RPM_BUILD_ROOT
 %doc doc/{CHANGES*,DESIGN.gz,READ*,SECURITY*,TODO.gz} 0-README.gz 0-RELEASE.gz
 
 %dir /etc/vga
-%config(noreplace) %verify(not size mtime md5) /etc/vga/*
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/*.so.*.*
 %{_mandir}/man[1567]/*
 
-%attr(1777,root,root) %dir /var/state/svgalib
+%attr(1777,root,root) %dir %{_localstatedir}
 
 %files devel
 %defattr(644,root,root,755)
