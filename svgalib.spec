@@ -16,7 +16,6 @@ Patch1:		svgalib-glibc.patch
 Patch2:		svgalib-buildroot.patch
 Patch3:		svgalib-secu.patch
 Patch4:		svgalib-tmp2var.patch
-Prereq:		/sbin/ldconfig
 Buildroot:	/tmp/%{name}-%{version}-root
 
 Exclusivearch: %{ix86} alpha
@@ -46,14 +45,14 @@ X Windows'tan daha uygun olmasýnýn yanýsýra, pek çok oyun ve yardýmcý
 programlar çizim eriþimi için bu kitaplýðý kullanýr.
 
 %package devel
-Summary:     development libraries and include files for [S]VGA graphics
-Group:       Development/Libraries
-Group(pl):   Programowanie/Biblioteki
-Requires:    %{name} = %{version}
-Summary(de): Entwicklungs-Libraries und INCLUDE-Dateien für (S)VGA-Grafik. 
-Summary(fr): Bibliothèques et en-têtes de développement pour graphiques [S]VGA.
-Summary(pl): Pliki nag³ówkowe i dokumentacja dla [S]VGA 
-Summary(tr): [S]VGA grafikleri için geliþtirme kitaplýklarý ve baþlýk dosyalarý
+Summary:	development libraries and include files for [S]VGA graphics
+Summary(de):	Entwicklungs-Libraries und INCLUDE-Dateien für (S)VGA-Grafik. 
+Summary(fr):	Bibliothèques et en-têtes de développement pour graphiques [S]VGA.
+Summary(pl):	Pliki nag³ówkowe i dokumentacja dla [S]VGA 
+Summary(tr):	[S]VGA grafikleri için geliþtirme kitaplýklarý ve baþlýk dosyalarý
+Group:		Development/Libraries
+Group(pl):	Programowanie/Biblioteki
+Requires:	%{name} = %{version}
 
 %description devel
 These are the libraries and header files that are needed to build programs
@@ -80,10 +79,10 @@ baþlýk dosyalarýný ve statik kitaplýklarý içerir.
 
 %package static
 Summary:	Static [S]VGA graphics librarires
+Summary(pl):	Biblioteki statyczne [S]VGA
 Group:		Development/Libraries
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
-Summary(pl):	Biblioteki statyczne [S]VGA
 
 %description static
 Static [S]VGA graphics librarires.
@@ -146,8 +145,8 @@ gzip -9nf doc/{CHANGES*,DESIGN,READ*,SECURITY*,TODO} 0-README 0-RELEASE
 
 %preun
 if [ "$1" = "0" ]; then
-  rm -f /var/state/svgalib/fontdata
-  rm -f /var/state/svgalib/textregs
+	rm -f /var/state/svgalib/fontdata
+	rm -f /var/state/svgalib/textregs
 fi
 
 %clean
@@ -158,20 +157,16 @@ rm -fr $RPM_BUILD_ROOT
 %doc doc/{CHANGES*,DESIGN.gz,READ*,SECURITY*,TODO.gz} 0-README.gz 0-RELEASE.gz
 
 %dir /etc/vga
-%attr(1777,root,root) %dir /var/state/svgalib
-
 %config(noreplace) %verify(not size mtime md5) /etc/vga/*
-
 %attr(755,root,root) /usr/bin/*
 %attr(755,root,root) /usr/lib/*.so.*.*
-
 /usr/share/man/man[1567]/*
+
+%attr(1777,root,root) %dir /var/state/svgalib
 
 %files devel
 %defattr(644,root,root,755)
-
 /usr/include/*.h
-
 %attr(755,root,root) /usr/lib/*.so
 /usr/share/man/man3/*
 
@@ -179,6 +174,14 @@ rm -fr $RPM_BUILD_ROOT
 %attr(644,root,root) /usr/lib/*.a
 
 %changelog
+* Mon May 10 1999 Piotr Czerwiñski <pius@pld.org.pl>
+  [1.3.1-5]
+- more patches added,
+- moved temporary svgalib files to /var/state/svgalib,
+- added %preun section,
+- changes to the spec file,
+- FHS 2.0 compliant changes.
+
 * Wed Jan 20 1999 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
   [1.3.1-4d]
 - updated to stable version, 
@@ -191,21 +194,21 @@ rm -fr $RPM_BUILD_ROOT
 - fixed group of shared libraries & ELF binaries.  
 
 * Mon Nov 02 1998 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
-[1.3.1-1d]
+ [1.3.1-1d]
 - updated to latest snapshoot - 1.3.1.19981020,
 - added fiew missing ELF Binaries,
 - shared libraries moved to /lib
 - minor changes.
 
 * Fri Oct 15 1998 Wojtek ¦lusarczyk <wojtek@SHADOW.EU.ORG>
-[1.3.0-3d]
+ [1.3.0-3d]
 - build against Tornado,
 - translation modified for pl,
 - added missing %defattr support in %files static,
 - minor changes.
 
 * Thu Sep 24  1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-[1.3.0-3]
+ [1.3.0-3]
 - changed Buildroot to /tmp/%%{name}-%%{version}-root,
 - added using %%{name} and %%{version} in Source,
 - added static subpackage,
