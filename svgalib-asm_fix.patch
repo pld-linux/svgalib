@@ -1,0 +1,11 @@
+--- svgalib-1.9.19/gl/inlstring.h~	2005-02-14 22:40:41.137511688 +0000
++++ svgalib-1.9.19/gl/inlstring.h	2005-02-14 22:40:43.522149168 +0000
+@@ -121,7 +121,7 @@
+ 	       "cmpl $12,%%edx\n\t"
+ 	       "jl 1f\n\t"	/* if (count >= 12) */
+ 
+-	       "movzbl %%al,%%ax\n\t"
++	       "movzbl %%al,%%eax\n\t"
+ 	       "movl %%eax,%%ecx\n\t"
+ 	       "shll $8,%%ecx\n\t"	/* c |= c << 8 */
+ 	       "orl %%ecx,%%eax\n\t"
