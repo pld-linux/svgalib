@@ -12,7 +12,7 @@ Group(pl):	Biblioteki
 Source:		ftp://metalab.unc.edu/pub/Linux/libs/graphics/%{name}-%{version}.tar.gz
 Patch0:		svgalib-pld.patch
 Patch1:		svgalib-glibc.patch
-Patch2:		svgalib-buildroot.patch
+Patch2:		svgalib-inc.patch
 Patch3:		svgalib-secu.patch
 Patch4:		svgalib-tmp2var.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib
@@ -103,6 +103,7 @@ gzip doc/man*/*
 
 %build
 make OPTIMIZE="$RPM_OPT_FLAGS -pipe" shared 
+ln -sf libvga.so.%{version} sharedlib/libvga.so
 (cd utils; make)
 make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static 
 
