@@ -196,11 +196,14 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 
 %{__make} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
 
+# UP
 %{__make} -C kernel/svgalib_helper \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
 mv kernel/svgalib_helper/svgalib_helper.o kernel/svgalib_helper/svgalib_helper-up.o
 
+# SMP
+%{__make} -C kernel/svgalib_helper clean
 %{__make} -C kernel/svgalib_helper \
 	SMP=1 \
 	INCLUDEDIR=%{_kernelsrcdir}/include
