@@ -1,19 +1,23 @@
 Summary:	Library for full screen [S]VGA graphics
+Summary(de):    Library für Vollbildschirm-[S]VGA-Grafiken
+Summary(fr):    Bibliothèque pour les graphiques plein écran [S]VGA
+Summary(pl):    Biblioteki dla pe³noekranowej grafiki [S]VGA
+Summary(tr):    Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.3.1
-Release:	3d
+Release:	4
 Copyright:	distributable
 Group:		Libraries
 Group(pl):	Biblioteki
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib
 Source:		%{name}-%{version}.tar.gz
-Patch:		%{name}-%{version}-pld.patch
+Patch0:		svgalib-pld.patch
+Patch1:		svgalib-glibc.patch
+Patch2:		svgalib-buildroot.patch
+Patch3:		svgalib-secu.patch
+Patch4:		svgalib-tmp2var.patch
 Prereq:		/sbin/ldconfig
 Buildroot:	/tmp/%{name}-%{version}-root
-Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
-Summary(fr):	Bibliothèque pour les graphiques plein écran [S]VGA
-Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
-Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 
 Exclusivearch: i386 alpha
 
@@ -89,7 +93,14 @@ Biblioteki statyczne [S]VGA.
 
 %prep
 %setup -q
-%patch -p1 
+gzip -d doc/man?/*gz
+%patch0 -p1 
+%patch1 -p1
+%patch2 -p0
+%patch3 -p1
+%patch4 -p1
+
+gzip doc/man*/*
 
 %build
 make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static shared 
@@ -98,28 +109,30 @@ make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static shared
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/{lib,etc/vga,usr/{bin,lib,include}}
-install -d $RPM_BUILD_ROOT/usr/man/man{1,3,5,6,7}
+install -d $RPM_BUILD_ROOT/{lib,etc/vga,usr/{bin,lib,include}} \
+	$RPM_BUILD_ROOT/usr/share/man/man{1,3,5,6,7} \
+	$RPM_BUILD_ROOT/var/state/svgalib
 
-install -s utils/{convfont,dumpreg,restore*,fix132*,setmclk} \
+install utils/{convfont,dumpreg,restore*,fix132*,setmclk} \
 	$RPM_BUILD_ROOT/usr/bin
 
 rm -f $RPM_BUILD_ROOT/usr/bin/{*.c,*.o}
 
+strip $RPM_BUILD_ROOT/usr/bin/*
+
 install utils/{runx,savetextmode,textmode} $RPM_BUILD_ROOT/usr/bin
 
-cp -a doc/man* $RPM_BUILD_ROOT/usr/man
+cp -a doc/man* $RPM_BUILD_ROOT/usr/share/man
 
 install sharedlib/lib*.so.* $RPM_BUILD_ROOT/lib
 
 ln -sf libvga.so.1.3.1 $RPM_BUILD_ROOT/lib/libvga.so
 ln -sf libvga.so.1.3.1 $RPM_BUILD_ROOT/lib/libvga.so.1
-
 ln -sf libvgagl.so.1.3.1 $RPM_BUILD_ROOT/lib/libvgagl.so
 ln -sf libvgagl.so.1.3.1 $RPM_BUILD_ROOT/lib/libvgagl.so.1
 
-cp include/*.h $RPM_BUILD_ROOT/usr/include
-cp gl/vgagl.h $RPM_BUILD_ROOT/usr/include
+install include/*.h $RPM_BUILD_ROOT/usr/include
+install gl/vgagl.h $RPM_BUILD_ROOT/usr/include
 
 install staticlib/*.a $RPM_BUILD_ROOT/lib
 
@@ -127,29 +140,33 @@ install libvga.config $RPM_BUILD_ROOT/etc/vga
 install et4000.regs $RPM_BUILD_ROOT/etc/vga/libvga.et4000
 install et6000.regs $RPM_BUILD_ROOT/etc/vga/libvga.et6000
 
-chmod 755 $RPM_BUILD_ROOT/lib/*.so.*
-
-gunzip		$RPM_BUILD_ROOT/usr/man/{man1/*,man3/*,man5/*,man6/*,man7/*}
-bzip2 -9	$RPM_BUILD_ROOT/usr/man/{man1/*,man3/*,man5/*,man6/*,man7/*}
-bzip2 -9	doc/{CHANGES*,DESIGN,READ*,SECURITY*} 0-README 0-RELEASE
-
-%clean
-rm -fr $RPM_BUILD_ROOT
+gzip -9nf doc/{CHANGES*,DESIGN,READ*,SECURITY*,TODO} 0-README 0-RELEASE
 
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
+%preun
+if [ "$1" = "0" ]; then
+  rm -f /var/lib/svgalib/fontdata
+  rm -f /var/lib/svgalib/textregs
+fi
+
+%clean
+rm -fr $RPM_BUILD_ROOT
+
 %files
 %defattr(644,root,root,755)
-%doc doc/{CHANGES*,DESIGN.bz2,READ*,SECURITY*} 0-README.bz2 0-RELEASE.bz2
+%doc doc/{CHANGES*,DESIGN.gz,READ*,SECURITY*,TODO.gz} 0-README.gz 0-RELEASE.gz
 
 %dir /etc/vga
+%attr(1777,root,root) %dir /var/state/svgalib
+
 %config(noreplace) %verify(not size mtime md5) /etc/vga/*
 
 %attr(755,root,root) /usr/bin/*
 %attr(755,root,root) /lib/*.so.*
 
-%attr(644,root, man) /usr/man/man[1567]/*
+/usr/share/man/man[1567]/*
 
 %files devel
 %defattr(644,root,root,755)
@@ -157,14 +174,14 @@ rm -fr $RPM_BUILD_ROOT
 /usr/include/*.h
 
 %attr(755,root,root) /lib/*.so
-%attr(644,root, man) /usr/man/man3/*
+/usr/share/man/man3/*
 
 %files static
 %attr(644,root,root) /lib/*.a
 
 %changelog
 * Wed Jan 20 1999 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
-[1.3.1-4d]
+  [1.3.1-4d]
 - updated to stable version, 
 - compressed man pages && documentation,
 - added Prereq: /sbin/ldconfig,
