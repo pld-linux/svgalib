@@ -114,7 +114,7 @@ make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_includedir}} \
-	$RPM_BUILD_ROOT%{_mandir}/man{1,3,5,6,7},%{_sysconfdir}} \
+	$RPM_BUILD_ROOT{%{_mandir}/man{1,3,5,6,7},%{_sysconfdir}} \
 	$RPM_BUILD_ROOT%{_localstatedir}
 
 install utils/{convfont,dumpreg,restore*,fix132*,setmclk} \
