@@ -5,8 +5,6 @@
 %define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 %define		_kernel_ver_str	%(echo %{_kernel_ver} | sed s/-/_/g)
-#%define		smpstr		%{?_with_smp:-smp}
-#%define		smp		%{?_with_smp:1}%{!?_with_smp:0}
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -215,10 +213,6 @@ install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
-
-#%{__make} install -C kernel/svgalib_helper \
-#	DESTDIR=$RPM_BUILD_ROOT \
-#	INCLUDEDIR=%{_kernelsrcdir}/include
 
 install kernel/svgalib_helper/svgalib_helper-up.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.o
 install kernel/svgalib_helper/svgalib_helper.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o
