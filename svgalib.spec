@@ -317,11 +317,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n kernel-video-svgalib_helper
 %defattr(644,root,root,755)
-%attr(600,root,root) /lib/modules/%{_kernel_ver}/misc/svgalib_helper.o
+%attr(600,root,root) /lib/modules/%{_kernel_ver}/misc/svgalib_helper.o*
 
 %files -n kernel-smp-video-svgalib_helper
 %defattr(644,root,root,755)
-%attr(600,root,root) /lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o
+%attr(600,root,root) /lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o*
 
 %files devel
 %defattr(644,root,root,755)
