@@ -2,7 +2,7 @@
 # conditional build
 # _without_dist_kernel		without distribution kernel
 
-%define		_rel		10
+%define		_rel		11
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
