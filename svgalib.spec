@@ -15,7 +15,7 @@ Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.9.12
-Release:	1
+Release:	2
 License:	distributable
 Group:		Libraries
 Group(de):	Libraries
