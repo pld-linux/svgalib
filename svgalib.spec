@@ -1,7 +1,9 @@
 #
 # Conditional build:
-%bcond_without dist_kernel	# without distribution kernel
-
+%bcond_without	dist_kernel	# without distribution kernel
+%bcond_without	kernel		# without kernel modules
+%bcond_without	userspace	# without userspace packages
+#
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library f¸r Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para gr·ficos en pantalla llena [S]VGA
@@ -24,14 +26,17 @@ Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-smp.patch
 Patch4:		%{name}-threeDKit-make.patch
-Patch5:		%{name}-nolrmi.patch
-Patch6:		%{name}-alpha.patch
-Patch7:		%{name}-svgalib_helper_Makefile.patch
-Patch8:		%{name}-link.patch
-Patch9:		%{name}-module-alias.patch
-Patch10:	%{name}-linux26-minor.patch
+#Patch5:		%{name}-nolrmi.patch
+#Patch6:		%{name}-alpha.patch
+Patch5:		%{name}-svgalib_helper_Makefile.patch
+Patch6:		%{name}-link.patch
+Patch7:		%{name}-module-alias.patch
+Patch8:		%{name}-linux26-minor.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 ExclusiveArch:	%{ix86} alpha
+%if %{with kernel} && %{with dist_kernel}
+BuildRequires:	kernel-headers
+%endif
 BuildRequires:	rpmbuild(macros) >= 1.118
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -106,49 +111,6 @@ oyun ve yard˝mc˝ programlar Áizim eri˛imi iÁin bu kitapl˝˝ kullan˝r.
 ∂”Œ’§ ﬁ…Õ¡Ãœ ¶«œ“ ‘¡ ’‘…Ã¶‘, —À¶ ◊…Àœ“…”‘œ◊’¿‘ÿ SVGAlib ƒÃ— ◊…◊œƒ’
 «“¡∆¶À…. ˜¡Õ Œ≈œ¬»¶ƒŒœ ¬’ƒ≈ ◊”‘¡Œœ◊…‘… svgalib, —À›œ ◊… Àœ“…”‘’§‘≈”ÿ
 ‘¡À…Õ… –“œ«“¡Õ¡Õ….
-
-%package -n kernel-video-svgalib_helper
-Summary:	svgalib's helper kernel module
-Summary(de):	Svgalibs Helferkernmodul
-Summary(es):	Bibliotecas de desarrollo y archivos de inclusiÛn para gr·ficos [S]VGA
-Summary(pl):	Pomocniczy modu≥ j±dra svgaliba
-Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclus„o para gr·ficos [S]VGA
-Group:		Base/Kernel
-Release:	%{_rel}@%{_kernel_ver_str}
-%if ! %{with dist_kernel}
-%requires_releq_kernel_up
-%endif  
-Requires(post,postun):	/sbin/depmod
-Provides:	svgalib-helper = %{version}
-Obsoletes:	svgalib-helper
-
-%description -n kernel-video-svgalib_helper
-This package contains the kernel module necessary to run svgalib-based
-programs.
-
-%description -n kernel-video-svgalib_helper -l pl
-Ten pakiet zawiera modu≥ j±dra potrzebny do uruchamiania programÛw
-opartych na svgalib.
-
-%package -n kernel-smp-video-svgalib_helper
-Summary:	svgalib's helper kernel module for SMP
-Summary(pl):	Pomoczniczy modu≥ j±dra svgalib dla SMP
-Group:		Base/Kernel
-Release:	%{_rel}@%{_kernel_ver_str}
-%if ! %{with dist_kernel}
-%requires_releq_kernel_smp
-%endif
-Requires(post,postun):	/sbin/depmod
-Provides:	svgalib-helper = %{version}
-Obsoletes:	svgalib-helper
-
-%description -n kernel-smp-video-svgalib_helper
-This package contains the kernel module necessary to run svgalib-based
-programs.
-
-%description -n kernel-smp-video-svgalib_helper -l pl
-Ten pakiet zawiera modu≥ j±dra potrzebny do uruchamiania programÛw
-opartych na svgalib.
 
 %package devel
 Summary:	Development libraries and include files for [S]VGA graphics
@@ -240,6 +202,45 @@ Bibliotecas est·ticas para desenvolvimento com SVGAlib.
 –œ◊Œœ≈À“¡ŒŒœ¿ «“¡∆¶Àœ¿ Œ¡ “¶⁄ŒœÕ¡Œ¶‘Œ…» ¡–¡“¡‘Œ…» –Ã¡‘∆œ“Õ¡» ‘¡ ¬≈⁄
 Œ≈œ¬»¶ƒŒœ”‘¶ ⁄¡–’”À¡‘… ƒÃ— √ÿœ«œ X Window.
 
+%package -n kernel-video-svgalib_helper
+Summary:	svgalib's helper kernel module
+Summary(de):	Svgalibs Helferkernmodul
+Summary(es):	Bibliotecas de desarrollo y archivos de inclusiÛn para gr·ficos [S]VGA
+Summary(pl):	Pomocniczy modu≥ j±dra svgaliba
+Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclus„o para gr·ficos [S]VGA
+Group:		Base/Kernel
+Release:	%{_rel}@%{_kernel_ver_str}
+%{?with_dist_kernel:%requires_releq_kernel_up}
+Requires(post,postun):	/sbin/depmod
+Provides:	svgalib-helper = %{version}
+Obsoletes:	svgalib-helper
+
+%description -n kernel-video-svgalib_helper
+This package contains the kernel module necessary to run svgalib-based
+programs.
+
+%description -n kernel-video-svgalib_helper -l pl
+Ten pakiet zawiera modu≥ j±dra potrzebny do uruchamiania programÛw
+opartych na svgalib.
+
+%package -n kernel-smp-video-svgalib_helper
+Summary:	svgalib's helper kernel module for SMP
+Summary(pl):	Pomoczniczy modu≥ j±dra svgalib dla SMP
+Group:		Base/Kernel
+Release:	%{_rel}@%{_kernel_ver_str}
+%{?with_dist_kernel:%requires_releq_kernel_smp}
+Requires(post,postun):	/sbin/depmod
+Provides:	svgalib-helper = %{version}
+Obsoletes:	svgalib-helper
+
+%description -n kernel-smp-video-svgalib_helper
+This package contains the kernel module necessary to run svgalib-based
+programs.
+
+%description -n kernel-smp-video-svgalib_helper -l pl
+Ten pakiet zawiera modu≥ j±dra potrzebny do uruchamiania programÛw
+opartych na svgalib.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -247,20 +248,16 @@ Bibliotecas est·ticas para desenvolvimento com SVGAlib.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%ifnarch %{ix86}
-# lrmi is x86-only
-#%patch5 -p1  -- probably obsolete
-%endif
-#%patch6 -p1  -- still neeed? needs update if so
+%patch5 -p1
+%patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
-%patch10 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
 
 %build
+%if %{with userspace}
 %ifarch %{ix86}
 NOASM=n
 %else
@@ -297,7 +294,9 @@ rm -f src/svgalib_helper.h
 
 %{__make} -C threeDKit lib3dkit.a \
 	 CC="%{__cc} $MOPT"
+%endif
 
+%if %{with kernel}
 # UP
 %{__make} -C kernel/svgalib_helper -f Makefile.alt \
 	CC="%{kgcc}" \
@@ -313,20 +312,27 @@ rm -f kernel/svgalib_helper/*.*o
 	CC="%{kgcc}" \
 	COPT="%{rpmcflags} -D__SMP__ -DCONFIG_X86_LOCAL_APIC" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/var/lib/svgalib \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 
-%{__make} install \
+%if %{with userspace}
+%{__make} installheaders installsharedlib installconfig installstaticlib \
+	  installutils installman lib3dkit-install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install threeDKit/lib3dkit.a $RPM_BUILD_ROOT%{_libdir}
+%endif
+
+%if %{with kernel}
 install kernel/svgalib_helper-up.%{kmodext} \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}
 install kernel/svgalib_helper/svgalib_helper.%{kmodext} \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -346,6 +352,7 @@ rm -rf $RPM_BUILD_ROOT
 %postun -n kernel-smp-video-svgalib_helper
 %depmod %{_kernel_ver}smp
 
+%if %{with userspace}
 %files
 %defattr(644,root,root,755)
 %doc doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
@@ -360,14 +367,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/mode3.8*
 %endif
 
-%files -n kernel-video-svgalib_helper
-%defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}*
-
-%files -n kernel-smp-video-svgalib_helper
-%defattr(644,root,root,755)
-/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}*
-
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/*.h
@@ -377,3 +376,14 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
+%endif
+
+%if %{with kernel}
+%files -n kernel-video-svgalib_helper
+%defattr(644,root,root,755)
+/lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}*
+
+%files -n kernel-smp-video-svgalib_helper
+%defattr(644,root,root,755)
+/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}*
+%endif
