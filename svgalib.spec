@@ -9,13 +9,13 @@ Release:	5
 Copyright:	distributable
 Group:		Libraries
 Group(pl):	Biblioteki
-URL:		http://www.cs.bgu.ac.il/~zivav/svgalib
-Source:		%{name}-%{version}.tar.gz
+Source:		ftp://metalab.unc.edu/pub/Linux/libs/graphics/%{name}-%{version}.tar.gz
 Patch0:		svgalib-pld.patch
 Patch1:		svgalib-glibc.patch
 Patch2:		svgalib-buildroot.patch
 Patch3:		svgalib-secu.patch
 Patch4:		svgalib-tmp2var.patch
+URL:		http://www.cs.bgu.ac.il/~zivav/svgalib
 Buildroot:	/tmp/%{name}-%{version}-root
 
 Exclusivearch: %{ix86} alpha
