@@ -13,7 +13,7 @@ Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
 Version:	1.9.14
-%define _rel	5
+%define _rel	6
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
