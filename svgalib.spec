@@ -155,7 +155,7 @@ rm -fr $RPM_BUILD_ROOT
 - added full %attr description in %files.
 - added modification which allow build package from non-root account
   (svgalib-non-root.patch),
-- added striping shared libraries.
+- added stripping shared libraries.
 
 * Sun Aug 23 1998 Jeff Johnson <jbj@redhat.com>
 - verify dumpreg is not setuid (problem #760)
