@@ -140,7 +140,7 @@ rm -fr $RPM_BUILD_ROOT
 %changelog
 * Tue Dec  1 1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [1.3.1-19981020.1]
-- added gziping man pages,
+- added gzipping man pages,
 - added missing %attr in static %files.
 
 * Thu Sep 24  1998 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
