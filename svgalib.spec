@@ -2,7 +2,7 @@
 # conditional build
 # _without_dist_kernel		without distribution kernel
 
-%define		_rel		3
+%define		_rel		4
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -24,6 +24,8 @@ Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-smp.patch
 Patch4:		%{name}-threeDKit-make.patch
+Patch5:		%{name}-nolrmi.patch
+Patch6:		%{name}-alpha.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 ExclusiveArch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -229,6 +231,11 @@ Bibliotecas estáticas para desenvolvimento com SVGAlib.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%ifnarch %{ix86}
+# lrmi is x86-only
+%patch5 -p1
+%endif
+%patch6 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -247,7 +254,9 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 ln -sf libvgagl.so.%{version} sharedlib/libvgagl.so
 
 %{__make} CC=%{__cc} LDFLAGS="-L../sharedlib $LDFLAGS" OPTIMIZE="$MOPT" -C utils
+%ifarch %{ix86}
 %{__make} CC=%{__cc} CFLAGS="$LDFLAGS $MOPT" -C lrmi-0.6m
+%endif
 %{__make} CC="%{__cc} -L../sharedlib $LDFLAGS $MOPT" -C threeDKit
 %{__make} CC=%{__cc} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
 %{__make} CC="%{__cc} $MOPT" -C threeDKit lib3dkit.a
@@ -303,6 +312,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %{_mandir}/man[1567]/*
+%ifarch %{ix86}
+%{_mandir}/man8/mode3.8*
+%endif
 
 %files -n kernel-video-svgalib_helper
 %defattr(644,root,root,755)
