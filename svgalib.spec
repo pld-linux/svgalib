@@ -26,8 +26,6 @@ Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-smp.patch
 Patch4:		%{name}-threeDKit-make.patch
-#Patch5:		%{name}-nolrmi.patch
-#Patch6:		%{name}-alpha.patch
 Patch5:		%{name}-svgalib_helper_Makefile.patch
 Patch6:		%{name}-link.patch
 Patch7:		%{name}-module-alias.patch
