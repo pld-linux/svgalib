@@ -5,7 +5,7 @@ Summary(pl):    Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):    Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.3.1
-Release:	4
+Release:	5
 Copyright:	distributable
 Group:		Libraries
 Group(pl):	Biblioteki
@@ -19,7 +19,7 @@ Patch4:		svgalib-tmp2var.patch
 Prereq:		/sbin/ldconfig
 Buildroot:	/tmp/%{name}-%{version}-root
 
-Exclusivearch: i386 alpha
+Exclusivearch: %{ix86} alpha
 
 %description
 SVGAlib is a library which allows applications to use full screen
@@ -103,13 +103,14 @@ gzip -d doc/man?/*gz
 gzip doc/man*/*
 
 %build
-make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static shared 
+make OPTIMIZE="$RPM_OPT_FLAGS -pipe" shared 
 (cd utils; make)
+make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static 
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/{lib,etc/vga,usr/{bin,lib,include}} \
+install -d $RPM_BUILD_ROOT/{etc/vga,usr/{bin,lib,include}} \
 	$RPM_BUILD_ROOT/usr/share/man/man{1,3,5,6,7} \
 	$RPM_BUILD_ROOT/var/state/svgalib
 
@@ -124,17 +125,15 @@ install utils/{runx,savetextmode,textmode} $RPM_BUILD_ROOT/usr/bin
 
 cp -a doc/man* $RPM_BUILD_ROOT/usr/share/man
 
-install sharedlib/lib*.so.* $RPM_BUILD_ROOT/lib
+install sharedlib/lib*.so.* $RPM_BUILD_ROOT/usr/lib
 
-ln -sf libvga.so.1.3.1 $RPM_BUILD_ROOT/lib/libvga.so
-ln -sf libvga.so.1.3.1 $RPM_BUILD_ROOT/lib/libvga.so.1
-ln -sf libvgagl.so.1.3.1 $RPM_BUILD_ROOT/lib/libvgagl.so
-ln -sf libvgagl.so.1.3.1 $RPM_BUILD_ROOT/lib/libvgagl.so.1
+ln -sf libvga.so.%{version} $RPM_BUILD_ROOT/usr/lib/libvga.so
+ln -sf libvgagl.so.%{version} $RPM_BUILD_ROOT/usr/lib/libvgagl.so
 
 install include/*.h $RPM_BUILD_ROOT/usr/include
 install gl/vgagl.h $RPM_BUILD_ROOT/usr/include
 
-install staticlib/*.a $RPM_BUILD_ROOT/lib
+install staticlib/*.a $RPM_BUILD_ROOT/usr/lib
 
 install libvga.config $RPM_BUILD_ROOT/etc/vga
 install et4000.regs $RPM_BUILD_ROOT/etc/vga/libvga.et4000
@@ -147,8 +146,8 @@ gzip -9nf doc/{CHANGES*,DESIGN,READ*,SECURITY*,TODO} 0-README 0-RELEASE
 
 %preun
 if [ "$1" = "0" ]; then
-  rm -f /var/lib/svgalib/fontdata
-  rm -f /var/lib/svgalib/textregs
+  rm -f /var/state/svgalib/fontdata
+  rm -f /var/state/svgalib/textregs
 fi
 
 %clean
@@ -164,7 +163,7 @@ rm -fr $RPM_BUILD_ROOT
 %config(noreplace) %verify(not size mtime md5) /etc/vga/*
 
 %attr(755,root,root) /usr/bin/*
-%attr(755,root,root) /lib/*.so.*
+%attr(755,root,root) /usr/lib/*.so.*.*
 
 /usr/share/man/man[1567]/*
 
@@ -173,11 +172,11 @@ rm -fr $RPM_BUILD_ROOT
 
 /usr/include/*.h
 
-%attr(755,root,root) /lib/*.so
+%attr(755,root,root) /usr/lib/*.so
 /usr/share/man/man3/*
 
 %files static
-%attr(644,root,root) /lib/*.a
+%attr(644,root,root) /usr/lib/*.a
 
 %changelog
 * Wed Jan 20 1999 Wojtek ¦lusarczyk <wojtek@shadow.eu.org>
