@@ -103,7 +103,7 @@ Prereq:		/sbin/depmod
 This package contains the kernel module necessary to run svgalib-based
 programs.
 
-%description -n kernel-smp-video-svgalib_helper
+%description -n kernel-smp-video-svgalib_helper -l pl
 Ten pakiet zawiera modu³ j±dra potrzebny do uruchamiania programów
 opartych na svgalib.
 
@@ -193,9 +193,6 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 
 %{__make} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
 
-#%if %{smp}
-#MOPT="$MOPT -D__KERNEL_SMP=1"
-#%endif
 %{__make} -C kernel/svgalib_helper \
 	DEBFLAGS="$MOPT" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
@@ -203,7 +200,7 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 mv kernel/svgalib_helper/svgalib_helper.o kernel/svgalib_helper/svgalib_helper-up.o
 
 %{__make} -C kernel/svgalib_helper \
-	DEBFLAGS="$MOPT -D__KERNEL_SMP=1"
+	DEBFLAGS="$MOPT -D__SMP__"
 	INCLUDEDIR=%{_kernelsrcdir}/include
 
 %install
