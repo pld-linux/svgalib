@@ -1,4 +1,4 @@
-%define		_kernel_ver	%(grep UTS_RELEASE /usr/src/linux/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
+%define		_kernel_ver	%(grep UTS_RELEASE %{_kernelsrcdir}/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 %define		smpstr		%{?_with_smp:smp}%{!?_with_smp:up}
 %define		smp		%{?_with_smp:1}%{!?_with_smp:0}
@@ -10,7 +10,7 @@ Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.9.11
-Release:	1
+Release:	2
 License:	Distributable
 Group:		Libraries
 Group(de):	Libraries
@@ -24,11 +24,7 @@ Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-stderr.patch
 Patch4:		%{name}-kernver.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
-Prereq:		modutils
-Prereq:		/sbin/depmod
-Prereq:		/sbin/ldconfig
 Requires:	svgalib-helper = %{version}
-Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}
 %{!?no_dist_kernel:Buildrequires:	kernel-headers}
 Exclusivearch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -65,21 +61,23 @@ ekran çizim kullanmalarýný saðlayan bir kitaplýktýr. Az bellekli
 makinalar için X Windows'tan daha uygun olmasýnýn yanýsýra, pek çok
 oyun ve yardýmcý programlar çizim eriþimi için bu kitaplýðý kullanýr.
 
-%package helper-%{smpstr}
+%package helper
 Summary:	svgalib's helper kernel module
 Summary(de):	Svgalibs Helferkernmodul
 Summary(pl):	Pomocniczy modu³ j±dra svgaliba
 Group:		Base/Kernel
 Group(de):	Grundsätzlich/Kern
 Group(pl):	Podstawowe/J±dro
-Release:	%{release}@%{_kernel_ver}
-Provides:	svgalib-helper = %{version}
+Release:	%{release}@%{_kernel_ver}%{smpstr}
+Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}
+Conflicts:	kernel-%{?_with_smp:up}%{!?_with_smp:smp}
+Prereq:		/sbin/depmod
 
-%description helper-%{smpstr}
+%description helper
 This package contains the kernel module necessary to run svgalib-based
 programs.
 
-%description helper-%{smpstr} -l pl
+%description helper -l pl
 Ten pakiet zawiera modu³ j±dra potrzebny do uruchamiania programów
 opartych na svgalib.
 
@@ -164,7 +162,9 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 %if %{smp}
 MOPT="$MOPT -D__KERNEL_SMP=1"
 %endif
-%{__make} DEBFLAGS="$MOPT" -C kernel/svgalib_helper
+%{__make} -C kernel/svgalib_helper \
+	DEBFLAGS="$MOPT" \
+	INCLUDEDIR=%{_kernelsrcdir}/include
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -174,10 +174,13 @@ install -d $RPM_BUILD_ROOT/var/lib/svgalib
 
 %if %{_kernel24}
     install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/char
-    install kernel/svgalib_helper/svgalib_helper.o \
+    install -m644 kernel/svgalib_helper/svgalib_helper.o \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/char
 %else
-    %{__make} install -C kernel/svgalib_helper DESTDIR=$RPM_BUILD_ROOT
+    %{__make} install -C kernel/svgalib_helper \
+	DESTDIR=$RPM_BUILD_ROOT \
+	INCLUDEDIR=%{_kernelsrcdir}/include
+    chmod 644 $RPM_BUILD_ROOT/lib/modules/*/*/*
 %endif
 
 # threeDKit is not really example, but "library" used in source form...
@@ -191,10 +194,10 @@ gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
 
 %postun -p /sbin/ldconfig
 
-%post helper-%{smpstr}
+%post helper
 /sbin/depmod -a
 
-%postun helper-%{smpstr}
+%postun helper
 /sbin/depmod -a
 
 %clean
@@ -211,7 +214,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %{_mandir}/man[1567]/*
 
-%files helper-%{smpstr}
+%files helper
 %defattr(644,root,root,755)
 %if %{_kernel24}
 %attr(600,root,root) /lib/modules/*/kernel/drivers/char/*.o
