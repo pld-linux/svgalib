@@ -130,8 +130,8 @@ install sharedlib/lib*.so.* $RPM_BUILD_ROOT%{_libdir}
 ln -sf libvga.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libvga.so
 ln -sf libvgagl.so.%{version} $RPM_BUILD_ROOT%{_libdir}/libvgagl.so
 
-install include/*.h $RPM_BUILD_ROOT/usr/include
-install gl/vgagl.h $RPM_BUILD_ROOT/usr/include
+install include/*.h $RPM_BUILD_ROOT%{_includedir}
+install gl/vgagl.h $RPM_BUILD_ROOT%{_includedir}
 
 install staticlib/*.a $RPM_BUILD_ROOT%{_libdir}
 
@@ -167,7 +167,7 @@ rm -fr $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-/usr/include/*.h
+%{_includedir}/*.h
 %attr(755,root,root) %{_libdir}/*.so
 %{_mandir}/man3/*
 
