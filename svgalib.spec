@@ -4,25 +4,24 @@ Summary(fr):	Une librairie graphique SVGA plein ecran de bas niveau
 Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
-Version:	1.9.5
-Release:	5
+Version:	1.9.9
+Release:	1
 License:	Distributable
 Group:		Libraries
 Group(de):	Libraries
 Group(es):	Bibliotecas
 Group(fr):	Librairies
 Group(pl):	Biblioteki
-Source0:	ftp://metalab.unc.edu/pub/Linux/libs/graphics/%{name}-%{version}.tar.gz
+Source0:	http://www.cs.bgu.ac.il/~zivav/svgalib/%{name}-%{version}.tar.gz
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-stderr.patch
-Patch4:		%{name}-kernel-2.4.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 Prereq:		modutils
 Prereq:		/sbin/depmod
 Prereq:		/sbin/ldconfig
-%{!?no_dist_kernel:Buildrequires:	kernel-headers = 2.2.18}
+%{!?no_dist_kernel:Buildrequires:	kernel-headers}
 Exclusivearch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -112,12 +111,13 @@ Biblioteki statyczne [S]VGA.
 
 %prep
 %setup -q
-gzip -d doc/man?/*gz
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
+
+# remove backup of svgalib.7 - we don't want it in package
+rm -f doc/man7/svgalib.7?*
 
 %build
 %ifarch %{ix86}

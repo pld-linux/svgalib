@@ -1,7 +1,7 @@
-diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
---- svgalib-1.9.5.orig/Makefile	Thu Jul 27 18:47:39 2000
-+++ svgalib-1.9.5/Makefile	Thu Jul 27 18:53:40 2000
-@@ -134,49 +134,34 @@
+diff -Nur svgalib-1.9.9.orig/Makefile svgalib-1.9.9/Makefile
+--- svgalib-1.9.9.orig/Makefile	Sat May 26 15:14:04 2001
++++ svgalib-1.9.9/Makefile	Sat May 26 15:29:26 2001
+@@ -112,49 +112,24 @@
  .PHONY: indent-gnu configaout
  
  installheaders:
@@ -10,6 +10,7 @@ diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
 -		rm -f /usr/include/vga.h /usr/include/vgagl.h; \
 -		echo Old header files in /usr/include removed.; \
 -	fi
+-	@mkdir -p $(includedir)
 -	@cp $(srcdir)/src/vga.h $(includedir)/vga.h
 -	@chmod a+r $(includedir)/vga.h
 -	@cp $(srcdir)/gl/vgagl.h $(includedir)/vgagl.h
@@ -21,34 +22,25 @@ diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
 -	@cp $(srcdir)/src/keyboard/vgakeyboard.h $(includedir)/vgakeyboard.h
 -	@chmod a+r $(includedir)/vgakeyboard.h
 +	@echo Installing header files in $(DESTDIR)$(includedir).
-+	install -d $(DESTDIR)$(includedir)
-+	@cp $(srcdir)/src/vga.h $(DESTDIR)$(includedir)/vga.h
-+	@chmod a+r $(DESTDIR)$(includedir)/vga.h
-+	@cp $(srcdir)/gl/vgagl.h $(DESTDIR)$(includedir)/vgagl.h
-+	@chmod a+r $(DESTDIR)$(includedir)/vgagl.h
-+	@cp $(srcdir)/src/mouse/vgamouse.h $(DESTDIR)$(includedir)/vgamouse.h
-+	@chmod a+r $(DESTDIR)$(includedir)/vgamouse.h
-+	@cp $(srcdir)/src/joystick/vgajoystick.h $(DESTDIR)$(includedir)/vgajoystick.h
-+	@chmod a+r $(DESTDIR)$(includedir)/vgajoystick.h
-+	@cp $(srcdir)/src/keyboard/vgakeyboard.h $(DESTDIR)$(includedir)/vgakeyboard.h
-+	@chmod a+r $(DESTDIR)$(includedir)/vgakeyboard.h
++	@install -d $(DESTDIR)$(includedir)
++	@install $(srcdir)/src/vga.h $(DESTDIR)$(includedir)/vga.h
++	@install $(srcdir)/gl/vgagl.h $(DESTDIR)$(includedir)/vgagl.h
++	@install $(srcdir)/src/mouse/vgamouse.h $(DESTDIR)$(includedir)/vgamouse.h
++	@install $(srcdir)/src/joystick/vgajoystick.h $(DESTDIR)$(includedir)/vgajoystick.h
++	@install $(srcdir)/src/keyboard/vgakeyboard.h $(DESTDIR)$(includedir)/vgakeyboard.h
  
  installsharedlib: $(SHAREDLIBS) $(SVGALIBSHAREDSTUBS)
- ifeq (a.out, $(TARGET_FORMAT))
+-ifeq (a.out, $(TARGET_FORMAT))
 -	@echo Installing shared library stubs in $(libdir).
-+	@echo Installing shared library stubs in $(DESTDIR)$(libdir).
- 	-@for foo in $(notdir $(SVGALIBSHAREDSTUBS)); do \
+-	-@for foo in $(notdir $(SVGALIBSHAREDSTUBS)); do \
 -		$(INSTALL_DATA) sharedlib/$$foo $(libdir)/$$foo; \
 -		chmod a+r $(libdir)/$$foo; \
-+		$(INSTALL_DATA) sharedlib/$$foo $(DESTDIR)$(libdir)/$$foo; \
-+		chmod a+r $(DESTDIR)$(libdir)/$$foo; \
- 	done
- endif
+-	done
+-endif
 -	@if [ -f /usr/lib/libvga.sa ]; then \
 -		rm -f /usr/lib/libvga.sa /usr/lib/libvgagl.sa; \
 -		echo Old stubs in /usr/lib removed.; \
 -	fi
--	@rm -f $(OBSOLETESHAREDIMAGES)
 -ifndef KEEPSHAREDLIBS
 -	@echo "Removing shared library images (old & current)..."
 -	@for i in $(OBSOLETELDIRS); do \
@@ -57,8 +49,10 @@ diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
 -endif
 -	@echo Installing shared library image as \
 -		$(addprefix $(sharedlibdir)/,$(notdir $(SHAREDLIBS))).
-+	@echo Installing shared library in $(DESTDIR)$(libdir).
-+	@ mkdir -p $(DESTDIR)$(libdir)
++	@echo Installing shared library image as in $(DESTDIR)$(libdir)
++	@if [ ! -d $(DESTDIR)$(libdir) ]; then \
++		install -d $(DESTDIR)$(libdir); \
++	fi
  	@for foo in $(notdir $(SHAREDLIBS)); do \
 -		$(INSTALL_SHLIB) sharedlib/$$foo $(sharedlibdir)/$$foo; \
 -		(cd $(sharedlibdir); \
@@ -70,15 +64,7 @@ diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
  
  ifdef INSTALLAOUTDIR
  
-@@ -192,7 +177,6 @@
- 		(cd $(TOPDIR)/$(INSTALLAOUTDIR); \
- 		 ln -sf $$foo `echo $$foo | sed 's/\.so\..*/.so/'` ); \
- 	done
--	@ldconfig
- 
- else
- 
-@@ -202,83 +186,74 @@
+@@ -180,83 +158,57 @@
  endif
  
  installstaticlib: static
@@ -90,11 +76,11 @@ diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
 -	@$(INSTALL_DATA) staticlib/libvgagl.a $(libdir)/libvgagl.a
 -	@chmod a+r $(libdir)/libvgagl.a
 +	@echo Installing static libraries in $(DESTDIR)$(libdir).
-+	@install -d $(DESTDIR)$(libdir)
++	@if [ ! -f $(DESTDIR)$(libdir) ]; then \
++		install -d $(DESTDIR)$(libdir); \
++	fi
 +	@$(INSTALL_DATA) staticlib/libvga.a $(DESTDIR)$(libdir)/libvga.a
-+	@chmod a+r $(DESTDIR)$(libdir)/libvga.a
 +	@$(INSTALL_DATA) staticlib/libvgagl.a $(DESTDIR)$(libdir)/libvgagl.a
-+	@chmod a+r $(DESTDIR)$(libdir)/libvgagl.a
  
  installutils: textutils lrmi
 -	@if [ ! -d $(bindir) ]; then \
@@ -110,7 +96,7 @@ diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
 -		rm -f /usr/bin/convfont /usr/bin/setmclk; \
 +	@if [ ! -d $(DESTDIR)$(bindir) ]; then \
 +		echo No $(DESTDIR)$(bindir) directory, creating it.; \
-+		mkdir -p $(DESTDIR)$(bindir); \
++		install -d $(DESTDIR)$(bindir); \
  	fi
 -	@echo Installing textmode utilities in $(bindir):
 +	@echo Installing textmode utilities in $(DESTDIR)$(bindir):
@@ -180,24 +166,7 @@ diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
 -		cp $(confdir)/dvorak-us.keymap $(datadir)/dvorak-us.keymap; \
 +	@if [ ! -d $(DESTDIR)$(datadir) ]; then \
 +		echo Creating configuration directory $(DESTDIR)$(datadir).; \
-+		mkdir -p $(DESTDIR)$(datadir); \
-+		chmod go-w $(DESTDIR)$(datadir); \
-+	fi
-+	@if [ \( -f /usr/local/lib/libvga.config -a ! -f $(DESTDIR)$(datadir)/libvga.config \) ]; then \
-+		echo "Moving old config file /usr/local/lib/libvga.config to $(DESTDIR)$(datadir)." ; \
-+		mv -f /usr/local/lib/libvga.config $(DESTDIR)$(datadir)/libvga.config; \
-+	fi
-+	@if [ \( -f /usr/local/lib/libvga.et4000 -a ! -f $(DESTDIR)$(datadir)/libvga.et4000 \) ]; then \
-+		echo "Moving old config file /usr/local/lib/libvga.et4000 to $(DESTDIR)$(datadir)." ; \
-+		mv -f /usr/local/lib/libvga.et4000 $(DESTDIR)$(datadir)/libvga.et4000; \
-+	fi
-+	@if [ \( -f /usr/local/lib/libvga.ega -a ! -f $(DESTDIR)$(datadir)/libvga.ega \) ]; then \
-+		echo "Moving old config file /usr/local/lib/libvga.ega to $(DESTDIR)$(datadir)." ; \
-+		mv -f /usr/local/lib/libvga.ega $(DESTDIR)$(datadir)/libvga.ega; \
-+	fi
-+	@if [ \( -f /etc/mach32.eeprom -a ! -f $(DESTDIR)$(datadir)/mach32.eeprom \) ]; then \
-+		echo Consider moving your /etc/mach32.eeprom file to $(DESTDIR)$(datadir) ; \
-+		echo and changing $(DESTDIR)$(datadir)/libvga.config appropriately. ; \
++		install -d $(DESTDIR)$(datadir); \
 +	fi
 +	@if [ ! -f $(DESTDIR)$(datadir)/libvga.config ]; then \
 +		echo Installing default configuration file in $(DESTDIR)$(datadir).; \
@@ -217,7 +186,7 @@ diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
  	fi
  
  installman:
-@@ -287,8 +262,8 @@
+@@ -265,8 +214,8 @@
  installmodule:
  	(cd kernel/svgalib_helper ; $(MAKE) install )
  	 
@@ -228,89 +197,35 @@ diff -ur svgalib-1.9.5.orig/Makefile svgalib-1.9.5/Makefile
  	@echo
  	@echo
  	@echo Now run "'make demoprogs'" to make the test and demo programs in
-diff -ur svgalib-1.9.5.orig/Makefile.cfg svgalib-1.9.5/Makefile.cfg
---- svgalib-1.9.5.orig/Makefile.cfg	Thu Jul 27 18:47:39 2000
-+++ svgalib-1.9.5/Makefile.cfg	Thu Jul 27 18:48:12 2000
-@@ -25,7 +25,7 @@
- # Common prefix for installation directories.
- # NOTE: This directory must exist when you start the install.
- TOPDIR=
--prefix = $(TOPDIR)/usr/local
-+prefix = $(TOPDIR)/usr
- exec_prefix = $(prefix)
+diff -Nur svgalib-1.9.9.orig/doc/Makefile svgalib-1.9.9/doc/Makefile
+--- svgalib-1.9.9.orig/doc/Makefile	Fri Jul  7 14:43:58 2000
++++ svgalib-1.9.9/doc/Makefile	Sat May 26 15:37:49 2001
+@@ -65,26 +65,15 @@
+ 	cat $(VGAGL) | grep -v '^\.so ' | troff -man -T$@ > vgagl.$@
+ 	cat $(THREED) | grep -v '^\.so ' | troff -man -T$@ > 3d.$@
  
- # Directory where the shared stubs and static library will be installed.
-diff -ur svgalib-1.9.5.orig/doc/Makefile svgalib-1.9.5/doc/Makefile
---- svgalib-1.9.5.orig/doc/Makefile	Thu Dec  9 08:09:44 1999
-+++ svgalib-1.9.5/doc/Makefile	Thu Jul 27 18:48:12 2000
-@@ -3,22 +3,22 @@
- srcdir    = ..
- VPATH     = $(srcdir)/doc
- 
--SVGALIB1=man7/svgalib.7.gz man5/libvga.config.5.gz man7/svgalib.chips.7.gz\
--	man7/svgalib.et4000.7.gz man7/svgalib.mach32.7.gz\
--	man6/mach32info.6.gz man3/vga_* man3/keyboard_* man3/mouse_* \
--	man1/convfont.1.gz man1/dumpreg.1.gz man1/fix132x43.1.gz man1/restorefont.1.gz \
--	man1/restorepalette.1.gz man1/restoretextmode.1.gz man1/runx.1.gz man1/savetextmode.1.gz \
--	man1/setmclk.1.gz man1/textmode.1.gz\
--	man1/svgakeymap.1.gz \
--	man6/eventtest.6.gz man6/forktest.6.gz man6/fun.6.gz man6/keytest.6.gz\
--	man6/mousetest.6.gz man6/speedtest.6.gz man6/spin.6.gz\
--	man6/testaccel.6.gz man6/threed.6.gz man6/vgatest.6.gz man6/accel.6.gz\
--	man6/bg_test.6.gz man6/scrolltest.6.gz man6/testlinear.6.gz\
--	man8/mode3.8.gz man6/lineart.6.gz
-+SVGALIB1=man7/svgalib.7 man5/libvga.config.5 man7/svgalib.chips.7\
-+	man7/svgalib.et4000.7 man7/svgalib.mach32.7\
-+	man6/mach32info.6 man3/vga_* man3/keyboard_* man3/mouse_* \
-+	man1/convfont.1 man1/dumpreg.1 man1/fix132x43.1 man1/restorefont.1 \
-+	man1/restorepalette.1 man1/restoretextmode.1 man1/runx.1 man1/savetextmode.1 \
-+	man1/setmclk.1 man1/textmode.1\
-+	man1/svgakeymap.1 \
-+	man6/eventtest.6 man6/forktest.6 man6/fun.6 man6/keytest.6\
-+	man6/mousetest.6 man6/speedtest.6 man6/spin.6\
-+	man6/testaccel.6 man6/threed.6 man6/vgatest.6 man6/accel.6\
-+	man6/bg_test.6 man6/scrolltest.6 man6/testlinear.6\
-+	man8/mode3.8 man6/lineart.6
- 
--VGAGL1=man7/vgagl.7.gz $(shell ls man3/gl_* | grep -v tri ) man6/testgl.6.gz
-+VGAGL1=man7/vgagl.7 $(shell ls man3/gl_* | grep -v tri ) man6/testgl.6
- 
--THREED1=man7/threedkit.7.gz man3/gl_*tri* man6/plane.6.gz man6/wrapdemo.6.gz
-+THREED1=man7/threedkit.7 man3/gl_*tri* man6/plane.6 man6/wrapdemo.6
- 
- SVGALIB=$(subst man,$(srcdir)/doc/man,$(SVGALIB1))
- VGAGL=$(subst man,$(srcdir)/doc/man,$(VGAGL1))
-@@ -74,32 +74,14 @@
- 	zcat $(THREED) | grep -v '^\.so ' | troff -man -T$@ > 3d.$@
- 
- install:
+-install: gzip
 -	mkdir -p $(mandir)/man1 $(mandir)/man3 $(mandir)/man5\
 -		 $(mandir)/man6 $(mandir)/man7 $(mandir)/man8
--ifeq ($(MANFORMAT),compressed)
 -	$(INSTALL_DATA) $(srcdir)/doc/man1/* $(mandir)/man1
 -	$(INSTALL_DATA) $(srcdir)/doc/man3/* $(mandir)/man3
 -	$(INSTALL_DATA) $(srcdir)/doc/man5/* $(mandir)/man5
 -	$(INSTALL_DATA) $(srcdir)/doc/man6/* $(mandir)/man6
 -	$(INSTALL_DATA) $(srcdir)/doc/man7/* $(mandir)/man7
 -	$(INSTALL_DATA) $(srcdir)/doc/man8/* $(mandir)/man8
--else
--	@cd $(srcdir)/doc; \
--        for dir in man?; do\
--		echo Installing manpages in $$dir;\
+-	for dir in man?; do\
+-		echo gunzipping manpages in $$dir;\
 -		for file in $$dir/*; do \
--			bfile=`echo $$file | sed 's/.gz$$//'`; \
--			gunzip < $$file > $(mandir)/$$bfile; \
--			chmod 644 $(mandir)/$$bfile; \
--			chown root.bin $(mandir)/$$bfile; \
+-			gunzip $$file; \
 -		done; \
 -	done
--endif
 -ifdef MAKEWHATIS
 -	@echo "Rebuilding the whatis database (this is slow!)"
 -	@echo "You can comment this out in Makefile.cfg!"
 -	$(MAKEWHATIS)
 -endif
-+	mkdir -p $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man3 $(DESTDIR)$(mandir)/man5\
++install:
++	install -d $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man3 $(DESTDIR)$(mandir)/man5\
 +		 $(DESTDIR)$(mandir)/man6 $(DESTDIR)$(mandir)/man7 $(DESTDIR)$(mandir)/man8
 +	$(INSTALL_DATA) $(srcdir)/doc/man1/* $(DESTDIR)$(mandir)/man1
 +	$(INSTALL_DATA) $(srcdir)/doc/man3/* $(DESTDIR)$(mandir)/man3
@@ -321,23 +236,27 @@ diff -ur svgalib-1.9.5.orig/doc/Makefile svgalib-1.9.5/doc/Makefile
  
  uninstall:
  	@echo Removing all svgalib man pages.
-diff -ur svgalib-1.9.5.orig/kernel/svgalib_helper/Makefile svgalib-1.9.5/kernel/svgalib_helper/Makefile
---- svgalib-1.9.5.orig/kernel/svgalib_helper/Makefile	Tue May 30 07:05:29 2000
-+++ svgalib-1.9.5/kernel/svgalib_helper/Makefile	Thu Jul 27 18:54:21 2000
-@@ -30,8 +30,8 @@
- install: device modules_install
+diff -Nur svgalib-1.9.9.orig/kernel/svgalib_helper/Makefile svgalib-1.9.9/kernel/svgalib_helper/Makefile
+--- svgalib-1.9.9.orig/kernel/svgalib_helper/Makefile	Sat May  5 10:05:00 2001
++++ svgalib-1.9.9/kernel/svgalib_helper/Makefile	Sat May 26 15:48:37 2001
+@@ -30,11 +30,11 @@
+ $(TARGET).o: $(SRC:.c=.o)
+ 	$(LD) -r $^ -o $@
+ 
+-install: device modules_install
++install: modules_install
  
  modules_install: $(TARGET).o
--	mkdir -p /lib/modules/$(VER)/misc /lib/modules/misc
+-	mkdir -p /lib/modules/$(VER)/misc 
 -	install -c $(TARGET).o /lib/modules/$(VER)/misc
-+	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc $(DESTDIR)/lib/modules/misc
++	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc 
 +	install -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/misc
  
  device:
  	rm -f /dev/svgalib_helper* /dev/svga /dev/svga?
-diff -ur svgalib-1.9.5.orig/lrmi-0.6m/Makefile svgalib-1.9.5/lrmi-0.6m/Makefile
---- svgalib-1.9.5.orig/lrmi-0.6m/Makefile	Sun Apr 16 16:05:09 2000
-+++ svgalib-1.9.5/lrmi-0.6m/Makefile	Thu Jul 27 18:48:12 2000
+diff -Nur svgalib-1.9.9.orig/lrmi-0.6m/Makefile svgalib-1.9.9/lrmi-0.6m/Makefile
+--- svgalib-1.9.9.orig/lrmi-0.6m/Makefile	Sun Apr 16 16:05:09 2000
++++ svgalib-1.9.9/lrmi-0.6m/Makefile	Sat May 26 15:47:56 2001
 @@ -25,8 +25,8 @@
  	$(CC) $(CFLAGS) -o $@ $^
  
@@ -349,25 +268,3 @@ diff -ur svgalib-1.9.5.orig/lrmi-0.6m/Makefile svgalib-1.9.5/lrmi-0.6m/Makefile
  
  .PHONY: clean
  clean:
---- svgalib-1.9.5/kernel/svgalib_helper/Makefile~	Thu Jul 27 19:01:15 2000
-+++ svgalib-1.9.5/kernel/svgalib_helper/Makefile	Thu Jul 27 19:03:41 2000
-@@ -27,7 +27,7 @@
- $(TARGET).o: $(SRC:.c=.o)
- 	$(LD) -r $^ -o $@
- 
--install: device modules_install
-+install: modules_install
- 
- modules_install: $(TARGET).o
- 	mkdir -p $(DESTDIR)/lib/modules/$(VER)/misc $(DESTDIR)/lib/modules/misc
---- svgalib-1.9.5/kernel/svgalib_helper/Makefile~	Thu Jul 27 19:04:08 2000
-+++ svgalib-1.9.5/kernel/svgalib_helper/Makefile	Thu Jul 27 19:09:50 2000
-@@ -3,7 +3,7 @@
- SVGALIB_HELPER_MAJOR = 209
- 
- # Change it here or specify it on the "make" commandline
--INCLUDEDIR = /usr/src/linux-2.3.99/include
-+INCLUDEDIR = /usr/src/linux/include
- 
- ifeq ($(DEBUG),y)
-   DEBFLAGS = -O -g -DSCULL_DEBUG # "-O" is needed to expand inlines

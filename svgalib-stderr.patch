@@ -1,6 +1,6 @@
-diff -ur svgalib-1.9.5.orig/src/ali.c svgalib-1.9.5/src/ali.c
---- svgalib-1.9.5.orig/src/ali.c	Tue Jul 27 18:36:18 1999
-+++ svgalib-1.9.5/src/ali.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/ali.c svgalib-1.9.9/src/ali.c
+--- svgalib-1.9.9.orig/src/ali.c	Tue Jul 27 18:36:18 1999
++++ svgalib-1.9.9/src/ali.c	Sat May 26 15:53:11 2001
 @@ -381,7 +381,7 @@
  	ali_memory = ali_memorydetect();
      }
@@ -19,9 +19,9 @@ diff -ur svgalib-1.9.5.orig/src/ali.c svgalib-1.9.5/src/ali.c
  	return 2048;
      }
  }
-diff -ur svgalib-1.9.5.orig/src/apm.c svgalib-1.9.5/src/apm.c
---- svgalib-1.9.5.orig/src/apm.c	Wed Feb 23 15:18:40 2000
-+++ svgalib-1.9.5/src/apm.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/apm.c svgalib-1.9.9/src/apm.c
+--- svgalib-1.9.9.orig/src/apm.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/apm.c	Sat May 26 15:53:58 2001
 @@ -590,7 +590,7 @@
  */
      apm_memory=__svgalib_inseq(0x20)*64-34; /* maybe will support accel some day */
@@ -46,9 +46,9 @@ diff -ur svgalib-1.9.5.orig/src/apm.c svgalib-1.9.5/src/apm.c
    return 0;
  }
  
-diff -ur svgalib-1.9.5.orig/src/ark.c svgalib-1.9.5/src/ark.c
---- svgalib-1.9.5.orig/src/ark.c	Tue Jul 27 18:36:18 1999
-+++ svgalib-1.9.5/src/ark.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/ark.c svgalib-1.9.9/src/ark.c
+--- svgalib-1.9.9.orig/src/ark.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/ark.c	Sat May 26 15:55:50 2001
 @@ -700,7 +700,7 @@
  	else if ((id == 0x13) || (id == 0x14) || (id == 0x20))
  	    ark_chip = ARK2000PV;
@@ -87,9 +87,9 @@ diff -ur svgalib-1.9.5.orig/src/ark.c svgalib-1.9.5/src/ark.c
      }
      __svgalib_driverspecs = &__svgalib_ark_driverspecs;
      __svgalib_mmio_base = 0xb80000;
-diff -ur svgalib-1.9.5.orig/src/ati.c svgalib-1.9.5/src/ati.c
---- svgalib-1.9.5.orig/src/ati.c	Tue Jul 27 18:36:18 1999
-+++ svgalib-1.9.5/src/ati.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/ati.c svgalib-1.9.9/src/ati.c
+--- svgalib-1.9.9.orig/src/ati.c	Tue Jul 27 18:36:18 1999
++++ svgalib-1.9.9/src/ati.c	Sat May 26 15:56:45 2001
 @@ -73,7 +73,7 @@
  
      /* Have to give ourselves some more permissions -- last port currently used is 0x3df */
@@ -108,10 +108,10 @@ diff -ur svgalib-1.9.5.orig/src/ati.c svgalib-1.9.5/src/ati.c
  
      __svgalib_banked_mem_base=0xa0000;
      __svgalib_banked_mem_size=0x10000;
-diff -ur svgalib-1.9.5.orig/src/banshee.c svgalib-1.9.5/src/banshee.c
---- svgalib-1.9.5.orig/src/banshee.c	Sun Apr 16 16:53:16 2000
-+++ svgalib-1.9.5/src/banshee.c	Thu Jul 27 18:55:58 2000
-@@ -511,7 +511,7 @@
+diff -Nur svgalib-1.9.9.orig/src/banshee.c svgalib-1.9.9/src/banshee.c
+--- svgalib-1.9.9.orig/src/banshee.c	Sat Mar 31 09:01:13 2001
++++ svgalib-1.9.9/src/banshee.c	Sat May 26 15:57:37 2001
+@@ -510,7 +510,7 @@
      banshee_unlock();
      
      if (__svgalib_driver_report) {
@@ -120,25 +120,9 @@ diff -ur svgalib-1.9.5.orig/src/banshee.c svgalib-1.9.5/src/banshee.c
      }
      
      cardspecs = malloc(sizeof(CardSpecs));
-@@ -568,13 +568,13 @@
-           continue;
- #endif
- #if 0
--printf("clock=%i n=%i m=%i l=%i",clock,n,m,l);
-+fprintf(stderr,"clock=%i n=%i m=%i l=%i",clock,n,m,l);
- #endif
-         return (n << 8) | (m<<2) | l;
-       }
-     }
-   }
--printf("BANSHEE driver: Can't do clock=%i\n",clock);
-+fprintf(stderr,"BANSHEE driver: Can't do clock=%i\n",clock);
-   return 0;
- }
- 
-diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
---- svgalib-1.9.5.orig/src/chips.c	Sun Sep 19 22:02:10 1999
-+++ svgalib-1.9.5/src/chips.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/chips.c svgalib-1.9.9/src/chips.c
+--- svgalib-1.9.9.orig/src/chips.c	Mon Apr  2 17:07:48 2001
++++ svgalib-1.9.9/src/chips.c	Sat May 26 16:04:17 2001
 @@ -403,7 +403,7 @@
  static void CHIPS_getmodeinfo(int mode, vga_modeinfo * modeinfo)
  {
@@ -282,7 +266,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
 +    fprintf(stderr,"CHIPS: CHIPS_modeavailable(%d)\n", mode);
  #endif
  
-     if (mode < G640x480x256 || mode == G720x348x2)
+     if (IS_IN_STANDARD_VGA_DRIVER(mode))
 @@ -1081,7 +1081,7 @@
      int temp;
  
@@ -554,7 +538,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  
  	outw(vgaIOBase + 4, 0x13 | (((width >> 3) << 8) & 0xFF00));
 @@ -2278,7 +2278,7 @@
- static char *CHIPS_process_option(int option, int mode)
+ static char *CHIPS_process_option(int option, int mode, char** dummy)
  {
  #ifdef DEBUG
 -    printf("CHIPS: CHIPS_process_option(%d, %d)\n",option, mode);
@@ -571,7 +555,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
  	if (force) {
-@@ -2483,7 +2483,7 @@
+@@ -2484,7 +2484,7 @@
              if (getenv("IOPERM") == NULL) {
                  _ioperm=1;
                  if (iopl(3) < 0) {
@@ -580,7 +564,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
                      exit(1);
                  }
              }
-@@ -2625,7 +2625,7 @@
+@@ -2626,7 +2626,7 @@
  		__svgalib_ctSize.VTotal = ((tmp1 & 0x01) << 8)
  		    + ((tmp1 & 0x20) << 4) + temp + 2;
  #ifdef DEBUG
@@ -589,7 +573,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  		__svgalib_ctSize.VDisplay,__svgalib_ctSize.HDisplay);
  #endif
  	    }
-@@ -2650,7 +2650,7 @@
+@@ -2651,7 +2651,7 @@
  	
  	if (__svgalib_driver_report)
  	{
@@ -598,7 +582,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  			   video_memory, CHIPSchipset);
  	}
  
-@@ -2930,7 +2930,7 @@
+@@ -2931,7 +2931,7 @@
      int srcaddr, destaddr, op;
  
  #ifdef DEBUG
@@ -607,7 +591,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      srcaddr = BLTBYTEADDRESS(x1, y1);
-@@ -2962,7 +2962,7 @@
+@@ -2963,7 +2963,7 @@
      int srcaddr, destaddr, op;
  
  #ifdef DEBUG
@@ -616,7 +600,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      srcaddr = BLTBYTEADDRESS(x1, y1);
-@@ -2995,7 +2995,7 @@
+@@ -2996,7 +2996,7 @@
      int srcaddr, destaddr, op;
  
  #ifdef DEBUG
@@ -625,7 +609,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      srcaddr = BLTBYTEADDRESS(x1, y1);
-@@ -3029,7 +3029,7 @@
+@@ -3030,7 +3030,7 @@
      int destaddr;
  
  #ifdef DEBUG
@@ -634,7 +618,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      destaddr = BLTBYTEADDRESS(x, y);
-@@ -3051,7 +3051,7 @@
+@@ -3052,7 +3052,7 @@
      int destaddr;
  
  #ifdef DEBUG
@@ -643,7 +627,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      destaddr = BLTBYTEADDRESS(x, y);
-@@ -3074,7 +3074,7 @@
+@@ -3075,7 +3075,7 @@
      int destaddr;
  
  #ifdef DEBUG
@@ -652,7 +636,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      destaddr = BLTBYTEADDRESS(x, y);
-@@ -3100,7 +3100,7 @@
+@@ -3101,7 +3101,7 @@
      Bool fastfill;
  
  #ifdef DEBUG
@@ -661,7 +645,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      pixel3 = ctFGCOLOR & 0xFF;
-@@ -3182,7 +3182,7 @@
+@@ -3183,7 +3183,7 @@
      Bool fastfill;
  
  #ifdef DEBUG
@@ -670,7 +654,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      pixel3 = ctFGCOLOR & 0xFF;
-@@ -3264,7 +3264,7 @@
+@@ -3265,7 +3265,7 @@
      int destaddr, line;
  
  #ifdef DEBUG
@@ -679,7 +663,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      destaddr = BLTBYTEADDRESS(x, y);
-@@ -3303,7 +3303,7 @@
+@@ -3304,7 +3304,7 @@
      int destaddr, line;
  
  #ifdef DEBUG
@@ -688,7 +672,7 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      destaddr = BLTBYTEADDRESS(x, y);
-@@ -3348,7 +3348,7 @@
+@@ -3349,7 +3349,7 @@
      int destaddr, line;
  
  #ifdef DEBUG
@@ -697,9 +681,9 @@ diff -ur svgalib-1.9.5.orig/src/chips.c svgalib-1.9.5/src/chips.c
  #endif
  
      destaddr = BLTBYTEADDRESS(x, y);
-diff -ur svgalib-1.9.5.orig/src/cirrus.c svgalib-1.9.5/src/cirrus.c
---- svgalib-1.9.5.orig/src/cirrus.c	Sun Sep 19 22:02:02 1999
-+++ svgalib-1.9.5/src/cirrus.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/cirrus.c svgalib-1.9.9/src/cirrus.c
+--- svgalib-1.9.9.orig/src/cirrus.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/cirrus.c	Sat May 26 16:04:58 2001
 @@ -233,7 +233,7 @@
  /*      int i; */
  
@@ -718,7 +702,7 @@ diff -ur svgalib-1.9.5.orig/src/cirrus.c svgalib-1.9.5/src/cirrus.c
     #endif
   */
      cirrus_unlock();		/* May be locked again by other programs (eg. X) */
-@@ -987,7 +987,7 @@
+@@ -985,7 +985,7 @@
  	    cirrus_chiptype = CLGD7548;
  	    break;
  	default:
@@ -727,7 +711,7 @@ diff -ur svgalib-1.9.5.orig/src/cirrus.c svgalib-1.9.5/src/cirrus.c
  		   cirrus_chiptype);
  	    return -1;
  	}
-@@ -1031,7 +1031,7 @@
+@@ -1029,7 +1029,7 @@
  	}
      }
      if (__svgalib_driver_report) {
@@ -736,10 +720,10 @@ diff -ur svgalib-1.9.5.orig/src/cirrus.c svgalib-1.9.5/src/cirrus.c
  	       cirrus_chipname[cirrus_chiptype], cirrus_memory);
      }
      if (CHIP_HAS_MCLK_REGISTER())
-diff -ur svgalib-1.9.5.orig/src/clockchip/icd2061a.c svgalib-1.9.5/src/clockchip/icd2061a.c
---- svgalib-1.9.5.orig/src/clockchip/icd2061a.c	Sun Aug 16 15:56:56 1998
-+++ svgalib-1.9.5/src/clockchip/icd2061a.c	Thu Jul 27 18:55:58 2000
-@@ -267,7 +267,7 @@
+diff -Nur svgalib-1.9.9.orig/src/clockchip/icd2061a.c svgalib-1.9.9/src/clockchip/icd2061a.c
+--- svgalib-1.9.9.orig/src/clockchip/icd2061a.c	Tue Jun 13 10:05:36 2000
++++ svgalib-1.9.9/src/clockchip/icd2061a.c	Sat May 26 16:05:37 2001
+@@ -255,7 +255,7 @@
  {
      if (DAC && !__svgalib_I2061A_clockchip_methods.DAC_initializeState) {
  	if (__svgalib_driver_report)
@@ -748,9 +732,9 @@ diff -ur svgalib-1.9.5.orig/src/clockchip/icd2061a.c svgalib-1.9.5/src/clockchip
  	__svgalib_I2061A_clockchip_methods.DAC_initializeState = DAC->initializeState;
  	__svgalib_I2061A_clockchip_methods.DAC_saveState = DAC->saveState;
  	__svgalib_I2061A_clockchip_methods.DAC_restoreState = DAC->restoreState;
-diff -ur svgalib-1.9.5.orig/src/egadrv.c svgalib-1.9.5/src/egadrv.c
---- svgalib-1.9.5.orig/src/egadrv.c	Tue Jul 27 18:36:19 1999
-+++ svgalib-1.9.5/src/egadrv.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/egadrv.c svgalib-1.9.9/src/egadrv.c
+--- svgalib-1.9.9.orig/src/egadrv.c	Tue Jul 27 18:36:19 1999
++++ svgalib-1.9.9/src/egadrv.c	Sat May 26 16:05:59 2001
 @@ -123,7 +123,7 @@
      else
  	r = LOOKUPMODE(ega_modes, lastmode);
@@ -769,9 +753,9 @@ diff -ur svgalib-1.9.5.orig/src/egadrv.c svgalib-1.9.5/src/egadrv.c
  
      /* Read additional modes from file if available */
      if (ega_modes == NULL) {
-diff -ur svgalib-1.9.5.orig/src/et3000.c svgalib-1.9.5/src/et3000.c
---- svgalib-1.9.5.orig/src/et3000.c	Tue Jul 27 18:36:19 1999
-+++ svgalib-1.9.5/src/et3000.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/et3000.c svgalib-1.9.9/src/et3000.c
+--- svgalib-1.9.9.orig/src/et3000.c	Tue Jul 27 18:36:19 1999
++++ svgalib-1.9.9/src/et3000.c	Sat May 26 16:06:44 2001
 @@ -361,7 +361,7 @@
      }
  
@@ -781,9 +765,9 @@ diff -ur svgalib-1.9.5.orig/src/et3000.c svgalib-1.9.5/src/et3000.c
      __svgalib_driverspecs = &__svgalib_et3000_driverspecs;
  
      __svgalib_banked_mem_base=0xa0000;
-diff -ur svgalib-1.9.5.orig/src/et4000.c svgalib-1.9.5/src/et4000.c
---- svgalib-1.9.5.orig/src/et4000.c	Tue Jan  4 18:14:04 2000
-+++ svgalib-1.9.5/src/et4000.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/et4000.c svgalib-1.9.9/src/et4000.c
+--- svgalib-1.9.9.orig/src/et4000.c	Mon Jul 24 09:16:38 2000
++++ svgalib-1.9.9/src/et4000.c	Sat May 26 16:07:26 2001
 @@ -1122,15 +1122,15 @@
  	    break;
  	}
@@ -804,10 +788,10 @@ diff -ur svgalib-1.9.5.orig/src/et4000.c svgalib-1.9.5/src/et4000.c
      }
      __svgalib_driverspecs = &__svgalib_et4000_driverspecs;
  
-diff -ur svgalib-1.9.5.orig/src/et6000.c svgalib-1.9.5/src/et6000.c
---- svgalib-1.9.5.orig/src/et6000.c	Sun Sep 19 22:01:49 1999
-+++ svgalib-1.9.5/src/et6000.c	Thu Jul 27 18:55:58 2000
-@@ -379,7 +379,7 @@
+diff -Nur svgalib-1.9.9.orig/src/et6000.c svgalib-1.9.9/src/et6000.c
+--- svgalib-1.9.9.orig/src/et6000.c	Thu Feb 22 22:58:40 2001
++++ svgalib-1.9.9/src/et6000.c	Sat May 26 16:08:36 2001
+@@ -398,7 +398,7 @@
    if(x3_8)
      outb(x3_8,0xa0);
      else
@@ -816,7 +800,7 @@ diff -ur svgalib-1.9.5.orig/src/et6000.c svgalib-1.9.5/src/et6000.c
  }
  
  static void et6000_lock(void)
-@@ -393,7 +393,7 @@
+@@ -411,7 +411,7 @@
      outb(x3_8,0);          /* I think it is because we lose root  */
    }                        /* privalege after initialize and can  */
    else                     /* no longer unlock registers.         */
@@ -825,7 +809,7 @@ diff -ur svgalib-1.9.5.orig/src/et6000.c svgalib-1.9.5/src/et6000.c
  }
  
  static int  et6000_test(void)
-@@ -437,7 +437,7 @@
+@@ -455,7 +455,7 @@
    sprintf(dboutfile,"D%ld.txt",time(NULL));
    outf = fopen(dboutfile,"w");
    if(!outf){
@@ -834,25 +818,16 @@ diff -ur svgalib-1.9.5.orig/src/et6000.c svgalib-1.9.5/src/et6000.c
      exit(1);
    }
    else
-@@ -464,7 +464,7 @@
- 
-     if(iopl(3) == -1)
-       {
--          printf("No permission to use PCI ports.\n");
-+          fprintf(stderr,"No permission to use PCI ports.\n");
-           perror("PCI ports");
-       }
-     et6000_linear_base = 0;
-@@ -542,7 +542,7 @@
+@@ -555,7 +555,7 @@
+     outb(base1 | 0x69,0x24);
      outb(base1 | 0x69,0x21);
- 
      if(__svgalib_driver_report)
 -      printf("Using Tseng ET6000 driver (%d MBytes %sDRAM)\n",
 +      fprintf(stderr,"Using Tseng ET6000 driver (%d MBytes %sDRAM)\n",
  		       et6000_memory,mem_type ? "M" : "");
-     __svgalib_driverspecs = &__svgalib_et6000_driverspecs;
-     cardspecs = malloc(sizeof(CardSpecs));
-@@ -566,7 +566,7 @@
+ #ifdef DB6K
+     else
+@@ -584,7 +584,7 @@
        fdm = fopen("regset.txt","w");
        if(!fdm)
  	{
@@ -861,7 +836,25 @@ diff -ur svgalib-1.9.5.orig/src/et6000.c svgalib-1.9.5/src/et6000.c
  	  exit(1);
  	}
        fprintf(fdm,"CardSpecs\n");
-@@ -967,12 +967,12 @@
+@@ -959,7 +959,7 @@
+     case CURSOR_SHOW:
+       if(active_cursor == -1)
+ 	{
+-	  printf("No active cursor\n");
++	  fprintf(stderr,"No active cursor\n");
+ 	  return(-1);
+ 	}
+       outb(base1 | 0x46,inb(base1 | 0x46) | 0x01);
+@@ -1149,7 +1149,7 @@
+ 	}
+       else 
+ 	{
+-	  printf("Cursor %d's immage has not been loaded when selected!\n",
++	  fprintf(stderr,"Cursor %d's immage has not been loaded when selected!\n",
+ 		 p1);
+ 	 return(-1);
+ 	}
+@@ -1217,12 +1217,12 @@
          if (!WITHIN(fvco, fmin, fmax))
            continue;
  #if 0
@@ -876,9 +869,42 @@ diff -ur svgalib-1.9.5.orig/src/et6000.c svgalib-1.9.5/src/et6000.c
 +  fprintf(stderr,"ET6000: Illegal clock\n");
    return 0;
  }
-diff -ur svgalib-1.9.5.orig/src/gvga6400.c svgalib-1.9.5/src/gvga6400.c
---- svgalib-1.9.5.orig/src/gvga6400.c	Tue Jul 27 18:36:19 1999
-+++ svgalib-1.9.5/src/gvga6400.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/fbdev.c svgalib-1.9.9/src/fbdev.c
+--- svgalib-1.9.9.orig/src/fbdev.c	Thu May 24 10:22:51 2001
++++ svgalib-1.9.9/src/fbdev.c	Sat May 26 16:08:58 2001
+@@ -117,7 +117,7 @@
+ 
+         dacmode = 6;
+         
+-        printf("Using fbdev, %iKB at %08x\n",fbdev_memory/1024, info.smem_start);
++        fprintf(stderr,"Using fbdev, %iKB at %08x\n",fbdev_memory/1024, info.smem_start);
+ 
+ 	return 0;
+ }
+diff -Nur svgalib-1.9.9.orig/src/g400.c svgalib-1.9.9/src/g400.c
+--- svgalib-1.9.9.orig/src/g400.c	Mon Mar 26 11:32:23 2001
++++ svgalib-1.9.9/src/g400.c	Sat May 26 16:09:17 2001
+@@ -763,7 +763,7 @@
+     found=__svgalib_pci_find_vendor_vga(VENDOR_ID,buf,0);
+     
+     if(found) {
+-        printf("Error: Must use Matrox driver, but no card found\n");
++        fprintf(stderr,"Error: Must use Matrox driver, but no card found\n");
+         exit(1);
+     }
+ 
+@@ -790,7 +790,7 @@
+     HasSDRAM=(buf[0x10]&(1<<14))?0:1;
+     
+     if (__svgalib_driver_report) {
+-	printf("Using Matrox %s driver, %iKB S%cRAM.\n",ids[id],
++	fprintf(stderr,"Using Matrox %s driver, %iKB S%cRAM.\n",ids[id],
+            	g400_memory, HasSDRAM?'D':'G');
+     };
+ 
+diff -Nur svgalib-1.9.9.orig/src/gvga6400.c svgalib-1.9.9/src/gvga6400.c
+--- svgalib-1.9.9.orig/src/gvga6400.c	Tue Jul 27 18:36:19 1999
++++ svgalib-1.9.9/src/gvga6400.c	Sat May 26 16:09:26 2001
 @@ -283,7 +283,7 @@
  static int gvga6400_init(int force, int par1, int par2)
  {
@@ -888,10 +914,10 @@ diff -ur svgalib-1.9.5.orig/src/gvga6400.c svgalib-1.9.5/src/gvga6400.c
      __svgalib_driverspecs = &__svgalib_gvga6400_driverspecs;
      __svgalib_banked_mem_base=0xa0000;
      __svgalib_banked_mem_size=0x10000;
-diff -ur svgalib-1.9.5.orig/src/i740.c svgalib-1.9.5/src/i740.c
---- svgalib-1.9.5.orig/src/i740.c	Sun Apr 16 16:46:40 2000
-+++ svgalib-1.9.5/src/i740.c	Thu Jul 27 18:55:58 2000
-@@ -454,7 +454,7 @@
+diff -Nur svgalib-1.9.9.orig/src/i740.c svgalib-1.9.9/src/i740.c
+--- svgalib-1.9.9.orig/src/i740.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/i740.c	Sat May 26 16:10:03 2001
+@@ -451,7 +451,7 @@
      *DIVSEL= ((p_best << 4) | (d_best ? 4 : 0) | REF_DIV_1);
  
  #if 0
@@ -900,7 +926,7 @@ diff -ur svgalib-1.9.5.orig/src/i740.c svgalib-1.9.5/src/i740.c
  	   "[ %02X %02X %02X ] "
  	   "[ %d %d %d %d ]\n",
  	   CALC_VCLK(m_best,n_best,p_best,d_best),
-@@ -817,7 +817,7 @@
+@@ -814,7 +814,7 @@
      I740HasSGRAM = !((temp & DRAM_RAS_TIMING) || (temp & DRAM_RAS_PRECHARGE));
  
      if (__svgalib_driver_report) {
@@ -909,9 +935,9 @@ diff -ur svgalib-1.9.5.orig/src/i740.c svgalib-1.9.5/src/i740.c
      };
  
      cardspecs = malloc(sizeof(CardSpecs));
-diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/joystick.c
---- svgalib-1.9.5.orig/src/joystick/joystick.c	Tue Sep 28 10:58:01 1999
-+++ svgalib-1.9.5/src/joystick/joystick.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/joystick/joystick.c svgalib-1.9.9/src/joystick/joystick.c
+--- svgalib-1.9.9.orig/src/joystick/joystick.c	Mon Jul 24 09:16:38 2000
++++ svgalib-1.9.9/src/joystick/joystick.c	Sat May 26 17:27:55 2001
 @@ -134,7 +134,7 @@
      unsigned long tmpl;
  
@@ -926,7 +952,7 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
      } else if (joydesc[joydev].fd < 0) {
  #ifdef DEBUG
 -    puts("trying to reopen");
-+    fprintf(stderr,"trying to reopen");
++    fprintf("trying to reopen\n");
  #endif
  	/* (re)open joystick device */
     	if ((joydesc[joydev].fd = open(__joystick_devicenames[joydev] ?
@@ -976,7 +1002,7 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  	       joydev,	js_data.x, js_data.y);
     joydesc[joydev].joydata->p.prot0.xdif = js_data.x;
     joydesc[joydev].joydata->p.prot0.ydif = js_data.y;
-@@ -335,7 +335,7 @@
+@@ -338,7 +338,7 @@
     if (-1 == ioctl(joydesc[joydev].fd, JSIOCGCORR, &corr)) 
       {
  	if (__svgalib_driver_report)
@@ -985,7 +1011,7 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  	return -1;
       }
  
-@@ -354,12 +354,12 @@
+@@ -357,12 +357,12 @@
     
     
     if (__svgalib_driver_report)
@@ -1000,7 +1026,7 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  	return -1;
       }
     
-@@ -431,25 +431,25 @@
+@@ -434,25 +434,25 @@
  
     if (__svgalib_driver_report)
       {
@@ -1014,14 +1040,15 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  	     for(j = 0; j < corr_coef_num[(int)corr[i].type]; j++) 
  	       {
 -		  printf(" %d", corr[i].coef[j]); 
+-		  if (j < corr_coef_num[(int)corr[i].type] - 1) putchar(',');
 +		  fprintf(stderr," %d", corr[i].coef[j]); 
- 		  if (j < corr_coef_num[(int)corr[i].type] - 1) putchar(',');
++		  if (j < corr_coef_num[(int)corr[i].type] - 1) putc(',',stderr);
  	       }
 -	     puts("");
-+	     fprintf(stderr,"");
++	     fprintf(stderr,"\n");
  	  }
 -	puts("");
-+	fprintf(stderr,"");
++	fprintf(stderr,"\n");
       }
     
     if (-1 == ioctl(joydesc[joydev].fd, JSIOCSCORR, &corr)) 
@@ -1032,7 +1059,7 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  	return -1;
       }
     
-@@ -478,14 +478,14 @@
+@@ -482,7 +482,7 @@
     for (i = 0; i < NUM_JOYSTICKS; i++)
  	if (joydesc[i].joydata && joydesc[i].joydata->flip_vc)
  	    if (joydesc[i].joydata->flip_vc(i, acquire)) {
@@ -1041,15 +1068,7 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  		exit(1);
  	    }
  }
- 
- static void joy_stdout(const char *msg)
- {
--   fputs(msg, stdout);
-+   fprintf(stdout,msg);
-    fflush(stdout);
- }
- 
-@@ -511,7 +511,7 @@
+@@ -515,7 +515,7 @@
  	if (-1 == ioctl(joydesc[joydev].fd, JSIOCGVERSION, &version)) 
  	  {
  	     if (__svgalib_driver_report)
@@ -1058,7 +1077,7 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  	     
  	     /* Old 0.x protocol */
  	     joystick_initdefhandler(joydev, 4, 2);
-@@ -524,7 +524,7 @@
+@@ -528,7 +528,7 @@
  	     joydesc[joydev].joydata->p.prot0.ydif = 0x80;
  	     
  	     if (__svgalib_driver_report)
@@ -1067,16 +1086,16 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  		      joydesc[joydev].joydata->axes, joydesc[joydev].joydata->buttons);
  	     
  	     /* Now calibrate ... */
-@@ -534,7 +534,7 @@
+@@ -538,7 +538,7 @@
  	     if (-1 == ioctl(joydesc[joydev].fd, JS_GET_CAL,
  			 &joydesc[joydev].joydata->p.prot0.caldata)) {
  	       if (__svgalib_driver_report)
 -		  printf("svgalib, joystick%d: Failed to read calibration data\n", joydev);
-+		  fprintf(stderr,"svgalib, joystick%d: Failed to read calibration data\n", joydev);
++		  fprintf(stderr,"svgalib, joystick %d: Failed to read calibration data\n", joydev);
  	       joystick_close(joydev);
  	       return -1;
  	     }
-@@ -545,7 +545,7 @@
+@@ -549,7 +549,7 @@
  	     char axes, buttons;
  
  	     if (__svgalib_driver_report)
@@ -1085,21 +1104,21 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  		      joydev,
  		      (version & 0xff0000) >> 16, (version & 0xff00)>> 8,
  		      version & 0xff);
-@@ -553,7 +553,7 @@
+@@ -557,7 +557,7 @@
  	     if (-1 == ioctl(joydesc[joydev].fd, JSIOCGAXES, &axes)) 
  	       {
  	          if (__svgalib_driver_report)
 -		    printf("svgalib, joystick%d: error getting number of axes\n", joydev);
-+		    fprintf(stderr,"svgalib, joystick%d: error getting number of axes\n", joydev);
++		    fprintf(stderr,"svgalib, joystick %d: error getting number of axes\n", joydev);
  	          joystick_close(joydev);
  		  return -1;
  	       }
-@@ -561,13 +561,13 @@
+@@ -565,13 +565,13 @@
  	     if (-1 == ioctl(joydesc[joydev].fd, JSIOCGBUTTONS, &buttons)) 
  	       {
  	          if (__svgalib_driver_report)
 -		    printf("svgalib, joystick%d: error getting number of buttons\n", joydev);
-+		    fprintf(stderr,"svgalib, joystick%d: error getting number of buttons\n", joydev);
++		    fprintf(stderr, "svgalib, joystick %d: error getting number of buttons\n", joydev);
  	          joystick_close(joydev);
  		  return -1;
  	       }
@@ -1110,7 +1129,7 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  	     joystick_initdefhandler(joydev, buttons, axes);
  	     
  	     /* Now calibrate ... */
-@@ -578,7 +578,7 @@
+@@ -582,7 +582,7 @@
  	     if (-1 == ioctl(joydesc[joydev].fd, JSIOCGCORR,
  			&joydesc[joydev].joydata->p.prot1.corrdata)) {
  	       if (__svgalib_driver_report)
@@ -1119,7 +1138,7 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  	       joystick_close(joydev);
  	       return -1;
  	     }
-@@ -632,7 +632,7 @@
+@@ -636,7 +636,7 @@
     joydesc[joydev].joydata = malloc(sizeof(joydat_t));
     if (!joydesc[joydev].joydata) {
       nomem:
@@ -1128,7 +1147,7 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  	exit(1);
     }
     joydesc[joydev].joydata->axes = axes;
-@@ -654,7 +654,7 @@
+@@ -658,7 +658,7 @@
  static void joystick_defaulthandler(int event, int num, char val, int joydev)
  {
  #ifdef DEBUG
@@ -1137,19 +1156,10 @@ diff -ur svgalib-1.9.5.orig/src/joystick/joystick.c svgalib-1.9.5/src/joystick/j
  #endif
     switch (event)
       {
-diff -ur svgalib-1.9.5.orig/src/keyboard/keyboard.c svgalib-1.9.5/src/keyboard/keyboard.c
---- svgalib-1.9.5.orig/src/keyboard/keyboard.c	Tue May 23 09:55:36 2000
-+++ svgalib-1.9.5/src/keyboard/keyboard.c	Thu Jul 27 18:55:58 2000
-@@ -119,7 +119,7 @@
- #endif
-     if ( (fake_mouse_events = malloc(sizeof(void *) * NR_KEYS)) == 0) {
-  error:
--      fputs("svgalib: keyboard-config: out of memory ?! Fake mouse events might be disabled !", stderr);
-+      fprintf(stderr,"svgalib: keyboard-config: out of memory ?! Fake mouse events might be disabled !");
-       return 0;
-     } else {
-       if ( (fme_numberof = malloc(sizeof(short) * NR_KEYS)) == 0) {
-@@ -226,7 +226,7 @@
+diff -Nur svgalib-1.9.9.orig/src/keyboard/keyboard.c svgalib-1.9.9/src/keyboard/keyboard.c
+--- svgalib-1.9.9.orig/src/keyboard/keyboard.c	Thu Jan 25 23:26:14 2001
++++ svgalib-1.9.9/src/keyboard/keyboard.c	Sat May 26 16:18:03 2001
+@@ -230,7 +230,7 @@
    store_event:
  
  #ifdef DEBUG_KEYBOARD
@@ -1158,7 +1168,7 @@ diff -ur svgalib-1.9.5.orig/src/keyboard/keyboard.c svgalib-1.9.5/src/keyboard/k
  #endif
  	   if ( ! expand_events(n))
  	     return ptr;
-@@ -332,7 +332,7 @@
+@@ -336,7 +336,7 @@
          __svgalib_kbd_fd = __svgalib_tty_fd; /* We are initialized. */
      
          if (ioctl(__svgalib_kbd_fd, KDGKBMODE, &oldkbmode)) {
@@ -1167,7 +1177,7 @@ diff -ur svgalib-1.9.5.orig/src/keyboard/keyboard.c svgalib-1.9.5/src/keyboard/k
  	    return -1;
          }
          tcgetattr(__svgalib_kbd_fd, &oldkbdtermios);
-@@ -523,15 +523,15 @@
+@@ -527,15 +527,15 @@
                      flags = event -> flags;
                      request_at_down = (event -> flags & FMEF_AT_PRESS)  ?  1 : 0;
  #ifdef DEBUG_KEYBOARD
@@ -1186,7 +1196,7 @@ diff -ur svgalib-1.9.5.orig/src/keyboard/keyboard.c svgalib-1.9.5/src/keyboard/k
  #endif
                              switch (event -> type) {
                              case FME_TYPE_BUTTON1:
-@@ -576,7 +576,7 @@
+@@ -580,7 +580,7 @@
                __svgalib_mouse_eventhandler(but, dx, dy, dz, 0, 0, 0);
  
  #ifdef DEBUG_KEYBOARD
@@ -1195,7 +1205,7 @@ diff -ur svgalib-1.9.5.orig/src/keyboard/keyboard.c svgalib-1.9.5/src/keyboard/k
                     (long)but, (long)dx, (long)dy, (long)dz);
  #endif
            }
-@@ -648,7 +648,7 @@
+@@ -652,7 +652,7 @@
  static int checkscancode(int scancode)
  {
      if (scancode < 0 || scancode >= NR_KEYS) {
@@ -1204,7 +1214,7 @@ diff -ur svgalib-1.9.5.orig/src/keyboard/keyboard.c svgalib-1.9.5/src/keyboard/k
  	       scancode);
  	return 1;
      }
-@@ -702,7 +702,7 @@
+@@ -706,7 +706,7 @@
  
  #if 0				/* This happens very often. */
      if (state[scancode] == newstate) {
@@ -1213,39 +1223,22 @@ diff -ur svgalib-1.9.5.orig/src/keyboard/keyboard.c svgalib-1.9.5/src/keyboard/k
  	       scancode);
  	return;
      }
-diff -ur svgalib-1.9.5.orig/src/lrmi.c svgalib-1.9.5/src/lrmi.c
---- svgalib-1.9.5.orig/src/lrmi.c	Sun Apr 16 17:17:22 2000
-+++ svgalib-1.9.5/src/lrmi.c	Thu Jul 27 18:55:58 2000
-@@ -720,7 +720,7 @@
- 	int i;
- 	unsigned char *p;
+diff -Nur svgalib-1.9.9.orig/src/laguna.c svgalib-1.9.9/src/laguna.c
+--- svgalib-1.9.9.orig/src/laguna.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/laguna.c	Sat May 26 16:18:34 2001
+@@ -617,7 +617,7 @@
+     } else return -1;
  
--	fputs("vm86() failed\n", stderr);
-+	fprintf(stderr, "vm86() failed\n");
- 	fprintf(stderr, "return = 0x%x\n", vret);
- 	fprintf(stderr, "eax = 0x%08lx\n", context.vm.regs.eax);
- 	fprintf(stderr, "ebx = 0x%08lx\n", context.vm.regs.ebx);
-@@ -739,14 +739,14 @@
- 	fprintf(stderr, "gs  = 0x%04x\n", context.vm.regs.gs);
- 	fprintf(stderr, "eflags  = 0x%08lx\n", context.vm.regs.eflags);
+     if (__svgalib_driver_report) {
+-	printf("Using LAGUNA driver, %s with %iKB video ram found.\n",
++	fprintf(stderr,"Using LAGUNA driver, %s with %iKB video ram found.\n",
+             	chipnames[laguna_chiptype],laguna_memory);
+     };
  
--	fputs("cs:ip = [ ", stderr);
-+	fprintf(stderr, "cs:ip = [ ");
- 
- 	p = (unsigned char *)((context.vm.regs.cs << 4) + (context.vm.regs.eip & 0xffff));
- 
- 	for (i = 0; i < 16; ++i)
- 		fprintf(stderr, "%02x ", (unsigned int)p[i]);
- 
--	fputs("]\n", stderr);
-+	fprintf(stderr, "]\n");
- 	}
- 
- 
-diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
---- svgalib-1.9.5.orig/src/mach32.c	Sun Apr 16 15:16:20 2000
-+++ svgalib-1.9.5/src/mach32.c	Thu Jul 27 18:55:58 2000
-@@ -604,7 +604,7 @@
+diff -Nur svgalib-1.9.9.orig/src/mach32.c svgalib-1.9.9/src/mach32.c
+--- svgalib-1.9.9.orig/src/mach32.c	Mon Jul 24 09:16:38 2000
++++ svgalib-1.9.9/src/mach32.c	Sat May 26 16:45:38 2001
+@@ -604,15 +604,15 @@
  /* Better reconfigure all used registers */
      mach32_accelstate = R_UNKNOWN;
      CRITICAL = 0;		/* Obviously we are idle */
@@ -1254,11 +1247,12 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	 "was probably corrupted! If you have a very fast machine (10*Pentium)\n"
  	 "raise BUSYWAIT and ADDIWAIT in mach32.c, may also be a driver/card bug,\n"
  	 "so report detailed info to me (Michael Weller).\nBUT:\n"
-@@ -612,7 +612,7 @@
+ 	 "This reaction is normal when svgalib is killed in a very critical operation\n"
  	 "by a fatal signal like INT (pressing ^C). In this situation this reset just\n"
  	 "guarantees that you can continue working on the console, so in this case\n"
- 	 "PLEASE don't bloat my mailbox with bug reports. Thx, Michael.");
+-	 "PLEASE don't bloat my mailbox with bug reports. Thx, Michael.");
 -    printf("POST-Mortem:\n\tSubsys stat: %04x - %sIOerror (is usually a queue overrun)\n"
++	 "PLEASE don't bloat my mailbox with bug reports. Thx, Michael.\n");
 +    fprintf(stderr,"POST-Mortem:\n\tSubsys stat: %04x - %sIOerror (is usually a queue overrun)\n"
  	   "\tGE stat    : %04x - engine %s, %sdata ready for host.\n\tQueue stat : %04x\n",
  	   ioerr, (ioerr & 4) ? "" : "no ", ge_stat,
@@ -1321,7 +1315,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	dac_reg = mach32_dac1;
  #ifdef DEBUG
 -	fputs("DAC1: ", stdout);
-+	fprintf(stderr,"DAC1: ");
++	fputs("DAC1: ", stderr);
  #endif
  	if (dac_mode <= DAC_MODE565)
  	    goto dac1_4;
@@ -1330,7 +1324,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	    outb(DAC3, 0x2d);
  #ifdef DEBUG
 -	    puts("DAC2: 0x00 0x30 0x2d (8bpp)");
-+	    fprintf(stderr,"DAC2: 0x00 0x30 0x2d (8bpp)");
++	    fprintf(stderr,"DAC2: 0x00 0x30 0x2d (8bpp)\n");
  #endif
  	    if (dac_mode != DAC_MODEMUX)
  		break;
@@ -1339,7 +1333,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	    mach32_blankadj(1);
  #ifdef DEBUG
 -	    puts("DAC2: 0x01 0x09 0x1d (8bpp MUX)");
-+	    fprintf(stderr,"DAC2: 0x01 0x09 0x1d (8bpp MUX)");
++	    fprintf(stderr"DAC2: 0x01 0x09 0x1d (8bpp MUX)\n");
  #endif
  	    break;
  	case DAC_MODE555:
@@ -1348,7 +1342,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  		outb(DAC2, 0x00);
  #ifdef DEBUG
 -		puts("DAC2: 0x01 0x00 0x0d (16/24bpp)");
-+		fprintf(stderr,"DAC2: 0x01 0x00 0x0d (16/24bpp)");
++		fprintf(stderr,"DAC2: 0x01 0x00 0x0d (16/24bpp)\n");
  #endif
  	    } else {
  		clock_intended &= 0xff3f;
@@ -1357,7 +1351,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  		    mach32_blankadj(2);
  #ifdef DEBUG
 -		puts("DAC2: 0x01 0x08 0x0d (16/24bpp)");
-+		fprintf(stderr,"DAC2: 0x01 0x08 0x0d (16/24bpp)");
++		fprintf(stderr,"DAC2: 0x01 0x08 0x0d (16/24bpp)\n");
  #endif
  	    }
  	    outb(DAC3, 0x0d);
@@ -1366,7 +1360,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	dac_reg = mach32_dac4;
  #ifdef DEBUG
 -	fputs("DAC4: ", stdout);
-+	fprintf(stderr,"DAC4: ");
++	fputs("DAC4: ", stderr);
  #endif
        dac1_4:
  	if (dac_mode <= DAC_MODERGB) {
@@ -1392,7 +1386,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
      case DAC_MODEMUX:
  #ifdef DEBUG
 -	puts("DAC-Mask to 0xff");
-+	fprintf(stderr,"DAC-Mask to 0xff");
++	fprintf(stderr,"DAC-Mask to 0xff\n");
  #endif
  	outb(DAC_MASK, 0xff);
  	break;
@@ -1401,14 +1395,14 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	case MACH32_BT481:
  #ifdef DEBUG
 -	    puts("DAC-Mask to 0x00");
-+	    fprintf(stderr,"DAC-Mask to 0x00");
++	    fprintf(stderr,"DAC-Mask to 0x00\n");
  #endif
  	    outb(DAC_MASK, 0x00);
  	    break;
  	}
  #ifdef DEBUG
 -	puts("VGA-DAC-Mask to 0x0f");
-+	fprintf(stderr,"VGA-DAC-Mask to 0x0f");
++	fprintf(stderr,"VGA-DAC-Mask to 0x0f\n");
  #endif
  	outb(VGA_DAC_MASK, 0x0f);
  	break;
@@ -1435,7 +1429,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  
  #ifdef DEBUG
 -    puts("mach32_unlock");
-+    fprintf(stderr,"mach32_unlock");
++    fprintf(stderr,"mach32_unlock\n");
  #endif				/* DEBUG */
      outb(ATIPORT, ATISEL(0x2e));
      oldval = inb(ATIPORT + 1) & ~0x10;	/* Unlock CPUCLK Select */
@@ -1444,7 +1438,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  
  #ifdef DEBUG
 -    puts("mach32_lock");
-+    fprintf(stderr,"mach32_lock");
++    fprintf(stderr,"mach32_lock\n");
  #endif				/* DEBUG */
  /* I'm really not sure if calling this function would be a good idea */
  /* Actually it is not called in svgalib */
@@ -1485,15 +1479,16 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	 "function. Test will need about 3-4 seconds.\n"
  	 "If your monitor doesn't switch off when it gets signals it can't sync on\n"
  	 "better switch it off now before continuing. I'll beep when you can safely\n"
- 	 "switch it back on.");
+-	 "switch it back on.");
++	 "switch it back on.\n");
  #if 1
 -    puts("\n(Enter Y<Return> to continue, any other text to bail out)");
-+    fprintf(stderr,"\n(Enter Y<Return> to continue, any other text to bail out)");
++    fprintf(stderr,"\n(Enter Y<Return> to continue, any other text to bail out)\n");
  
      if (getchar() != 'Y') {
        bailout:
 -	puts("\aBailed out.");
-+	fprintf(stderr,"\aBailed out.");
++	fprintf(stderr,"\aBailed out.\n");
  	exit(0);
      }
      if (getchar() != '\n')
@@ -1502,7 +1497,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
      if (!clock_map[clock_ind]) {
  	vga_setmode(TEXT);
 -	puts("svgalib-mach32: Panic, internal error: DAC1/4, invalid clock for >8bpp.");
-+	fprintf(stderr,"svgalib-mach32: Panic, internal error: DAC1/4, invalid clock for >8bpp.");
++	fprintf(stderr,"svgalib-mach32: Panic, internal error: DAC1/4, invalid clock for >8bpp.\n");
  	exit(1);
      }
      return clock | ((clock_map[clock_ind] - 1) << 2);
@@ -1545,7 +1540,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	}
  	/* Read in eeprom */
        read_eeprom:
-@@ -1494,7 +1494,7 @@
+@@ -1494,10 +1494,10 @@
  	} else
  	    sum = 0;
  	if (sum & 0xffff) {
@@ -1553,7 +1548,11 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
 +	    fprintf(stderr,"mach32: Warning, Illegal checksum in Mach32 EEPROM.\n"
  	     "Check configuration of your card and read README.mach32,\n"
  		 "esp. the Mach32 Eeprom Woe chapter.\n"
- 		 "Ignoring contents...");
+-		 "Ignoring contents...");
++		 "Ignoring contents...\n");
+ 	    eeprom_option &= ~(EEPROM_USE_MEMCFG | EEPROM_USE_TIMING);
+ 	}
+       skip_read:
 @@ -1520,7 +1520,7 @@
  	    fd = fopen(eeprom_fname, "wb");
  	    if (fd == NULL) {
@@ -1580,38 +1579,36 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
 +	    fprintf(stderr,"mach32: Warning, no clocks defined.. please have a look at\n"
  		 "README.Mach32 and README.config for details.\n");
  	    mach32_scan_clocks();
--	    fputs("\a\nResulting clocks command for your libvga.config should be:\n\n"
+ 	    fputs("\a\nResulting clocks command for your libvga.config should be:\n\n"
 -		  "clocks", stdout);
-+	    fprintf(stderr,"\a\nResulting clocks command for your libvga.config should be:\n\n"
-+		  "clocks");
++		  "clocks", stderr);
  	    for (i = 0; i < 16; i++)
 -		printf(" %3d", mach32_clocks[i]);
--	    fputs("\n\nPlease edit \""
 +		fprintf(stderr," %3d", mach32_clocks[i]);
-+	    fprintf(stderr,"\n\nPlease edit \""
+ 	    fputs("\n\nPlease edit \""
  		  SVGALIB_CONFIG_FILE
  		  "\" appropriately.\n"
  		  "Or shall I try to do it for you? You have to have write access to the\n"
 -		  "config file to do it! (y/n) ", stdout);
-+		  "config file to do it! (y/n) ");
++		  "config file to do it! (y/n) ", stderr);
  	    i = getchar();
  	    if (i != '\n')
  		while (getchar() != '\n');
  	    if ((i != 'y') && (i != 'Y')) {
 -		puts("Ok, then do it yourself.");
-+		fprintf(stderr,"Ok, then do it yourself.");
++		fprintf(stderr,"Ok, then do it yourself.\n");
  		exit(0);
  	    }
  	    /* Toast setuid settings coz of security breach of system().. */
-@@ -1593,22 +1593,22 @@
+@@ -1593,25 +1593,25 @@
  		   ".bak >"
  		   SVGALIB_CONFIG_FILE);
  	    if (system(linebuffer))
 -		puts("Failed (at least partial, maybe there was just no config file yet).");
-+		fprintf(stderr,"Failed (at least partial, maybe there was just no config file yet).");
++		fprintf(stderr,"Failed (at least partial, maybe there was just no config file yet).\n");
  	    else
 -		puts("Ok. (But you should check it anyway)");
-+		fprintf(stderr,"Ok. (But you should check it anyway)");
++		fprintf(stderr,"Ok. (But you should check it anyway)\n");
  	    exit(0);
  	}
  #ifdef DEBUG
@@ -1619,7 +1616,8 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
 +	fprintf(stderr,"ATI-EEPROM contents:");
  	for (i = 0; i < 128; i++) {
  	    if (i & 7)
- 		putchar(' ');
+-		putchar(' ');
++		putc(' ',stderr);
  	    else
 -		puts("");
 -	    printf("%02x - %04x", i, mach32_eeprom[i]);
@@ -1628,19 +1626,26 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	}
  #ifdef DEBUG_KEY
 -	fputs("\n(Hit Return)", stdout);
-+	fprintf(stderr,"\n(Hit Return)");
++	fputs("\n(Hit Return)", stderr);
  	while (getchar() != '\n');
  #else
- 	putchar('\n');
-@@ -1653,7 +1653,7 @@
+-	putchar('\n');
++	putc('\n',stderr);
+ #endif				/* DEBUG_KEY */
+ #endif				/* DEBUG */
+     }
+@@ -1653,9 +1653,9 @@
  	    i -= mach32_apadd;
  	    i -= (mach32_apsiz == 1) ? 1 : 4;
  	    if (i < 0) {
 -		puts("svgalib-mach32: Dangerous warning:\n"
 +		fprintf(stderr,"svgalib-mach32: Dangerous warning:\n"
  		     "\tsetuplinear setting exceeds phys. address range of card!\n"
- 		     "\tSetting ignored.");
+-		     "\tSetting ignored.");
++		     "\tSetting ignored.\n");
  		mach32_apsiz = 0;
+ 	    } else {
+ 		/* will be actually set by setappage(0) call in setmode */
 @@ -1681,7 +1681,7 @@
  	}
      }
@@ -1659,6 +1664,15 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  		 "!=4,3,2,0. Nevertheless, I put every knowledge I got from the DOCs in this\n"
  		 "driver, so it should work. If you think you can stand this risk\n"
  		 "(for example, your monitor will just switch off if he can't stand the\n"
+@@ -1704,7 +1704,7 @@
+ 		 "In any case, that is, if it works or not (and what went wrong),\n"
+ 		 "please tell me about:\n"
+ 		 "Michael Weller, eowmob@exp-math.uni-essen.de,\n"
+-		 "eowmob@pollux.exp-math.uni-essen.de, or mat42b@aixrs1.hrz.uni-essen.de.\n.");
++		 "eowmob@pollux.exp-math.uni-essen.de, or mat42b@aixrs1.hrz.uni-essen.de.\n.\n");
+ 	    exit(-1);
+ 	}
+ 	if (strcmp(cptr, "ILLTRYIT"))
 @@ -1724,7 +1724,7 @@
  	    apertloc = ((unsigned long) (mach32_memcfg & 0xff00)) << 12;
  	}
@@ -1689,7 +1703,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	mach32_modes = malloc(__svgalib_max_modes * sizeof(mode_entry *));
  	if (!mach32_modes) {
 -	    puts("mach32: No memory for dynamic mode table.");
-+	    fprintf(stderr,"mach32: No memory for dynamic mode table.");
++	    fprintf(stderr,"mach32: No memory for dynamic mode table.\n");
  	    exit(1);
  	}
      }
@@ -1698,10 +1712,11 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  
  #ifdef DEBUG
 -    puts("15/16bpp DAC1/4 clock_maps:");
-+    fprintf(stderr,"15/16bpp DAC1/4 clock_maps:");
++    fprintf(stderr,"15/16bpp DAC1/4 clock_maps:\n");
      for (i = 0; i < 32; i++) {
  	if (!(i & 7))
- 	    putchar('\n');
+-	    putchar('\n');
++	    putc('\n',stderr);
  	if (mach32_clock_by2[i])
 -	    printf("%3d->%3d  ", mach32_clocks[i], mach32_clocks[mach32_clock_by2[i] - 1]);
 +	    fprintf(stderr,"%3d->%3d  ", mach32_clocks[i], mach32_clocks[mach32_clock_by2[i] - 1]);
@@ -1710,10 +1725,11 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
 +	    fprintf(stderr,"%3d->  -  ", mach32_clocks[i]);
      }
 -    puts("\n24bpp DAC1/4 clock_maps:");
-+    fprintf(stderr,"\n24bpp DAC1/4 clock_maps:");
++    fprintf(stderr,"\n24bpp DAC1/4 clock_maps:\n");
      for (i = 0; i < 32; i++) {
  	if (!(i & 7))
- 	    putchar('\n');
+-	    putchar('\n');
++	    putc('\n',stderr);
  	if (mach32_clock_by3[i])
 -	    printf("%3d->%3d  ", mach32_clocks[i], mach32_clocks[mach32_clock_by3[i] - 1]);
 +	    fprintf(stderr,"%3d->%3d  ", mach32_clocks[i], mach32_clocks[mach32_clock_by3[i] - 1]);
@@ -1721,13 +1737,14 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
 -	    printf("%3d->  -  ", mach32_clocks[i]);
 +	    fprintf(stderr,"%3d->  -  ", mach32_clocks[i]);
      }
-     putchar('\n');
+-    putchar('\n');
++    putc('\n',stderr);
  #endif
  
  /*Populating database: */
      if (verbose)
 -	puts("Populating mode table:");
-+	fprintf(stderr,"Populating mode table:");
++	fprintf(stderr,"Populating mode table:\n");
  
      for (i = 0; i < __svgalib_max_modes; i++)
  	mach32_modes[i] = NULL;
@@ -1736,7 +1753,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
      }
      if (verbose)
 -	puts("Squeeze in run-time config:");
-+	fprintf(stderr,"Squeeze in run-time config:");
++	fprintf(stderr,"Squeeze in run-time config:\n");
      mach32_final_modefixup();
  
      if (__svgalib_driver_report) {
@@ -1751,7 +1768,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
      if (!clock) {
  	if (verbose)
 -	    puts("Illegal clock #%d of unknown frequency! (rejected)");
-+	    fprintf(stderr,"Illegal clock #%d of unknown frequency! (rejected)");
++	    fprintf(stderr,"%s","Illegal clock #%d of unknown frequency! (rejected)\n");
  	return;
      }
      horz = (1e3 * clock) / (float) (mode->h_total * 8 + 8);
@@ -1804,37 +1821,37 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	if (iptr->xbytes * iptr->ydim > mach32_memory * 1024) {
  	    if (verbose)
 -		puts(" (not enough memory)");
-+		fprintf(stderr," (not enough memory)");
++		fprintf(stderr," (not enough memory)\n");
  	    continue;
  	}
  	if (__svgalib_horizsync.max < OFF_ALLOWANCE(horz * 1000)) {
  	    if (verbose)
 -		puts(" (rejected, hsync too high)");
-+		fprintf(stderr," (rejected, hsync too high)");
++		fprintf(stderr," (rejected, hsync too high)\n");
  	    continue;
  	}
  	if (__svgalib_horizsync.min > ADD_ALLOWANCE(horz * 1000)) {
  	    if (verbose)
 -		puts(" (rejected, hsync too low)");
-+		fprintf(stderr," (rejected, hsync too low)");
++		fprintf(stderr," (rejected, hsync too low)\n");
  	    continue;
  	}
  	if (__svgalib_vertrefresh.max < OFF_ALLOWANCE(cmpvert)) {
  	    if (verbose)
 -		puts(" (rejected, vsync too high)");
-+		fprintf(stderr," (rejected, vsync too high)");
++		fprintf(stderr," (rejected, vsync too high)\n");
  	    continue;
  	}
  	if (__svgalib_vertrefresh.min > ADD_ALLOWANCE(cmpvert)) {
  	    if (verbose)
 -		puts(" (rejected, vsync too low)");
-+		fprintf(stderr," (rejected, vsync too low)");
++		fprintf(stderr," (rejected, vsync too low)\n");
  	    continue;
  	}
  	if ((mach32_modes[i] == NULL) || (forcein >= 0)) {
  	    if (verbose)
 -		puts(" (accepted)");
-+		fprintf(stderr," (accepted)");
++		fprintf(stderr," (accepted)\n");
  	  fillin:
  	    mach32_modes[i] = mode;
  	    continue;
@@ -1843,12 +1860,12 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	    if (mode->disp_cntl & 0x10) {
  		if (verbose)
 -		    puts(" (rejected, is interlaced)");
-+		    fprintf(stderr," (rejected, is interlaced)");
++		    fprintf(stderr," (rejected, is interlaced)\n");
  		continue;
  	    } else {
  		if (verbose)
 -		    puts(" (preferred, is non-interlaced)");
-+		    fprintf(stderr," (preferred, is non-interlaced)");
++		    fprintf(stderr," (preferred, is non-interlaced)\n");
  		goto fillin;
  	    }
  	}
@@ -1857,12 +1874,12 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	if (n_vert < vert) {
  	    if (verbose)
 -		puts(" (higher V_SYNC preferred)");
-+		fprintf(stderr," (higher V_SYNC preferred)");
++		fprintf(stderr," (higher V_SYNC preferred)\n");
  	    goto fillin;
  	}
  	if (verbose)
 -	    puts(" (rejected, have a better one already)");
-+	    fprintf(stderr," (rejected, have a better one already)");
++	    fprintf(stderr," (rejected, have a better one already)\n");
      }
  }
  
@@ -1889,7 +1906,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  
  #ifdef DEBUG
 -    puts("mach32_setmode: accel set.");
-+    fprintf(stderr,"mach32_setmode: accel set.");
++    fprintf(stderr,"mach32_setmode: accel set.\n");
  #endif
  
      if (type != SVGADRV) {
@@ -1936,7 +1953,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  
  #if defined(DEBUG_KEY)&&defined(DEBUG)
 -    fputs("\n(Hit Return)", stdout);
-+    fprintf(stderr,"\n(Hit Return)");
++    fputs("\n(Hit Return)", stderr);
      while (getchar() != '\n');
  #endif
      return 0;
@@ -1945,7 +1962,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	    mach32_modemixup = realloc(mach32_modemixup, (mixup_alloc += PREALLOC) * sizeof(short));
  	if (mach32_modemixup == NULL) {
 -	    puts("mach32-config: Fatal error: Out of memory.");
-+	    fprintf(stderr,"mach32-config: Fatal error: Out of memory.");
++	    fprintf(stderr,"mach32-config: Fatal error: Out of memory.\n");
  	    exit(-1);
  	}
      }
@@ -1976,44 +1993,50 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  		       mach32_conf_commands[command]);
  		break;
  	    }
-@@ -2489,7 +2489,7 @@
+@@ -2489,8 +2489,8 @@
  		ptr = strtok(NULL, " ");
  		if (ptr == NULL) {
  		    if (position <= 1)
 -			puts("mach32-config: mach32eeprom "
+-			     "command expects a parameter.");
 +			fprintf(stderr,"mach32-config: mach32eeprom "
- 			     "command expects a parameter.");
++			     "command expects a parameter.\n");
  		    return ptr;
  		}
-@@ -2512,7 +2512,7 @@
+ 		if (!strcasecmp(ptr, "compatible")) {
+@@ -2512,8 +2512,8 @@
  		} else if (!strcasecmp(ptr, "file")) {
  		    ptr = strtok(NULL, " ");
  		    if (ptr == NULL) {
 -			puts("mach32-config: mach32eeprom file subcommand "
+-			     "expects a parameter.");
 +			fprintf(stderr,"mach32-config: mach32eeprom file subcommand "
- 			     "expects a parameter.");
++			     "expects a parameter.\n");
  			return ptr;
  		    }
-@@ -2524,11 +2524,11 @@
+ 		    goto fileparam;
+@@ -2524,12 +2524,12 @@
  			    free(eeprom_fname);
  			eeprom_fname = strdup(ptr);
  			if (eeprom_fname == NULL) {
 -			    puts("mach32-config: Fatal error: out of memory.");
-+			    fprintf(stderr,"mach32-config: Fatal error: out of memory.");
++			    fprintf(stderr,"mach32-config: Fatal error: out of memory.\n");
  			    exit(-1);
  			}
  		    } else {
 -			puts("mach32-config: mach32eeprom: filename has "
+-			     "to start with a / !!");
 +			fprintf(stderr,"mach32-config: mach32eeprom: filename has "
- 			     "to start with a / !!");
++			     "to start with a / !!\n");
  		    }
  		} else
+ 		    return ptr;
 @@ -2560,7 +2560,7 @@
  	    }
  	}
  	if (!flag) {
 -	    puts("mach32-config: Invalid define command, no valid vga-mode given");
-+	    fprintf(stderr,"mach32-config: Invalid define command, no valid vga-mode given");
++	    fprintf(stderr,"mach32-config: Invalid define command, no valid vga-mode given\n");
  	  ex_inv_mod:
  	    mixup_ptr = currptr;
  	    return ptr;
@@ -2022,7 +2045,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	if (ptr == NULL) {
  	  inv_clk:
 -	    puts("mach32-config: Invalid define command, clock is invalid");
-+	    fprintf(stderr,"mach32-config: Invalid define command, clock is invalid");
++	    fprintf(stderr,"mach32-config: Invalid define command, clock is invalid\n");
  	    goto ex_inv_mod;
  	}
  	if (*ptr == ':') {	/*No. of clock given */
@@ -2039,35 +2062,39 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	if (!isnumber(ptr)) {
  	  inv_time:
 -	    puts("mach32-config: Invalid define command, timing is invalid");
-+	    fprintf(stderr,"mach32-config: Invalid define command, timing is invalid");
++	    fprintf(stderr,"mach32-config: Invalid define command, timing is invalid\n");
  	    goto ex_inv_mod;
  	}
  	mptr->h_disp = (atoi(ptr) >> 3) - 1;
-@@ -2670,7 +2670,7 @@
+@@ -2670,8 +2670,8 @@
      case 3:
  	ptr = strtok(NULL, " ");
  	if (!isnumber(ptr)) {
 -	    puts("mach32-config: illegal setlinelength command.\n"
+-		 "Usage: setlinelength integer modes...");
 +	    fprintf(stderr,"mach32-config: illegal setlinelength command.\n"
- 		 "Usage: setlinelength integer modes...");
++		 "Usage: setlinelength integer modes...\n");
  	    return ptr;
  	}
-@@ -2684,12 +2684,12 @@
+ 	i = atoi(ptr);
+@@ -2684,13 +2684,13 @@
  
  	if (!mode) {
  	  maxclk_deny:
 -	    puts("Don't use the maxclock's commands out of the environment variable.");
-+	    fprintf(stderr,"Don't use the maxclock's commands out of the environment variable.");
++	    fprintf(stderr,"Don't use the maxclock's commands out of the environment variable.\n");
  	    return ptr;
  	}
  	if (!isnumber(ptr)) {
  	  ilmaxclk:
 -	    puts("mach32-config: illegal maxclock16 or maxclock24 command.\n"
+-		 "Usage: maxclock16 integer or maxclock24 integer");
 +	    fprintf(stderr,"mach32-config: illegal maxclock16 or maxclock24 command.\n"
- 		 "Usage: maxclock16 integer or maxclock24 integer");
++		 "Usage: maxclock16 integer or maxclock24 integer\n");
  	    return ptr;
  	}
-@@ -2710,7 +2710,7 @@
+ 	mach32_maxclk16 = atoi(ptr);
+@@ -2710,11 +2710,11 @@
  	    ptr = strtok(NULL, " ");
  	    clocks_set = 1;
  	    if (!isnumber(ptr)) {
@@ -2076,18 +2103,23 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  		     "Usage: clocks integer integer ...\n"
  		     "16 clocks have to be specified.\n"
  		     "specify 0 for unsupported clocks\n"
+-		     "(using 0's for the mistyped clocks)");
++		     "(using 0's for the mistyped clocks)\n");
+ 		if (mode) {
+ 		    while (i < 16)
+ 			mach32_clocks[i++] = 0;
 @@ -2768,12 +2768,12 @@
  	ptr = strtok(NULL, " ");
  	if (!mode) {
  	  tweak_deny:
 -	    puts("The vfifo, latch, blank commands are not allowed out of the environment.");
-+	    fprintf(stderr,"The vfifo, latch, blank commands are not allowed out of the environment.");
++	    fprintf(stderr,"The vfifo, latch, blank commands are not allowed out of the environment.\n");
  	    return ptr;
  	}
  	if (!isnumber(ptr)) {
  	  ilvfi:
 -	    puts("Illegal vfifo command");
-+	    fprintf(stderr,"Illegal vfifo command");
++	    fprintf(stderr,"Illegal vfifo command\n");
  	    return ptr;
  	}
  	vfifo8 = atoi(ptr) & 0xf;
@@ -2096,7 +2128,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	    goto tweak_deny;
  	if (!isnumber(ptr)) {
 -	    puts("Illegal latch command");
-+	    fprintf(stderr,"Illegal latch command");
++	    fprintf(stderr,"Illegal latch command\n");
  	    return ptr;
  	}
  	latchopt = atoi(ptr);
@@ -2105,31 +2137,34 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	    goto tweak_deny;
  	if (!isnumber(ptr)) {
 -	    puts("Illegal blank command");
-+	    fprintf(stderr,"Illegal blank command");
++	    fprintf(stderr,"Illegal blank command\n");
  	    return ptr;
  	}
  	bladj = atoi(ptr) & 0xf;
-@@ -2826,7 +2826,7 @@
+@@ -2826,9 +2826,9 @@
  	ptr = strtok(NULL, " ");
  	if (!isnumber(ptr)) {
  	  ilsetupli:
 -	    puts("Illegal setuplinear command.\n"
 +	    fprintf(stderr,"Illegal setuplinear command.\n"
  		 "usage: setuplinear address size\n"
- 		 "where size = 1 or 4 and both are in MB");
+-		 "where size = 1 or 4 and both are in MB");
++		 "where size = 1 or 4 and both are in MB\n");
  	    return ptr;
+ 	}
+ 	i = atoi(ptr);
 @@ -2844,12 +2844,12 @@
  	} else
  	    goto ilsetupli;
  	if ((i & ~0xfff) || (!i)) {
 -	    puts("setuplinear: address out of range");
-+	    fprintf(stderr,"setuplinear: address out of range");
++	    fprintf(stderr,"setuplinear: address out of range\n");
  	    return ptr;
  	}
        setuplin:
  	if (!mode) {
 -	    puts("setuplinear config option strictly disallowed from the environment.");
-+	    fprintf(stderr,"setuplinear config option strictly disallowed from the environment.");
++	    fprintf(stderr,"setuplinear config option strictly disallowed from the environment.\n");
  	    return ptr;
  	}
  	mach32_apsiz = flag + 1;
@@ -2165,7 +2200,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
      mach32_modemixup = realloc(mach32_modemixup, mixup_ptr * sizeof(short));
      if (mach32_modemixup == NULL) {
 -	puts("mach32-config: Fatal: queue shrink failed.");
-+	fprintf(stderr,"mach32-config: Fatal: queue shrink failed.");
++	fprintf(stderr,"mach32-config: Fatal: queue shrink failed.\n");
  	exit(-1);
      }
  }
@@ -2174,7 +2209,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	    oldentry = mach32_modes[i];
  #ifdef DEBUG
 -	    puts("Calling mach32_modfill to add new mode.");
-+	    fprintf(stderr,"Calling mach32_modfill to add new mode.");
++	    fprintf(stderr,"Calling mach32_modfill to add new mode.\n");
  #endif
  	    mach32_modfill((mode_entry *) ptm, col2msk(infotable + i), i);
  	    if (mach32_modes[i] == oldentry) {
@@ -2224,7 +2259,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	if ((src_x & 1) || (des_x & 1) || (pitch & 0xfffff00f)) {
  	  f_ugh:
 -	    puts("\asvgalib: mach32: mach32_bitblt can't emulate Cirrus.");
-+	    fprintf(stderr,"\asvgalib: mach32: mach32_bitblt can't emulate Cirrus.");
++	    fprintf(stderr,"\asvgalib: mach32: mach32_bitblt can't emulate Cirrus.\n");
  	    return;
  	}
  	src_x >>= 1;
@@ -2260,7 +2295,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	if ((destaddr & 1) || (pitch & 0xfffff00f)) {
  	  ugh:
 -	    puts("\asvgalib: mach32: mach32_fillblt can't emulate Cirrus.");
-+	    fprintf(stderr,"\asvgalib: mach32: mach32_fillblt can't emulate Cirrus.");
++	    fprintf(stderr,"\asvgalib: mach32: mach32_fillblt can't emulate Cirrus.\n");
  	    CRITICAL = 0;
  	    vga_unlockvc();
  	    return;
@@ -2278,7 +2313,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	if (pitch & 0xfffff00f) {
  	  ugh:
 -	    puts("\asvgalib: mach32: mach32_hlinelistblt can't emulate Cirrus.");
-+	    fprintf(stderr,"\asvgalib: mach32: mach32_hlinelistblt can't emulate Cirrus.");
++	    fprintf(stderr,"\asvgalib: mach32: mach32_hlinelistblt can't emulate Cirrus.\n");
  	    CRITICAL = 0;
  	    vga_unlockvc();
  	    return;
@@ -2296,7 +2331,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  	if ((destaddr & 1) || (pitch & 0xfffff00f)) {
  	  ugh:
 -	    puts("\asvgalib: mach32: mach32_imageblt can't emulate Cirrus.");
-+	    fprintf(stderr,"\asvgalib: mach32: mach32_imageblt can't emulate Cirrus.");
++	    fprintf(stderr,"\asvgalib: mach32: mach32_imageblt can't emulate Cirrus.\n");
  
  	    CRITICAL = 0;
  	    vga_unlockvc();
@@ -2325,7 +2360,7 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
      }
  #ifdef DEBUG
 -    puts("mach32_mach32_imageblt ended.");
-+    fprintf(stderr,"mach32_mach32_imageblt ended.");
++    fprintf(stderr,"mach32_mach32_imageblt ended.\n");
  #endif
  }
  
@@ -2347,9 +2382,9 @@ diff -ur svgalib-1.9.5.orig/src/mach32.c svgalib-1.9.5/src/mach32.c
  #else
      	    if (infotable[CM].bytesperpixel == 2) {
  		asm("cld\n"
-diff -ur svgalib-1.9.5.orig/src/mouse/mouse.c svgalib-1.9.5/src/mouse/mouse.c
---- svgalib-1.9.5.orig/src/mouse/mouse.c	Fri Feb 11 12:51:58 2000
-+++ svgalib-1.9.5/src/mouse/mouse.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/mouse/mouse.c svgalib-1.9.9/src/mouse/mouse.c
+--- svgalib-1.9.9.orig/src/mouse/mouse.c	Fri Feb 11 12:51:58 2000
++++ svgalib-1.9.9/src/mouse/mouse.c	Sat May 26 16:46:42 2001
 @@ -339,7 +339,7 @@
  void mouse_setscale(int s)
  {
@@ -2359,10 +2394,10 @@ diff -ur svgalib-1.9.5.orig/src/mouse/mouse.c svgalib-1.9.5/src/mouse/mouse.c
      else {
        mouse_x = (mouse_x*s)/scale;
        mouse_y = (mouse_y*s)/scale;
-diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
---- svgalib-1.9.5.orig/src/mouse/ms.c	Fri May  5 19:26:28 2000
-+++ svgalib-1.9.5/src/mouse/ms.c	Thu Jul 27 18:55:58 2000
-@@ -176,7 +176,7 @@
+diff -Nur svgalib-1.9.9.orig/src/mouse/ms.c svgalib-1.9.9/src/mouse/ms.c
+--- svgalib-1.9.9.orig/src/mouse/ms.c	Mon Aug 21 07:10:23 2000
++++ svgalib-1.9.9/src/mouse/ms.c	Sat May 26 16:51:10 2001
+@@ -177,7 +177,7 @@
   int newmtype;
  
  #ifdef DEBUG_ACCEL
@@ -2371,7 +2406,7 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
  #endif
  
     switch (option) {
-@@ -261,12 +261,12 @@
+@@ -262,7 +262,7 @@
  #ifdef ALLOW_MOUSE_OVERRIDE
  	newmtype = vga_getmousetype();
  	if (m_type != newmtype) {
@@ -2380,32 +2415,7 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
  		   m_type, newmtype);
  	    m_type = newmtype;
  	}
- #else				/* ALLOW_MOUSE_OVERRIDE */
--	fputs("svgalib: was compiled with SVGA_MOUSE_OVERRIDE disabled !", stderr);
-+	fprintf(stderr,"svgalib: was compiled with SVGA_MOUSE_OVERRIDE disabled !");
- #endif				/* ALLOW_MOUSE_OVERRIDE */
- 	break;
- 
-@@ -377,30 +377,30 @@
- 	    m_accel_thresh = DEFAULT_ACCEL_THRESH;
-          }
-       } else if (m_accel_thresh < 0) {
--	 fputs("svgalib: mouse_accel_thresh musn't be negative !\n", stderr);
-+	 fprintf(stderr,"svgalib: mouse_accel_thresh musn't be negative !\n");
- 	 m_accel_thresh = DEFAULT_ACCEL_THRESH;
-       }
- 
-       if (m_accel_offset >= m_accel_mult) {
--         fputs("svgalib: warning: accel_offset should be less then accel_mult !", stderr);
-+         fprintf(stderr,"svgalib: warning: accel_offset should be less then accel_mult !");
-       }
- 
-       if (m_accel_thresh > 1 && m_accel_type == MOUSE_ACCEL_TYPE_POWER) {
-         if ((m_accel_powertable = malloc(m_accel_thresh * sizeof(float))) == 0 ) {
--  	  fputs("svgalib: out of memory in mouse init ! (Check SVGA_MOUSE_ACCEL_THRESH size) !", stderr);
-+  	  fprintf(stderr,"svgalib: out of memory in mouse init ! (Check SVGA_MOUSE_ACCEL_THRESH size) !");
- 	  fflush(stderr);
- 	  return 1;
+@@ -394,14 +394,14 @@
          } else {
           int i;
  #ifdef DEBUG_ACCEL
@@ -2422,7 +2432,7 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
  	  			     (double)m_accel_powertable[i]);
  #endif
            }
-@@ -409,14 +409,14 @@
+@@ -410,14 +410,14 @@
      }
  
  #ifdef DEBUG_ACCEL
@@ -2445,7 +2455,7 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
  #endif
  
      /*  Ensure that the open will get a file descriptor greater
-@@ -658,7 +658,7 @@
+@@ -667,7 +667,7 @@
  	nu_bytes += bytesread;
  
  #ifdef DEBUG
@@ -2454,7 +2464,7 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
  #endif
  
    handle_packets:
-@@ -666,10 +666,10 @@
+@@ -675,10 +675,10 @@
      /* Handle packets in buffer. */
  
  #ifdef DEBUG
@@ -2467,7 +2477,7 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
  
  #endif
  
-@@ -729,7 +729,7 @@
+@@ -738,7 +738,7 @@
      if ((buf[i] & proto[m_type][0]) != proto[m_type][1]) {
  	/* Not a header byte. */
  #ifdef DEBUG
@@ -2476,7 +2486,7 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
  #endif
  	i++;
  	goto handle_packets;
-@@ -990,7 +990,7 @@
+@@ -1052,7 +1052,7 @@
  	    /*    if (fabs(dx) < sorb_trans_thresh[1]) dx = 0; */
              i+=13;
  #ifdef DEBUG
@@ -2485,7 +2495,7 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
              but,dx,dy,dz,drx,dry,drz);
  #endif
              break;
-@@ -1000,23 +1000,23 @@
+@@ -1062,23 +1062,23 @@
  	    if (but==MOUSE_RESETBUTTON)
  	      mouse_orientation=1-mouse_orientation;
  #ifdef DEBUG
@@ -2514,7 +2524,7 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
  #endif
              i++;
              break;
-@@ -1058,20 +1058,20 @@
+@@ -1120,20 +1120,20 @@
  
        case MOUSE_ACCEL_TYPE_NORMAL:
  #ifdef DEBUG_ACCEL 
@@ -2538,7 +2548,7 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
  #endif
  	delta = abs(dx);
  	dx = (delta >= m_accel_thresh)  ?  (float)dx * m_accel_mult :
-@@ -1086,7 +1086,7 @@
+@@ -1148,7 +1148,7 @@
  	     (float)dz * m_accel_powertable[delta];
  
  #ifdef DEBUG_ACCEL
@@ -2547,10 +2557,10 @@ diff -ur svgalib-1.9.5.orig/src/mouse/ms.c svgalib-1.9.5/src/mouse/ms.c
  #endif
          break;
      }
-diff -ur svgalib-1.9.5.orig/src/mx.c svgalib-1.9.5/src/mx.c
---- svgalib-1.9.5.orig/src/mx.c	Sun Apr 16 16:35:08 2000
-+++ svgalib-1.9.5/src/mx.c	Thu Jul 27 18:55:58 2000
-@@ -641,16 +641,16 @@
+diff -Nur svgalib-1.9.9.orig/src/mx.c svgalib-1.9.9/src/mx.c
+--- svgalib-1.9.9.orig/src/mx.c	Thu Apr 26 00:12:54 2001
++++ svgalib-1.9.9/src/mx.c	Sat May 26 17:25:58 2001
+@@ -637,16 +637,16 @@
      };
  
      if (__svgalib_driver_report) {
@@ -2571,7 +2581,7 @@ diff -ur svgalib-1.9.5.orig/src/mx.c svgalib-1.9.5/src/mx.c
             break;
          };
      }
-@@ -721,14 +721,14 @@
+@@ -717,14 +717,14 @@
  	b=0;
  	if((fvco>150000.0))b=1;		
  #if 0
@@ -2588,10 +2598,10 @@ diff -ur svgalib-1.9.5.orig/src/mx.c svgalib-1.9.5/src/mx.c
    return 0;
  }
  
-diff -ur svgalib-1.9.5.orig/src/neo.c svgalib-1.9.5/src/neo.c
---- svgalib-1.9.5.orig/src/neo.c	Sun Dec 19 12:58:52 1999
-+++ svgalib-1.9.5/src/neo.c	Thu Jul 27 18:55:58 2000
-@@ -737,7 +737,7 @@
+diff -Nur svgalib-1.9.9.orig/src/neo.c svgalib-1.9.9/src/neo.c
+--- svgalib-1.9.9.orig/src/neo.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/neo.c	Sat May 26 16:52:39 2001
+@@ -735,7 +735,7 @@
      if (getenv("IOPERM") == NULL) {
        _ioperm=1;
        if (iopl(3) < 0) {
@@ -2600,7 +2610,7 @@ diff -ur svgalib-1.9.5.orig/src/neo.c svgalib-1.9.5/src/neo.c
          exit(1);
        }
      }
-@@ -879,7 +879,7 @@
+@@ -877,7 +877,7 @@
      if (getenv("IOPERM") == NULL) {
        _ioperm=1;
        if (iopl(3) < 0) {
@@ -2609,7 +2619,7 @@ diff -ur svgalib-1.9.5.orig/src/neo.c svgalib-1.9.5/src/neo.c
          exit(1);
        }
      }
-@@ -911,7 +911,7 @@
+@@ -909,7 +909,7 @@
      }
  
      if (__svgalib_driver_report) {
@@ -2618,10 +2628,10 @@ diff -ur svgalib-1.9.5.orig/src/neo.c svgalib-1.9.5/src/neo.c
      };
  
      cardspecs = malloc(sizeof(CardSpecs));
-diff -ur svgalib-1.9.5.orig/src/nv3.c svgalib-1.9.5/src/nv3.c
---- svgalib-1.9.5.orig/src/nv3.c	Sun May 14 15:20:35 2000
-+++ svgalib-1.9.5/src/nv3.c	Thu Jul 27 18:55:58 2000
-@@ -710,7 +710,7 @@
+diff -Nur svgalib-1.9.9.orig/src/nv3.c svgalib-1.9.9/src/nv3.c
+--- svgalib-1.9.9.orig/src/nv3.c	Fri Apr 27 22:04:40 2001
++++ svgalib-1.9.9/src/nv3.c	Sat May 26 16:53:04 2001
+@@ -740,7 +740,7 @@
         
      };
      if (__svgalib_driver_report) {
@@ -2630,9 +2640,9 @@ diff -ur svgalib-1.9.5.orig/src/nv3.c svgalib-1.9.5/src/nv3.c
      };
  
      cardspecs = malloc(sizeof(CardSpecs));
-diff -ur svgalib-1.9.5.orig/src/oak.c svgalib-1.9.5/src/oak.c
---- svgalib-1.9.5.orig/src/oak.c	Tue Jul 27 18:36:19 1999
-+++ svgalib-1.9.5/src/oak.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/oak.c svgalib-1.9.9/src/oak.c
+--- svgalib-1.9.9.orig/src/oak.c	Tue Jul 27 18:36:19 1999
++++ svgalib-1.9.9/src/oak.c	Sat May 26 16:53:54 2001
 @@ -560,7 +560,7 @@
  	oak_memory = oak_memorydetect();
      }
@@ -2669,9 +2679,18 @@ diff -ur svgalib-1.9.5.orig/src/oak.c svgalib-1.9.5/src/oak.c
      oak_lock();
      return 0;
  }
-diff -ur svgalib-1.9.5.orig/src/paradise.c svgalib-1.9.5/src/paradise.c
---- svgalib-1.9.5.orig/src/paradise.c	Sun Dec 19 12:59:02 1999
-+++ svgalib-1.9.5/src/paradise.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/paradise.c svgalib-1.9.9/src/paradise.c
+--- svgalib-1.9.9.orig/src/paradise.c	Sun Dec 19 12:59:02 1999
++++ svgalib-1.9.9/src/paradise.c	Sat May 26 17:26:06 2001
+@@ -41,7 +41,7 @@
+ void inline _outb(unsigned port,unsigned value)
+ {
+ #ifdef DEBUG
+- printf ("0x%x, 0x%x\n",port,value);
++ fprintf (stderr,"0x%x, 0x%x\n",port,value);
+ #endif
+ outb(port,value);
+ }
 @@ -51,7 +51,7 @@
  static void paradise_getmodeinfo(int mode, vga_modeinfo * modeinfo)
  {
@@ -2803,10 +2822,31 @@ diff -ur svgalib-1.9.5.orig/src/paradise.c svgalib-1.9.5/src/paradise.c
  	       paradise_memory);
      }
      __svgalib_driverspecs = &__svgalib_paradise_driverspecs;
-diff -ur svgalib-1.9.5.orig/src/rage.c svgalib-1.9.5/src/rage.c
---- svgalib-1.9.5.orig/src/rage.c	Mon May 22 09:30:31 2000
-+++ svgalib-1.9.5/src/rage.c	Thu Jul 27 18:55:58 2000
-@@ -1198,7 +1198,7 @@
+diff -Nur svgalib-1.9.9.orig/src/r128.c svgalib-1.9.9/src/r128.c
+--- svgalib-1.9.9.orig/src/r128.c	Fri Apr 13 15:23:09 2001
++++ svgalib-1.9.9/src/r128.c	Sat May 26 17:26:13 2001
+@@ -1162,7 +1162,7 @@
+     pll.max_pll_freq   = R128_BIOS32(pll_info_block + 0x16);
+     pll.xclk           = R128_BIOS16(pll_info_block + 0x08);
+ #if 0
+-printf("pll: %i %i %i %i %i\n",pll.reference_freq,pll.reference_div,
++fprintf(stderr,"pll: %i %i %i %i %i\n",pll.reference_freq,pll.reference_div,
+     pll.min_pll_freq,    pll.max_pll_freq, pll.xclk);
+ #endif
+     }
+@@ -1174,7 +1174,7 @@
+     r128_mapio();
+     
+     if (__svgalib_driver_report) {
+-	printf("Using Rage 128 driver, %iKB.\n",r128_memory);
++	fprintf(stderr,"Using Rage 128 driver, %iKB.\n",r128_memory);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.9.orig/src/rage.c svgalib-1.9.9/src/rage.c
+--- svgalib-1.9.9.orig/src/rage.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/rage.c	Sat May 26 17:25:31 2001
+@@ -1194,7 +1194,7 @@
        };
  
     if(found || !i){
@@ -2815,7 +2855,7 @@ diff -ur svgalib-1.9.5.orig/src/rage.c svgalib-1.9.5/src/rage.c
        exit(1);
     };
  
-@@ -1273,8 +1273,8 @@
+@@ -1248,8 +1248,8 @@
     };
  
     if (__svgalib_driver_report) {
@@ -2826,7 +2866,16 @@ diff -ur svgalib-1.9.5.orig/src/rage.c svgalib-1.9.5/src/rage.c
     }
  
     cardspecs = malloc(sizeof(CardSpecs));
-@@ -1363,9 +1363,9 @@
+@@ -1326,7 +1326,7 @@
+       fref*=2; /* X says double for all chips */
+       if(__svgalib_ragedoubleclock)fref/=2; /* just in case */
+       if (__svgalib_driver_report) {
+-          printf("Rage: BIOS reports base frequency=%.3fMHz  Denominator=%3i\n",fref/1000,M);
++          fprintf(stderr,"Rage: BIOS reports base frequency=%.3fMHz  Denominator=%3i\n",fref/1000,M);
+       }
+    } else {
+       rage_dac=(j>>9)&7;
+@@ -1376,9 +1376,9 @@
        }
      }
    }
@@ -2839,9 +2888,9 @@ diff -ur svgalib-1.9.5.orig/src/rage.c svgalib-1.9.5/src/rage.c
    return 0;
  }
  
-diff -ur svgalib-1.9.5.orig/src/ramdac/IBMRGB52x.c svgalib-1.9.5/src/ramdac/IBMRGB52x.c
---- svgalib-1.9.5.orig/src/ramdac/IBMRGB52x.c	Sun Jun 22 17:44:13 1997
-+++ svgalib-1.9.5/src/ramdac/IBMRGB52x.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/ramdac/IBMRGB52x.c svgalib-1.9.9/src/ramdac/IBMRGB52x.c
+--- svgalib-1.9.9.orig/src/ramdac/IBMRGB52x.c	Sun Jun 22 17:44:13 1997
++++ svgalib-1.9.9/src/ramdac/IBMRGB52x.c	Sat May 26 16:58:21 2001
 @@ -187,7 +187,7 @@
      }
  
@@ -2875,9 +2924,9 @@ diff -ur svgalib-1.9.5.orig/src/ramdac/IBMRGB52x.c svgalib-1.9.5/src/ramdac/IBMR
  	       IBMRGB52x_clk, ((m + 65.0) / n) / (8 >> df) * IBMRGB52x_fref / 1000,
  	       m, m, n, n, df);
  
-diff -ur svgalib-1.9.5.orig/src/ramdac/attdacs.c svgalib-1.9.5/src/ramdac/attdacs.c
---- svgalib-1.9.5.orig/src/ramdac/attdacs.c	Sun Jun 22 17:44:17 1997
-+++ svgalib-1.9.5/src/ramdac/attdacs.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/ramdac/attdacs.c svgalib-1.9.9/src/ramdac/attdacs.c
+--- svgalib-1.9.9.orig/src/ramdac/attdacs.c	Sun Jun 22 17:44:17 1997
++++ svgalib-1.9.9/src/ramdac/attdacs.c	Sat May 26 16:58:49 2001
 @@ -67,12 +67,12 @@
  static void att20c490_init(void)
  {
@@ -2903,9 +2952,9 @@ diff -ur svgalib-1.9.5.orig/src/ramdac/attdacs.c svgalib-1.9.5/src/ramdac/attdac
  }
  
  static int att20c498_map_clock(int bpp, int pixelclock)
-diff -ur svgalib-1.9.5.orig/src/ramdac/btdacs.c svgalib-1.9.5/src/ramdac/btdacs.c
---- svgalib-1.9.5.orig/src/ramdac/btdacs.c	Sat Jul  3 19:44:03 1999
-+++ svgalib-1.9.5/src/ramdac/btdacs.c	Thu Jul 27 18:55:58 2000
+diff -Nur svgalib-1.9.9.orig/src/ramdac/btdacs.c svgalib-1.9.9/src/ramdac/btdacs.c
+--- svgalib-1.9.9.orig/src/ramdac/btdacs.c	Sat Jul  3 19:44:03 1999
++++ svgalib-1.9.9/src/ramdac/btdacs.c	Sat May 26 16:59:03 2001
 @@ -37,7 +37,7 @@
  static void bt485_init(void)
  {
@@ -2915,9 +2964,9 @@ diff -ur svgalib-1.9.5.orig/src/ramdac/btdacs.c svgalib-1.9.5/src/ramdac/btdacs.
  }
  
  static int bt485_map_clock(int bpp, int pixelclock)
-diff -ur svgalib-1.9.5.orig/src/ramdac/icw.c svgalib-1.9.5/src/ramdac/icw.c
---- svgalib-1.9.5.orig/src/ramdac/icw.c	Sun Jun 22 17:44:19 1997
-+++ svgalib-1.9.5/src/ramdac/icw.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/ramdac/icw.c svgalib-1.9.9/src/ramdac/icw.c
+--- svgalib-1.9.9.orig/src/ramdac/icw.c	Sun Jun 22 17:44:19 1997
++++ svgalib-1.9.9/src/ramdac/icw.c	Sat May 26 16:59:22 2001
 @@ -31,7 +31,7 @@
      if (mi == 0x84) {
  	if (di == 0x98)
@@ -2936,9 +2985,9 @@ diff -ur svgalib-1.9.5.orig/src/ramdac/icw.c svgalib-1.9.5/src/ramdac/icw.c
  }
  
  static int ICW_map_clock(int bpp, int pixelclock)
-diff -ur svgalib-1.9.5.orig/src/ramdac/normal.c svgalib-1.9.5/src/ramdac/normal.c
---- svgalib-1.9.5.orig/src/ramdac/normal.c	Sun Jun 22 17:44:22 1997
-+++ svgalib-1.9.5/src/ramdac/normal.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/ramdac/normal.c svgalib-1.9.9/src/ramdac/normal.c
+--- svgalib-1.9.9.orig/src/ramdac/normal.c	Sun Jun 22 17:44:22 1997
++++ svgalib-1.9.9/src/ramdac/normal.c	Sat May 26 16:59:36 2001
 @@ -27,7 +27,7 @@
  static void normal_dac_init(void)
  {
@@ -2948,9 +2997,9 @@ diff -ur svgalib-1.9.5.orig/src/ramdac/normal.c svgalib-1.9.5/src/ramdac/normal.
  }
  
  static int normal_dac_map_clock(int bpp, int pixelclock)
-diff -ur svgalib-1.9.5.orig/src/ramdac/ramdac.c svgalib-1.9.5/src/ramdac/ramdac.c
---- svgalib-1.9.5.orig/src/ramdac/ramdac.c	Sun Jun 22 17:44:24 1997
-+++ svgalib-1.9.5/src/ramdac/ramdac.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/ramdac/ramdac.c svgalib-1.9.9/src/ramdac/ramdac.c
+--- svgalib-1.9.9.orig/src/ramdac/ramdac.c	Sun Jun 22 17:44:24 1997
++++ svgalib-1.9.9/src/ramdac/ramdac.c	Sat May 26 16:59:56 2001
 @@ -46,11 +46,11 @@
  {
      if (!dacspeed) {
@@ -2965,9 +3014,9 @@ diff -ur svgalib-1.9.5.orig/src/ramdac/ramdac.c svgalib-1.9.5/src/ramdac/ramdac.
      }
      return dacspeed;
  }
-diff -ur svgalib-1.9.5.orig/src/ramdac/s3dacs.c svgalib-1.9.5/src/ramdac/s3dacs.c
---- svgalib-1.9.5.orig/src/ramdac/s3dacs.c	Wed Nov 10 21:20:21 1999
-+++ svgalib-1.9.5/src/ramdac/s3dacs.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/ramdac/s3dacs.c svgalib-1.9.9/src/ramdac/s3dacs.c
+--- svgalib-1.9.9.orig/src/ramdac/s3dacs.c	Wed Nov 10 21:20:21 1999
++++ svgalib-1.9.9/src/ramdac/s3dacs.c	Sat May 26 17:01:50 2001
 @@ -115,7 +115,7 @@
      /* Calculate MCLK in kHz. */
      MCLK = 14318 * (m + 2) / (n1 + 2) / (1 << n2);
@@ -3080,9 +3129,9 @@ diff -ur svgalib-1.9.5.orig/src/ramdac/s3dacs.c svgalib-1.9.5/src/ramdac/s3dacs.
  	cardspecs->maxPixelClock4bpp = dacspeed;
  	cardspecs->maxPixelClock8bpp = 135000;
  	cardspecs->maxPixelClock16bpp = dacspeed;
-diff -ur svgalib-1.9.5.orig/src/ramdac/sierra.c svgalib-1.9.5/src/ramdac/sierra.c
---- svgalib-1.9.5.orig/src/ramdac/sierra.c	Sun Jun 22 17:44:35 1997
-+++ svgalib-1.9.5/src/ramdac/sierra.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/ramdac/sierra.c svgalib-1.9.9/src/ramdac/sierra.c
+--- svgalib-1.9.9.orig/src/ramdac/sierra.c	Sun Jun 22 17:44:35 1997
++++ svgalib-1.9.9/src/ramdac/sierra.c	Sat May 26 17:02:20 2001
 @@ -34,7 +34,7 @@
  {
      /* Should probe the exact DAC type. */
@@ -3110,9 +3159,9 @@ diff -ur svgalib-1.9.5.orig/src/ramdac/sierra.c svgalib-1.9.5/src/ramdac/sierra.
  }
  
  static void SC1148X_initializestate(unsigned char *regs, int bpp, int colormode,
-diff -ur svgalib-1.9.5.orig/src/regextr.c svgalib-1.9.5/src/regextr.c
---- svgalib-1.9.5.orig/src/regextr.c	Tue Jul 27 18:36:19 1999
-+++ svgalib-1.9.5/src/regextr.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/regextr.c svgalib-1.9.9/src/regextr.c
+--- svgalib-1.9.9.orig/src/regextr.c	Tue Jul 27 18:36:19 1999
++++ svgalib-1.9.9/src/regextr.c	Sat May 26 16:57:42 2001
 @@ -502,7 +502,7 @@
      p = modes;
      while (p != NULL) {
@@ -3122,9 +3171,9 @@ diff -ur svgalib-1.9.5.orig/src/regextr.c svgalib-1.9.5/src/regextr.c
  #endif
  	(*mt)[i].mode_number = p->mnum;
  	(*mt)[i].regs = p->regs;
-diff -ur svgalib-1.9.5.orig/src/s3.c svgalib-1.9.5/src/s3.c
---- svgalib-1.9.5.orig/src/s3.c	Fri May  5 19:31:51 2000
-+++ svgalib-1.9.5/src/s3.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/s3.c svgalib-1.9.9/src/s3.c
+--- svgalib-1.9.9.orig/src/s3.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/s3.c	Sat May 26 17:03:23 2001
 @@ -570,7 +570,7 @@
      do {
  	unsigned char m, n, df;
@@ -3173,7 +3222,7 @@ diff -ur svgalib-1.9.5.orig/src/s3.c svgalib-1.9.5/src/s3.c
      if (getenv("IOPERM") == NULL) {
  	if (0 > iopl(3))
 -	    printf("svgalib: s3: cannot get I/O permissions for 8514.");
-+	    fprintf(stderr,"svgalib: s3: cannot get I/O permissions for 8514.");
++	    fprintf(stderr,"svgalib: s3: cannot get I/O permissions for 8514.\n");
      }
  #ifdef S3_LINEAR_SUPPORT
      if (s3_chiptype > S3_805) {
@@ -3192,10 +3241,22 @@ diff -ur svgalib-1.9.5.orig/src/s3.c svgalib-1.9.5/src/s3.c
  	return 1;
  #endif
      }
-diff -ur svgalib-1.9.5.orig/src/sis.c svgalib-1.9.5/src/sis.c
---- svgalib-1.9.5.orig/src/sis.c	Fri May  5 10:14:40 2000
-+++ svgalib-1.9.5/src/sis.c	Thu Jul 27 18:55:59 2000
-@@ -660,7 +660,7 @@
+diff -Nur svgalib-1.9.9.orig/src/savage.c svgalib-1.9.9/src/savage.c
+--- svgalib-1.9.9.orig/src/savage.c	Wed May 16 18:09:39 2001
++++ svgalib-1.9.9/src/savage.c	Sat May 26 17:03:44 2001
+@@ -987,7 +987,7 @@
+     }
+ 
+     if (__svgalib_driver_report) {
+-	printf("Using SAVAGE driver, %iKB. Chipset: %s\n",savage_memory, chipnames[savage_chipset]);
++	fprintf(stderr,"Using SAVAGE driver, %iKB. Chipset: %s\n",savage_memory, chipnames[savage_chipset]);
+     };
+ 
+     cardspecs = malloc(sizeof(CardSpecs));
+diff -Nur svgalib-1.9.9.orig/src/sis.c svgalib-1.9.9/src/sis.c
+--- svgalib-1.9.9.orig/src/sis.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/sis.c	Sat May 26 17:03:59 2001
+@@ -661,7 +661,7 @@
      };
  
      if (__svgalib_driver_report) {
@@ -3204,10 +3265,10 @@ diff -ur svgalib-1.9.5.orig/src/sis.c svgalib-1.9.5/src/sis.c
      };
  
      /* program the 25 and 28 Mhz clocks */
-diff -ur svgalib-1.9.5.orig/src/skeleton.c svgalib-1.9.5/src/skeleton.c
---- svgalib-1.9.5.orig/src/skeleton.c	Sun Jan 16 20:13:34 2000
-+++ svgalib-1.9.5/src/skeleton.c	Thu Jul 27 18:55:59 2000
-@@ -304,7 +304,7 @@
+diff -Nur svgalib-1.9.9.orig/src/skeleton.c svgalib-1.9.9/src/skeleton.c
+--- svgalib-1.9.9.orig/src/skeleton.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/skeleton.c	Sat May 26 17:04:15 2001
+@@ -302,7 +302,7 @@
      };
  
      if (__svgalib_driver_report) {
@@ -3216,9 +3277,9 @@ diff -ur svgalib-1.9.5.orig/src/skeleton.c svgalib-1.9.5/src/skeleton.c
      };
  
      cardspecs = malloc(sizeof(CardSpecs));
-diff -ur svgalib-1.9.5.orig/src/timing.c svgalib-1.9.5/src/timing.c
---- svgalib-1.9.5.orig/src/timing.c	Sun Feb  6 20:57:28 2000
-+++ svgalib-1.9.5/src/timing.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/timing.c svgalib-1.9.9/src/timing.c
+--- svgalib-1.9.9.orig/src/timing.c	Fri Aug  4 05:21:11 2000
++++ svgalib-1.9.9/src/timing.c	Sat May 26 17:04:37 2001
 @@ -141,7 +141,7 @@
      if ((mmtp->flags & DOUBLESCAN))
  	vsf /= 2.0f;
@@ -3228,9 +3289,9 @@ diff -ur svgalib-1.9.5.orig/src/timing.c svgalib-1.9.5/src/timing.c
  	   hsf / 1000, (int) INRANGE(hsf, horizsync),
  	   vsf, (int) INRANGE(vsf, vertrefresh));
  #endif
-diff -ur svgalib-1.9.5.orig/src/tvga8900.c svgalib-1.9.5/src/tvga8900.c
---- svgalib-1.9.5.orig/src/tvga8900.c	Tue Jul 27 18:36:19 1999
-+++ svgalib-1.9.5/src/tvga8900.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/tvga8900.c svgalib-1.9.9/src/tvga8900.c
+--- svgalib-1.9.9.orig/src/tvga8900.c	Tue Jul 27 18:36:19 1999
++++ svgalib-1.9.9/src/tvga8900.c	Sat May 26 17:05:23 2001
 @@ -378,7 +378,7 @@
  	crtc31 = regs[EXT + 12];
      }
@@ -3282,10 +3343,10 @@ diff -ur svgalib-1.9.5.orig/src/tvga8900.c svgalib-1.9.5/src/tvga8900.c
  		tvga8900_memory, (tvga8900_nonint) ? "non-" : "");
      }
      __svgalib_driverspecs = &__svgalib_tvga8900_driverspecs;
-diff -ur svgalib-1.9.5.orig/src/vesa.c svgalib-1.9.5/src/vesa.c
---- svgalib-1.9.5.orig/src/vesa.c	Sun Apr 16 17:10:35 2000
-+++ svgalib-1.9.5/src/vesa.c	Thu Jul 27 18:55:59 2000
-@@ -563,7 +563,7 @@
+diff -Nur svgalib-1.9.9.orig/src/vesa.c svgalib-1.9.9/src/vesa.c
+--- svgalib-1.9.9.orig/src/vesa.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/vesa.c	Sat May 26 17:05:56 2001
+@@ -575,7 +575,7 @@
      };
      
      if (__svgalib_driver_report) {
@@ -3294,10 +3355,10 @@ diff -ur svgalib-1.9.5.orig/src/vesa.c svgalib-1.9.5/src/vesa.c
                  (vesa_chiptype==2)?"VBE3":(vesa_chiptype?"VBE2.0":"VBE1.2"));
      }
      return 0;
-diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
---- svgalib-1.9.5.orig/src/vga.c	Wed May 31 10:27:23 2000
-+++ svgalib-1.9.5/src/vga.c	Thu Jul 27 18:59:23 2000
-@@ -686,7 +686,7 @@
+diff -Nur svgalib-1.9.9.orig/src/vga.c svgalib-1.9.9/src/vga.c
+--- svgalib-1.9.9.orig/src/vga.c	Wed May 23 21:21:22 2001
++++ svgalib-1.9.9/src/vga.c	Sat May 26 17:17:09 2001
+@@ -716,7 +716,7 @@
  
      if (__svgalib_mem_fd < 0)
  	if ((__svgalib_mem_fd = open("/dev/svga", O_RDWR)) < 0) {
@@ -3306,7 +3367,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	    exit(1);
  	}
  }
-@@ -914,7 +914,7 @@
+@@ -944,7 +944,7 @@
      idle_accel();
      
      restoretextmode();
@@ -3315,7 +3376,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	   (v == SIGINT) ? " (ctrl-c pressed)" : "");
  
      for (i = 0; i < sizeof(sig2catch); i++)
-@@ -924,7 +924,7 @@
+@@ -954,7 +954,7 @@
  	    break;
  	}
      if (i >= sizeof(sig2catch)) {
@@ -3324,7 +3385,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	raise(SIGSEGV);
      }
  }
-@@ -1083,12 +1083,12 @@
+@@ -1145,12 +1145,12 @@
  {
      CHIPSET = c;
  #ifdef DEBUG
@@ -3339,7 +3400,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	CHIPSET = UNDEFINED;
  	return;
      }
-@@ -1103,12 +1103,12 @@
+@@ -1165,12 +1165,12 @@
  {
      CHIPSET = c;
  #ifdef DEBUG
@@ -3354,16 +3415,16 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
      __svgalib_setpage = __svgalib_driverspecs->__svgalib_setpage;
      __svgalib_setrdpage = __svgalib_driverspecs->__svgalib_setrdpage;
-@@ -1175,7 +1175,7 @@
+@@ -1237,7 +1237,7 @@
  	return;
      }
  #ifdef DEBUG
 -    printf("Release request.\n");
 +    fprintf(stderr,"Release request.\n");
  #endif
- if(release_acquire){
-    fprintf(stderr,"Error at Release.\n");
-@@ -1201,27 +1201,27 @@
+ release_acquire=!release_acquire;
+     forbidvtacquire = 1;
+@@ -1259,27 +1259,27 @@
          };
      ioctl(__svgalib_tty_fd, VT_RELDISP, 1);
  #ifdef DEBUG
@@ -3393,9 +3454,9 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
 -    printf("Acquisition request.\n");
 +    fprintf(stderr,"Acquisition request.\n");
  #endif
- if(!release_acquire){
-    fprintf(stderr,"Error at Acquire.\n");
-@@ -1236,7 +1236,7 @@
+ release_acquire=!release_acquire;
+     forbidvtrelease = 1;
+@@ -1290,7 +1290,7 @@
      __svgalib_flipback();
      ioctl(__svgalib_tty_fd, VT_RELDISP, VT_ACKACQ);
  #ifdef DEBUG
@@ -3404,7 +3465,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
      forbidvtrelease = 0;
      if (__svgalib_come_from_background)
-@@ -1395,7 +1395,7 @@
+@@ -1449,7 +1449,7 @@
      __vga_mmap();
  
      if ((long) GM < 0) {
@@ -3413,18 +3474,18 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	exit(1);
      }
      /* disable video */
-@@ -1405,8 +1405,8 @@
+@@ -1459,8 +1459,8 @@
  
      i = __svgalib_saveregs(text_regs);
      if (i > MAX_REGS) {
 -	puts("svgalib: FATAL internal error:");
 -	printf("Set MAX_REGS at least to %d in src/driver.h and recompile everything.\n",
-+	fprintf(stderr,"svgalib: FATAL internal error:");
++	fprintf(stderr,"svgalib: FATAL internal error:\n");
 +	fprintf(stderr,"Set MAX_REGS at least to %d in src/driver.h and recompile everything.\n",
  	       i);
  	exit(1);
      }
-@@ -1495,7 +1495,7 @@
+@@ -1549,7 +1549,7 @@
      int child_status, oldkbmode;
  
      if (initialized) {
@@ -3433,7 +3494,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	goto no_fork;
      }
      initialize();
-@@ -1510,7 +1510,7 @@
+@@ -1564,7 +1564,7 @@
      childpid = fork();
      if (childpid < 0) {
        no_fork:
@@ -3442,12 +3503,12 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	return;
      }
      if (childpid) {
-@@ -1528,19 +1528,19 @@
+@@ -1582,20 +1582,20 @@
  		exit(WEXITSTATUS(child_status));
  
  	    if (WCOREDUMP(child_status))
 -		puts("svgalib:vga_safety_fork: Core dumped!");
-+		fprintf(stderr,"svgalib:vga_safety_fork: Core dumped!");
++		fprintf(stderr,"svgalib:vga_safety_fork: Core dumped!\n");
  
  	    if (WIFSIGNALED(child_status)) {
 -		printf("svgalib:vga_safety_fork: Killed by signal %d, %s.\n",
@@ -3462,11 +3523,13 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  		       WSTOPSIG(child_status),
  		       strsignal(WSTOPSIG(child_status)));
 -		puts("\aWARNING! Continue stopped svgalib application at own risk. You are better\n"
+-		     "off killing it NOW!");
 +		fprintf(stderr,"\aWARNING! Continue stopped svgalib application at own risk. You are better\n"
- 		     "off killing it NOW!");
++		     "off killing it NOW!\n");
  		continue;
  	    }
-@@ -2100,7 +2100,7 @@
+ 	}
+@@ -2155,7 +2155,7 @@
  	/* (unless more has been claimed, in which case we assume */
  	/* SVGA bank-switching) */
  	if ((graph_buf = malloc(GRAPH_SIZE)) == NULL) {
@@ -3475,7 +3538,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	    vga_setmode(TEXT);
  	    exit(1);
  	}
-@@ -2109,7 +2109,7 @@
+@@ -2164,7 +2164,7 @@
  	/* for planar VGA modes, save the full 256K */
  	__svgalib_vga_driverspecs.setmode(GPLANE16, prv_mode);
  	if ((graph_buf = malloc(4 * GRAPH_SIZE)) == NULL) {
@@ -3484,7 +3547,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	    vga_setmode(TEXT);
  	    exit(1);
  	}
-@@ -2124,7 +2124,7 @@
+@@ -2179,7 +2179,7 @@
  
  	size = VMEM;
  	if ((graph_buf = malloc(4 * size)) == NULL) {
@@ -3493,7 +3556,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	    vga_setmode(TEXT);
  	    exit(1);
  	}
-@@ -2147,7 +2147,7 @@
+@@ -2202,7 +2202,7 @@
  	size = VMEM;
  
  	if ((graph_buf = malloc(size)) == NULL) {
@@ -3502,7 +3565,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	    vga_setmode(TEXT);
  	    exit(1);
  	}
-@@ -2233,7 +2233,7 @@
+@@ -2288,7 +2288,7 @@
  	size = VMEM;
  
  #ifdef DEBUG
@@ -3511,7 +3574,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
  	page = 0;
  	while (size >= 65536) {
-@@ -2509,11 +2509,11 @@
+@@ -2566,11 +2566,11 @@
      ptr = token(nptr);
      while (ptr) {
  #ifdef DEBUG_CONF
@@ -3525,16 +3588,16 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
  	    if (**curr == '!') {
  		if (!strcmp(*curr + 1, ptr)) {
-@@ -2543,7 +2543,7 @@
+@@ -2600,7 +2600,7 @@
      
      fstat(fileno(file), &st);	/* Some error analysis may be fine here.. */
      if ( (buf = alloca(st.st_size + 1)) == 0) {	/* + a final \0 */
 -        puts("svgalib: out of mem while parsing config file !");
-+        fprintf(stderr,"svgalib: out of mem while parsing config file !");
++        fprintf(stderr,"svgalib: out of mem while parsing config file !\n");
          return;
      }
      fread(buf, 1, st.st_size, file);
-@@ -2579,7 +2579,7 @@
+@@ -2636,7 +2636,7 @@
      }
      if ( (file = fopen(configfilename, "r")) != 0) {
  #ifdef DEBUG_CONF
@@ -3543,12 +3606,12 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
        process_config_file(file, 1, commands, func);
        fclose(file);
-@@ -2593,13 +2593,13 @@
+@@ -2650,13 +2650,13 @@
  
        filename = alloca(strlen(ptr) + 20);
        if (!filename) {
 -	puts("svgalib: out of mem while parsing SVGALIB_CONFIG_FILE !");
-+	fprintf(stderr,"svgalib: out of mem while parsing SVGALIB_CONFIG_FILE !");
++	fprintf(stderr,"svgalib: out of mem while parsing SVGALIB_CONFIG_FILE !\n");
        } else {
  	strcpy(filename, ptr);
  	strcat(filename, "/.svgalibrc");
@@ -3559,7 +3622,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
  	  process_config_file(file, allowoverride, commands, func);
  	  fclose(file);
-@@ -2610,7 +2610,7 @@
+@@ -2667,7 +2667,7 @@
      if ( (ptr = getenv("SVGALIB_CONFIG_FILE")) != 0) {
        if ( (file = fopen(ptr, "r")) != 0) {
  #ifdef DEBUG_CONF
@@ -3568,21 +3631,21 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
  	process_config_file(file, allowoverride, commands, func);
  	fclose(file);
-@@ -2622,11 +2622,11 @@
+@@ -2679,11 +2679,11 @@
      if ( (ptr = getenv("SVGALIB_CONFIG")) != 0  &&  (i = strlen(ptr)) != 0) {
        buf = alloca(i + 1);
        if (!buf) {
 -	puts("svgalib: out of mem while parsing SVGALIB_CONFIG !");
-+	fprintf(stderr,"svgalib: out of mem while parsing SVGALIB_CONFIG !");
++	fprintf(stderr,"svgalib: out of mem while parsing SVGALIB_CONFIG !\n");
        } else {
  	strcpy(buf, ptr);		/* Copy for safety and strtok!! */
  #ifdef DEBUG_CONF
 -	puts("Parsing env variable \'SVGALIB_CONFIG\'");
-+	fprintf(stderr,"Parsing env variable \'SVGALIB_CONFIG\'");
++	fprintf(stderr,"Parsing env variable \'SVGALIB_CONFIG\'\n");
  #endif
  	parse_string(buf, commands, func, allowoverride);
        }
-@@ -2673,17 +2673,17 @@
+@@ -2765,17 +2765,17 @@
      float f;
  
  #ifdef DEBUG_CONF
@@ -3593,17 +3656,17 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
      case 5:
  #ifdef DEBUG_CONF
 -	puts("Allow override");
-+	fprintf(stderr,"Allow override");
++	fprintf(stderr,"Allow override\n");
  #endif
  	if (mode)
  	    allowoverride = 1;
  	else
 -	    puts("Overrideenable denied. (Gee.. Do you think I'm that silly?)");
-+	    fprintf(stderr,"Overrideenable denied. (Gee.. Do you think I'm that silly?)");
++	    fprintf(stderr,"Overrideenable denied. (Gee.. Do you think I'm that silly?)\n");
  	break;
      case 0:			/* mouse */
      case 2:			/* m */
-@@ -2703,16 +2703,16 @@
+@@ -2798,16 +2798,16 @@
  		}
  	    }
  	  inv_mouse:
@@ -3619,11 +3682,11 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
 +		fprintf(stderr,"%s, ", *tabptr);
  	    }
 -	    puts("or none.");
-+	    fprintf(stderr,"or none.");
++	    fprintf(stderr,"or none.\n");
  	    return ptr;		/* Allow a second parse of str */
  	}
  	break;
-@@ -2735,7 +2735,7 @@
+@@ -2830,7 +2830,7 @@
  		goto mon_deny;
  	    __svgalib_horizsync.max = f * 1000.0f;
  	} else {
@@ -3632,12 +3695,12 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  		   "Correct usage: {monitor|M} monitortype\n"
  		   "where monitortype is one of 0, 1, 2, 3, 4, 5, 6, or\n"
  		   "maximal horz. scan frequency in khz.\n"
-@@ -2747,14 +2747,14 @@
+@@ -2842,14 +2842,14 @@
      case 4:			/* chipset */
  	ptr = token(nptr);
  	if (ptr == NULL) {
 -	    puts("svgalib: Illegal chipset setting: no chipset given");
-+	    fprintf(stderr,"svgalib: Illegal chipset setting: no chipset given");
++	    fprintf(stderr,"svgalib: Illegal chipset setting: no chipset given\n");
  	    goto chip_us;
  	}
  	/*First param is chipset */
@@ -3649,17 +3712,17 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  			ptr);
  		    continue; /* The for above will loop a few more times and fail */
  		}
-@@ -2767,33 +2767,33 @@
+@@ -2862,35 +2862,35 @@
  			    vga_setchipsetandfeatures(i, j, atoi(ptr));
  			else {
  			  chipdeny:
 -			    puts("chipset override from environment denied.");
-+			    fprintf(stderr,"chipset override from environment denied.");
++			    fprintf(stderr,"chipset override from environment denied.\n");
  			}
  			return token(nptr);
  		    } else {
 -			puts("svgalib: Illegal chipset setting: memory is not a number");
-+			fprintf(stderr,"svgalib: Illegal chipset setting: memory is not a number");
++			fprintf(stderr,"svgalib: Illegal chipset setting: memory is not a number\n");
  			goto chip_us;
  		    }
  		}
@@ -3667,7 +3730,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  		    vga_setchipset(i);
  		else
 -		    puts("chipset override from environment denied.");
-+		    fprintf(stderr,"chipset override from environment denied.");
++		    fprintf(stderr,"chipset override from environment denied.\n");
  		return ptr;
  	    }
  	}
@@ -3675,8 +3738,9 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
 +	fprintf(stderr,"svgalib: Illegal chipset setting: chipset %s\n", ptr);
        chip_us:
 -	puts("Correct usage: chipset driver [par1 par2]\n"
+-	     "where driver is one of:");
 +	fprintf(stderr,"Correct usage: chipset driver [par1 par2]\n"
- 	     "where driver is one of:");
++	     "where driver is one of:\n");
  	ptb = "%s";
  	for (i = 0, tabptr = driver_names; *tabptr; tabptr++, i++) {
  	    if (__svgalib_driverspecslist[i] != NULL) {
@@ -3688,23 +3752,26 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
 -	puts("\npar1 and par2 are river dependant integers.\n"
 +	fprintf(stderr,"\npar1 and par2 are river dependant integers.\n"
  	     "Example: Chipset VGA    or\n"
- 	     "Chipset VGA 0 512");
+-	     "Chipset VGA 0 512");
++	     "Chipset VGA 0 512\n");
  	return ptr;
-@@ -2817,7 +2817,7 @@
+     case 6:			/* oldstyle config: m0-m4 */
+     case 7:
+@@ -2912,7 +2912,7 @@
        monnum:
  	if (!mode) {
  	  mon_deny:
 -	    puts("Monitor setting from environment denied.");
-+	    fprintf(stderr,"Monitor setting from environment denied.");
++	    fprintf(stderr,"Monitor setting from environment denied.\n");
  	    break;
  	} else {
  	    __svgalib_horizsync.max = __svgalib_maxhsync[command - 12];
-@@ -2846,14 +2846,14 @@
+@@ -2941,14 +2941,14 @@
      case 31:			/* c0-c1 color-text selection */
  	if (!mode) {
  	  coltexdeny:
 -	    puts("Color/mono text selection from environment denied.");
-+	    fprintf(stderr,"Color/mono text selection from environment denied.");
++	    fprintf(stderr,"Color/mono text selection from environment denied.\n");
  	    break;
  	}
  	color_text = 0;
@@ -3712,11 +3779,11 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
      case 32:
  	if (!mode) {
 -	    puts("Color/mono text selection from environment denied.");
-+	    fprintf(stderr,"Color/mono text selection from environment denied.");
++	    fprintf(stderr,"Color/mono text selection from environment denied.\n");
  	    break;
  	}
  	color_text = 1;
-@@ -2908,7 +2908,7 @@
+@@ -3003,7 +3003,7 @@
  	    __svgalib_horizsync.max = f * 1000;
  	} else {
  	  hs_bad:
@@ -3725,7 +3792,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  		   "Correct usage: HorizSync min_kHz max_kHz\n"
  		   "Example: HorizSync 31.5 36.5\n");
  	}
-@@ -2931,7 +2931,7 @@
+@@ -3026,7 +3026,7 @@
  	    __svgalib_vertrefresh.max = f;
  	} else {
  	  vr_bad:
@@ -3734,16 +3801,16 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  		   "Correct usage: VertRefresh min_Hz max_Hz\n"
  		   "Example: VertRefresh 50 70\n");
  	}
-@@ -3017,7 +3017,7 @@
+@@ -3112,7 +3112,7 @@
  	}
      case 46:
  	if (!mode) {
 -	    puts("Security setting from environment denied.");
-+	    fprintf(stderr,"Security setting from environment denied.");
++	    fprintf(stderr,"Security setting from environment denied.\n");
  	    break;
  	}
  	if ( (ptr = token(nptr)) ) {
-@@ -3029,7 +3029,7 @@
+@@ -3124,7 +3124,7 @@
  		 break;
  	    }
  	} 
@@ -3752,16 +3819,16 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  	break;
      case 47:
  	ptr = token(nptr);
-@@ -3037,7 +3037,7 @@
+@@ -3132,7 +3132,7 @@
  	    mouse_device = strdup(ptr);
  	    if (mouse_device == NULL) {
  	      nomem:
 -		puts("svgalib: Fatal error: out of memory.");
-+		fprintf(stderr,"svgalib: Fatal error: out of memory.");
++		fprintf(stderr,"svgalib: Fatal error: out of memory.\n");
  		exit(1);
  	    }
  	} else
-@@ -3049,12 +3049,12 @@
+@@ -3144,12 +3144,12 @@
  	  if (mode != -1) {
  	    __svgalib_default_mode = mode;
  	  } else {
@@ -3776,7 +3843,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
    	  				vga_conf_commands[command]);
  	  break;
  	}
-@@ -3078,7 +3078,7 @@
+@@ -3173,7 +3173,7 @@
  	if (!__joystick_devicenames[command - 51])
  	    goto nomem;
  #else
@@ -3785,7 +3852,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
  	break;
      case 55: /* TextProg */
-@@ -3106,7 +3106,7 @@
+@@ -3201,7 +3201,7 @@
          __svgalib_vesatext=1;
          break;
  #else
@@ -3794,7 +3861,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
      case 57: /* Vesa save bitmap */  
  #ifdef INCLUDE_VESA_DRIVER
-@@ -3116,7 +3116,7 @@
+@@ -3211,7 +3211,7 @@
           __svgalib_VESA_savebitmap=j;
         };
  #else
@@ -3803,7 +3870,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
         break;
      case 58:
-@@ -3130,7 +3130,7 @@
+@@ -3225,7 +3225,7 @@
  	        __svgalib_bandwidth = f;
  	    }
  	} else {
@@ -3812,7 +3879,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
    	  				vga_conf_commands[command]);
  	    break;
  	}
-@@ -3171,7 +3171,7 @@
+@@ -3266,7 +3266,7 @@
           __svgalib_VESA_textmode=j;
         };
  #else
@@ -3821,7 +3888,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
         break;
      case 64:			/* pci initial values */
-@@ -3188,7 +3188,7 @@
+@@ -3283,7 +3283,7 @@
  	    if((j<256)&&(j>=0))__svgalib_pci_idev = j;
  	} else {
          ps_bad:
@@ -3830,7 +3897,7 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  		   "Correct usage: PCIStart initial_bus initial_dev"
  		   "Example: PCIStart 1 0\n");
  	}
-@@ -3201,7 +3201,7 @@
+@@ -3296,7 +3296,7 @@
  	    ptr = token(nptr);
              if ( (file = fopen(ptr, "r")) != 0) {
  #ifdef DEBUG_CONF
@@ -3839,19 +3906,19 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
                  process_config_file(file, 1, vga_conf_commands, process_option);
                  fclose(file);
-@@ -3252,19 +3252,19 @@
+@@ -3332,19 +3332,19 @@
      __svgalib_read_options(vga_conf_commands, process_option);
      if (mouse_type == -1) {
  	mouse_type = MOUSE_MICROSOFT;	/* Default. */
 -	puts("svgalib: Assuming Microsoft mouse.");
-+	fprintf(stderr,"svgalib: Assuming Microsoft mouse.");
++	fprintf(stderr,"svgalib: Assuming Microsoft mouse.\n");
      }
      if (__svgalib_horizsync.max == 0U) {
  	/* Default monitor is low end SVGA/8514. */
  	__svgalib_horizsync.min = 31500U;
  	__svgalib_horizsync.max = 35500U;
 -	puts("svgalib: Assuming low end SVGA/8514 monitor (35.5 KHz).");
-+	fprintf(stderr,"svgalib: Assuming low end SVGA/8514 monitor (35.5 KHz).");
++	fprintf(stderr,"svgalib: Assuming low end SVGA/8514 monitor (35.5 KHz).\n");
      }
  #ifdef DEBUG_CONF
 -    printf("Mouse is: %d Monitor is: H(%5.1f, %5.1f) V(%u,%u)\n", mouse_type,
@@ -3863,7 +3930,16 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
  #endif
  }
  
-@@ -3448,10 +3448,10 @@
+@@ -3463,7 +3463,7 @@
+     __svgalib_open_devconsole();
+ 
+     if(__svgalib_driver_report) {
+-        printf("svgalib %s\n", versionstr);
++        fprintf(stderr,"svgalib %s\n", versionstr);
+     }
+ 
+ #ifdef SET_TERMIO
+@@ -3540,10 +3540,10 @@
      };
     
  #ifdef DEBUG
@@ -3876,9 +3952,9 @@ diff -ur svgalib-1.9.5.orig/src/vga.c svgalib-1.9.5/src/vga.c
      else
         mouse_open = 1;
  
-diff -ur svgalib-1.9.5.orig/src/vga_console.c svgalib-1.9.5/src/vga_console.c
---- svgalib-1.9.5.orig/src/vga_console.c	Tue May 23 09:48:48 2000
-+++ svgalib-1.9.5/src/vga_console.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/vga_console.c svgalib-1.9.9/src/vga_console.c
+--- svgalib-1.9.9.orig/src/vga_console.c	Tue May 23 09:48:48 2000
++++ svgalib-1.9.9/src/vga_console.c	Sat May 26 17:18:06 2001
 @@ -103,7 +103,7 @@
      if ((stat(fname, &sbuf) >= 0) && (getuid() == sbuf.st_uid)) {
          return 1;
@@ -3915,10 +3991,10 @@ diff -ur svgalib-1.9.5.orig/src/vga_console.c svgalib-1.9.5/src/vga_console.c
  	 "and unable to find one.\n");
      }
  }
-diff -ur svgalib-1.9.5.orig/src/vgadrv.c svgalib-1.9.5/src/vgadrv.c
---- svgalib-1.9.5.orig/src/vgadrv.c	Thu Jan  6 12:42:07 2000
-+++ svgalib-1.9.5/src/vgadrv.c	Thu Jul 27 18:55:59 2000
-@@ -302,7 +302,7 @@
+diff -Nur svgalib-1.9.9.orig/src/vgadrv.c svgalib-1.9.9/src/vgadrv.c
+--- svgalib-1.9.9.orig/src/vgadrv.c	Tue Jan 30 10:31:45 2001
++++ svgalib-1.9.9/src/vgadrv.c	Sat May 26 17:19:17 2001
+@@ -315,7 +315,7 @@
  static int vgadrv_init(int force, int par1, int par2)
  {
      if (__svgalib_driver_report)
@@ -3927,58 +4003,9 @@ diff -ur svgalib-1.9.5.orig/src/vgadrv.c svgalib-1.9.5/src/vgadrv.c
      __svgalib_driverspecs = &__svgalib_vga_driverspecs;
  
      return 0;
-diff -ur svgalib-1.9.5.orig/src/vgadump.c svgalib-1.9.5/src/vgadump.c
---- svgalib-1.9.5.orig/src/vgadump.c	Tue Jul 27 18:36:19 1999
-+++ svgalib-1.9.5/src/vgadump.c	Thu Jul 27 18:55:59 2000
-@@ -29,9 +29,9 @@
-     if (!n)
- 	return;
-     i = 0;
--    printf("  ");
-+    fprintf(stderr,"  ");
-     while (i < n) {
--	printf("0x%02X,", regs[i]);
-+	fprintf(stderr,"0x%02X,", regs[i]);
- 	i++;
- 	if (i % 8 == 0 || i == n) {
- 	    if (i <= 8) {
-@@ -39,9 +39,9 @@
- 		vprintf(fmt, ap);
- 		va_end(ap);
- 	    }
--	    printf("\n");
-+	    fprintf(stderr,"\n");
- 	    if (i != n)
--		printf("  ");
-+		fprintf(stderr,"  ");
- 	}
-     }    
- }
-@@ -52,7 +52,7 @@
-  */
- void __svgalib_dumpregs(const unsigned char regs[], int n)
- {
--    printf("static unsigned char regs[%d] = {\n", n);
-+    fprintf(stderr,"static unsigned char regs[%d] = {\n", n);
- 
-     dumpregs(regs + CRT, CRT_C, "\t/* CR00-CR%02x */", CRT_C);
-     dumpregs(regs + ATT, ATT_C, "\t/* AR00-AR%02x */", ATT_C);
-@@ -61,10 +61,10 @@
-     dumpregs(regs + MIS, MIS_C, "\t\t\t\t\t\t/* MISC_OUT  */");
-     n -= EXT;
-     if (n) {
--	printf("  /* Extended (count = 0x%02x) */\n", n);
-+	fprintf(stderr,"  /* Extended (count = 0x%02x) */\n", n);
- 	dumpregs(regs + EXT, n, "");
-     }
--    printf("};\n");
-+    fprintf(stderr,"};\n");
- }
- 
- int vga_dumpregs(void)
-diff -ur svgalib-1.9.5.orig/src/vgamisc.c svgalib-1.9.5/src/vgamisc.c
---- svgalib-1.9.5.orig/src/vgamisc.c	Fri May 12 22:38:50 2000
-+++ svgalib-1.9.5/src/vgamisc.c	Thu Jul 27 18:55:59 2000
+diff -Nur svgalib-1.9.9.orig/src/vgamisc.c svgalib-1.9.9/src/vgamisc.c
+--- svgalib-1.9.9.orig/src/vgamisc.c	Sun Jul  2 17:01:42 2000
++++ svgalib-1.9.9/src/vgamisc.c	Sat May 26 17:23:36 2001
 @@ -116,7 +116,7 @@
      }
      /* Linear framebuffer is OK. */
@@ -4006,10 +4033,10 @@ diff -ur svgalib-1.9.5.orig/src/vgamisc.c svgalib-1.9.5/src/vgamisc.c
  		   memory >> 10, mappedMemory >> 10);
  	return mappedMemory;
      }
-diff -ur svgalib-1.9.5.orig/src/vgapal.c svgalib-1.9.5/src/vgapal.c
---- svgalib-1.9.5.orig/src/vgapal.c	Fri May 12 21:28:02 2000
-+++ svgalib-1.9.5/src/vgapal.c	Thu Jul 27 18:55:59 2000
-@@ -75,7 +75,7 @@
+diff -Nur svgalib-1.9.9.orig/src/vgapal.c svgalib-1.9.9/src/vgapal.c
+--- svgalib-1.9.9.orig/src/vgapal.c	Mon Jul 24 09:16:38 2000
++++ svgalib-1.9.9/src/vgapal.c	Sat May 26 17:24:17 2001
+@@ -72,7 +72,7 @@
  
      if (__svgalib_grayscale) {
  	if ((unsigned) index >= sizeof(__svgalib_green_backup) / sizeof(__svgalib_green_backup[0])) {
@@ -4018,7 +4045,7 @@ diff -ur svgalib-1.9.5.orig/src/vgapal.c svgalib-1.9.5/src/vgapal.c
  	}
  	__svgalib_green_backup[index] = green;
  
-@@ -100,7 +100,7 @@
+@@ -97,7 +97,7 @@
      else get_lut(index, red, green, blue);
      if (__svgalib_grayscale) {
  	if ((unsigned) index >= sizeof(__svgalib_green_backup) / sizeof(__svgalib_green_backup[0])) {
@@ -4027,3 +4054,15 @@ diff -ur svgalib-1.9.5.orig/src/vgapal.c svgalib-1.9.5/src/vgapal.c
  	}
  	*green = __svgalib_green_backup[index];
      }
+diff -Nur svgalib-1.9.9.orig/src/vgapci.c svgalib-1.9.9/src/vgapci.c
+--- svgalib-1.9.9.orig/src/vgapci.c	Wed May 23 21:17:56 2001
++++ svgalib-1.9.9/src/vgapci.c	Sat May 26 17:24:38 2001
+@@ -37,7 +37,7 @@
+ #if __BYTE_ORDER == __BIG_ENDIAN
+    for(i=0;i<n/4;i++)buf[i]=bswap_32(buf[i]);
+ #endif
+-//   printf("Read %i out of %i requested\n",n,size*4);
++//   fprintf(stderr,"Read %i out of %i requested\n",n,size*4);
+    close(f);
+    return 0;
+ };
