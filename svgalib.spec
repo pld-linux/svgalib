@@ -111,7 +111,7 @@ make OPTIMIZE="$RPM_OPT_FLAGS -pipe" static
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT/{etc/vga,usr/{bin,lib,include}} \
-	$RPM_BUILD_ROOT/usr/share/man/man{1,3,5,6,7} \
+	$RPM_BUILD_ROOT%{_mandir}/man{1,3,5,6,7} \
 	$RPM_BUILD_ROOT/var/state/svgalib
 
 install utils/{convfont,dumpreg,restore*,fix132*,setmclk} \
@@ -123,7 +123,7 @@ strip $RPM_BUILD_ROOT/usr/bin/*
 
 install utils/{runx,savetextmode,textmode} $RPM_BUILD_ROOT/usr/bin
 
-cp -a doc/man* $RPM_BUILD_ROOT/usr/share/man
+cp -a doc/man* $RPM_BUILD_ROOT%{_mandir}
 
 install sharedlib/lib*.so.* $RPM_BUILD_ROOT/usr/lib
 
@@ -161,7 +161,7 @@ rm -fr $RPM_BUILD_ROOT
 %config(noreplace) %verify(not size mtime md5) /etc/vga/*
 %attr(755,root,root) /usr/bin/*
 %attr(755,root,root) /usr/lib/*.so.*.*
-/usr/share/man/man[1567]/*
+%{_mandir}/man[1567]/*
 
 %attr(1777,root,root) %dir /var/state/svgalib
 
@@ -169,7 +169,7 @@ rm -fr $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 /usr/include/*.h
 %attr(755,root,root) /usr/lib/*.so
-/usr/share/man/man3/*
+%{_mandir}/man3/*
 
 %files static
 %attr(644,root,root) /usr/lib/*.a
