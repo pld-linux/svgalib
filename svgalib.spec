@@ -24,6 +24,7 @@ Patch5:		%{name}-smp.patch
 Patch6:		%{name}-banshee.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 %{!?_without_dist_kernel:Buildrequires:		kernel-headers}
+Requires:	%{name}-helper = %{version}
 ExclusiveArch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
