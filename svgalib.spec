@@ -124,7 +124,7 @@ Group(pt):	Base/Núcleo
 Group(ru):	âÁÚÏ×ÙÊ ÎÁÂÏÒ/ñÄÒÏ
 Group(sv):	Bas/Kärna
 Release:	%{_rel}@%{_kernel_ver_str}
-%{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel-ver}, kernel > %{_lernel_ver}}
+%{!?_without_dist_kernel:Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}}
 %{!?_without_dist_kernel:Conflicts:	kernel-up}
 Obsoletes:	svgalib-helper
 Provides:	svgalib-helper = %{version}
