@@ -1,0 +1,11 @@
+--- svgalib-1.9.19/utils/Makefile.orig	2003-10-08 11:08:01.000000000 +0000
++++ svgalib-1.9.19/utils/Makefile	2004-07-19 22:31:34.160618124 +0000
+@@ -56,7 +56,7 @@
+ 	$(INSTALLPROG) $(UTILPROGS) $(UTILINSTALLDIR)
+ 
+ .depend:
+-	gcc -MM $(patsubst %.o,$(srcdir)/utils/%.c,$(OBJECTS)) >.depend
++	$(CC) $(CFLAGS) -MM $(patsubst %.o,$(srcdir)/utils/%.c,$(OBJECTS)) >.depend
+ 
+ #
+ # include a dependency file if one exists
