@@ -176,13 +176,3 @@ rm -fr $RPM_BUILD_ROOT
 
 %files static
 %attr(644,root,root) %{_libdir}/*.a
-
-%changelog
-* Mon May 24 1999 Piotr Czerwiñski <pius@pld.org.pl> 
-  [1.3.1-6]
-- package is FHS 2.0 compliant,
-- spec file based on RH version, 
-- modified for PLD use by me, 
-  Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>,
-  Wojtek ¦lusarczyk <wojtek@shadow.eu.org> 
-  and Micha³ Zalewski <lcamtuf@dione.ids.pl>.
