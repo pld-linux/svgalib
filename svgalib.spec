@@ -36,6 +36,7 @@ BuildRequires:	rpmbuild(macros) >= 1.118
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
+%define		specflags	-fomit-frame-pointer
 
 %if %(echo %{_kernel_ver} | grep -q '2\.[0-4]\.' ; echo $?)
 %define	kmodext	ko
@@ -261,7 +262,7 @@ NOASM=n
 %else
 NOASM=y
 %endif
-MOPT="%{rpmcflags} %{!?debug:-fomit-frame-pointer} -pipe"
+MOPT="%{rpmcflags} -pipe"
 LDFLAGS="%{rpmldflags}"; export LDFLAGS
 
 %{__make} shared \
