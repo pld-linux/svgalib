@@ -5,7 +5,7 @@ Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.9.5
-Release:	4
+Release:	5
 License:	distributable
 Group:		Libraries
 Group(de):	Libraries
@@ -17,6 +17,7 @@ Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
 Patch3:		%{name}-stderr.patch
+Patch4:		%{name}-kernel-2.4.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 Prereq:		modutils
 Prereq:		/sbin/depmod
@@ -27,6 +28,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
 %define		_kernel_ver	%(grep UTS_RELEASE /usr/src/linux/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
+%define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
 
 %description
 The svgalib package provides the SVGAlib low-level graphics library
@@ -115,6 +117,7 @@ gzip -d doc/man?/*gz
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %ifarch %{ix86}
@@ -140,7 +143,14 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/var/lib/svgalib
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
-%{__make} install -C kernel/svgalib_helper DESTDIR=$RPM_BUILD_ROOT
+
+%if %{_kernel24}
+    install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/char
+    install kernel/svgalib_helper/svgalib_helper.o \
+	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/kernel/drivers/char
+%else
+    %{__make} install -C kernel/svgalib_helper DESTDIR=$RPM_BUILD_ROOT
+%endif
 
 # threeDKit is not really example, but "library" used in source form...
 # (but threeDKit directory contains also 2 examples)
@@ -169,7 +179,11 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
+%if %{_kernel24}
+%attr(600,root,root) /lib/modules/*/kernel/drivers/char/*.o
+%else
 %attr(600,root,root) /lib/modules/*/misc/*.o
+%endif
 %{_mandir}/man[1567]/*
 
 %files devel

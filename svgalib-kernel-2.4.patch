@@ -1,0 +1,32 @@
+--- svgalib-1.9.5/kernel/svgalib_helper/main.c.orig	Fri May 12 15:48:05 2000
++++ svgalib-1.9.5/kernel/svgalib_helper/main.c	Thu Mar  8 20:28:47 2001
+@@ -205,16 +205,19 @@
+ }
+ 
+ struct file_operations svgalib_helper_fops = {
+-   NULL,	/* llseek */
+-   NULL,	/* read */
+-   NULL,	/* write */
+-   NULL,	/* readdir */
+-   NULL,	/* poll */
+-   svgalib_helper_ioctl,	/* ioctl */
+-   svgalib_helper_mmap,	/* mmap */
+-   svgalib_helper_open,	/* open */
+-   NULL,	/* flush */
+-   svgalib_helper_release	/* release */
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,3,0)
++	owner:	THIS_MODULE,
++#endif
++	llseek:	NULL,	/* llseek */
++	read:	NULL,	/* read */
++	write:	NULL,	/* write */
++	readdir:NULL,	/* readdir */
++	poll:	NULL,	/* poll */
++	ioctl:	svgalib_helper_ioctl,	/* ioctl */
++	mmap:	svgalib_helper_mmap,	/* mmap */
++	open:	svgalib_helper_open,	/* open */
++	flush:	NULL,	/* flush */
++	release:svgalib_helper_release	/* release */
+ };
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,3,0)
