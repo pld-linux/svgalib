@@ -1,11 +1,11 @@
---- svgalib-1.9.18/kernel/svgalib_helper/Makefile.alt.orig	2003-10-07 18:22:30.000000000 +0200
-+++ svgalib-1.9.18/kernel/svgalib_helper/Makefile.alt	2003-10-07 19:32:32.463054496 +0200
+--- svgalib-1.9.19/kernel/svgalib_helper/Makefile.alt.orig	2003-10-07 18:22:30.000000000 +0200
++++ svgalib-1.9.19/kernel/svgalib_helper/Makefile.alt	2003-10-07 19:32:32.463054496 +0200
 @@ -26,7 +26,7 @@
  INCLUDES += -I$(INCLUDEDIR)
  INCLUDES += -I$(INCLUDEDIR)/asm/mach-default
                                                                                                    
--CFLAGS = -O2 -DLINUX -Dlinux -D__KERNEL__ -DMODULE $(DEBFLAGS) -nostdinc -iwithprefix include
-+CFLAGS = $(COPT) -DLINUX -Dlinux -D__KERNEL__ -DMODULE $(DEBFLAGS) -nostdinc -iwithprefix include
+-CFLAGS = -O2 -DLINUX -Dlinux -D__KERNEL__ -DMODULE $(DEBFLAGS) 
++CFLAGS = $(COPT) -DLINUX -Dlinux -D__KERNEL__ -DMODULE $(DEBFLAGS)
  ifeq (2,$(VER_MAJOR))
  	ifeq (6,$(VER_MINOR))
  		CFLAGS += -DKBUILD_MODNAME="svgalib_helper"

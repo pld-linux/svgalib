@@ -1,5 +1,5 @@
---- svgalib-1.9.18/Makefile.orig	2002-12-22 11:58:47.000000000 +0100
-+++ svgalib-1.9.18/Makefile	2003-10-07 18:17:06.368125512 +0200
+--- svgalib-1.9.19/Makefile.orig	2002-12-22 11:58:47.000000000 +0100
++++ svgalib-1.9.19/Makefile	2003-10-07 18:17:06.368125512 +0200
 @@ -77,125 +77,70 @@
  .PHONY: indent-gnu 
  
@@ -10,23 +10,23 @@
 -		echo Old header files in /usr/include removed.; \
 -	fi
 -	@mkdir -p $(includedir)
--	@cp $(srcdir)/src/vga.h $(includedir)/vga.h
+-	@cp $(SRCDIR)/src/vga.h $(includedir)/vga.h
 -	@chmod a+r $(includedir)/vga.h
--	@cp $(srcdir)/gl/vgagl.h $(includedir)/vgagl.h
+-	@cp $(SRCDIR)/gl/vgagl.h $(includedir)/vgagl.h
 -	@chmod a+r $(includedir)/vgagl.h
--	@cp $(srcdir)/src/mouse/vgamouse.h $(includedir)/vgamouse.h
+-	@cp $(SRCDIR)/src/mouse/vgamouse.h $(includedir)/vgamouse.h
 -	@chmod a+r $(includedir)/vgamouse.h
--	@cp $(srcdir)/src/joystick/vgajoystick.h $(includedir)/vgajoystick.h
+-	@cp $(SRCDIR)/src/joystick/vgajoystick.h $(includedir)/vgajoystick.h
 -	@chmod a+r $(includedir)/vgajoystick.h
--	@cp $(srcdir)/src/keyboard/vgakeyboard.h $(includedir)/vgakeyboard.h
+-	@cp $(SRCDIR)/src/keyboard/vgakeyboard.h $(includedir)/vgakeyboard.h
 -	@chmod a+r $(includedir)/vgakeyboard.h
 +	@echo Installing header files in $(DESTDIR)$(includedir).
 +	@install -d -m755 $(DESTDIR)$(includedir)
-+	@install -m644 $(srcdir)/src/vga.h $(DESTDIR)$(includedir)/vga.h
-+	@install -m644 $(srcdir)/gl/vgagl.h $(DESTDIR)$(includedir)/vgagl.h
-+	@install -m644 $(srcdir)/src/mouse/vgamouse.h $(DESTDIR)$(includedir)/vgamouse.h
-+	@install -m644 $(srcdir)/src/joystick/vgajoystick.h $(DESTDIR)$(includedir)/vgajoystick.h
-+	@install -m644 $(srcdir)/src/keyboard/vgakeyboard.h $(DESTDIR)$(includedir)/vgakeyboard.h
++	@install -m644 $(SRCDIR)/src/vga.h $(DESTDIR)$(includedir)/vga.h
++	@install -m644 $(SRCDIR)/gl/vgagl.h $(DESTDIR)$(includedir)/vgagl.h
++	@install -m644 $(SRCDIR)/src/mouse/vgamouse.h $(DESTDIR)$(includedir)/vgamouse.h
++	@install -m644 $(SRCDIR)/src/joystick/vgajoystick.h $(DESTDIR)$(includedir)/vgajoystick.h
++	@install -m644 $(SRCDIR)/src/keyboard/vgakeyboard.h $(DESTDIR)$(includedir)/vgakeyboard.h
  
  installsharedlib: $(SHAREDLIBS) $(SVGALIBSHAREDSTUBS)
 -	@if [ -f /usr/lib/libvga.sa ]; then \
@@ -136,35 +136,35 @@
 -	fi
 -	@if [ ! -f $(datadir)/libvga.config ]; then \
 -		echo Installing default configuration file in $(datadir).; \
--		cp $(confdir)/libvga.config $(datadir)/libvga.config; \
+-		cp $(CONFDIR)/libvga.config $(datadir)/libvga.config; \
 -	fi
 -	@if [ ! -f $(datadir)/libvga.et4000 ]; then \
 -		echo Installing dynamically loaded ET4000 registers in $(datadir).; \
--		cp $(confdir)/et4000.regs $(datadir)/libvga.et4000; \
+-		cp $(CONFDIR)/et4000.regs $(datadir)/libvga.et4000; \
 -	fi
 -	@if [ ! -f $(datadir)/default.keymap ]; then \
 -		echo Installing default keymap file in $(datadir).; \
--		cp $(confdir)/default.keymap $(datadir)/null.keymap; \
+-		cp $(CONFDIR)/default.keymap $(datadir)/null.keymap; \
 -	fi
 -	@if [ ! -f $(datadir)/dvorak-us.keymap ]; then \
 -		echo Installing Dvorak keymap file in $(datadir).; \
--		cp $(confdir)/dvorak-us.keymap $(datadir)/dvorak-us.keymap; \
+-		cp $(CONFDIR)/dvorak-us.keymap $(datadir)/dvorak-us.keymap; \
 +	@install -d -m755 $(DESTDIR)$(datadir)
 +	@if [ ! -f $(DESTDIR)$(datadir)/libvga.config ]; then \
 +		echo Installing default configuration file in $(DESTDIR)$(datadir).; \
-+		cp $(confdir)/libvga.config $(DESTDIR)$(datadir)/libvga.config; \
++		cp $(CONFDIR)/libvga.config $(DESTDIR)$(datadir)/libvga.config; \
 +	fi
 +	@if [ ! -f $(DESTDIR)$(datadir)/libvga.et4000 ]; then \
 +		echo Installing dynamically loaded ET4000 registers in $(DESTDIR)$(datadir).; \
-+		cp $(confdir)/et4000.regs $(DESTDIR)$(datadir)/libvga.et4000; \
++		cp $(CONFDIR)/et4000.regs $(DESTDIR)$(datadir)/libvga.et4000; \
 +	fi
 +	@if [ ! -f $(DESTDIR)$(datadir)/default.keymap ]; then \
 +		echo Installing default keymap file in $(DESTDIR)$(datadir).; \
-+		cp $(confdir)/default.keymap $(DESTDIR)$(datadir)/null.keymap; \
++		cp $(CONFDIR)/default.keymap $(DESTDIR)$(datadir)/null.keymap; \
 +	fi
 +	@if [ ! -f $(DESTDIR)$(datadir)/dvorak-us.keymap ]; then \
 +		echo Installing Dvorak keymap file in $(DESTDIR)$(datadir).; \
-+		cp $(confdir)/dvorak-us.keymap $(DESTDIR)$(datadir)/dvorak-us.keymap; \
++		cp $(CONFDIR)/dvorak-us.keymap $(DESTDIR)$(datadir)/dvorak-us.keymap; \
  	fi
  
  installman:
@@ -173,9 +173,9 @@
  	(cd threeDKit/; $(MAKE) install)
  	 
 -install: uninstall installheaders $(INSTALLSHAREDLIB) installconfig \
--	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) installmodule $(INSTALLDEV) \
+-	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) $(INSTALLMODULE) $(INSTALLDEV) \
 +install: installheaders $(INSTALLSHAREDLIB) installconfig \
-+	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) installmodule \
++	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) $(INSTALLMODULE) \
  	lib3dkit-install
  	@echo
  	@echo
@@ -262,20 +262,21 @@ diff -Nur svgalib-1.9.14.orig/threeDKit/Makefile svgalib-1.9.14/threeDKit/Makefi
  
  endif	  
  
---- svgalib-1.9.18/kernel/svgalib_helper/Makefile.orig	2003-09-06 19:46:08.000000000 +0200
-+++ svgalib-1.9.18/kernel/svgalib_helper/Makefile	2003-10-07 18:20:02.305378984 +0200
-@@ -45,8 +45,8 @@
- svgalib_helper.o: $(svgalib_helper-objs)
- 	$(LD) -r -o $@ $(svgalib_helper-objs)
+--- svgalib-1.9.19/kernel/svgalib_helper/Makefile.orig	2004-05-12 21:55:58.000000000 +0200
++++ svgalib-1.9.19/kernel/svgalib_helper/Makefile	2004-05-18 00:19:41.484386136 +0200
+@@ -45,9 +45,9 @@
+ 	mknod -m 666 /dev/svga3 c $(SVGALIB_HELPER_MAJOR) 3
+ 	mknod -m 666 /dev/svga4 c $(SVGALIB_HELPER_MAJOR) 4
  
 -install: device modules_install
 +install: modules_install
  
- modules_install: $(TARGET).o
+ modules_install: $(MODNAME)
 -	mkdir -p /lib/modules/$(VER)/kernel/misc
--	install -m 0644 -c $(TARGET).o /lib/modules/$(VER)/kernel/misc
+-	install -m 0644 -c $(TARGET).o /lib/modules/$(VER)/kernel/misc ||	install -m 0644 -c $(TARGET).ko /lib/modules/$(VER)/kernel/misc
 +	install -m 0755 -d $(DESTDIR)/lib/modules/$(VER)/kernel/misc
-+	install -m 0644 -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/kernel/misc
++	install -m 0644 -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/kernel/misc ||	install -m 0644 -c $(TARGET).ko $(DESTDIR)/lib/modules/$(VER)/kernel/misc
+ 
 --- svgalib-1.9.18/kernel/svgalib_helper/Makefile.alt.orig	2003-08-03 16:42:23.000000000 +0200
 +++ svgalib-1.9.18/kernel/svgalib_helper/Makefile.alt	2003-10-07 18:21:46.267574328 +0200
 @@ -58,11 +58,11 @@
