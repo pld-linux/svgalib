@@ -23,15 +23,6 @@ diff -urN svgalib-1.3.1/Makefile.cfg svgalib-1.3.1.new/Makefile.cfg
  
  # Target binary format.
  # TARGET_FORMAT = a.out
-@@ -51,7 +51,7 @@
- # Uncomment the next line if your are compiling with a version of
- # (GNU) glibc:
- 
--# USEGLIBC = yes
-+USEGLIBC = yes
- 
- # Uncomment this if you want root processes to be able to always get a new
- # VC. Alas, some games misuse suid root privs and become root, svgalib cannot
 @@ -85,7 +85,7 @@
  ONE_MAP = y
  
