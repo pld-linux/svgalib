@@ -2,10 +2,19 @@
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	kernel		# don't build kernel modules
+%bcond_with	kernel24	# force using kernel24 headers
 %bcond_without	smp		# don't build smp module
 %bcond_without	userspace	# don't build userspace packages
 #
+%if %{with kernel24}
+%define		_kernelsrcdir	/usr/src/linux-2.4
+%endif
 %define kernel26 %(echo %{_kernel_ver} | grep -q '2\.[0-4]\.' ; echo $?)
+%if %{kernel26}
+%define	k24	%{nil}
+%else
+%define	k24	24
+%endif
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library f¸r Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para gr·ficos en pantalla llena [S]VGA
@@ -207,7 +216,7 @@ Bibliotecas est·ticas para desenvolvimento com SVGAlib.
 –œ◊Œœ≈À“¡ŒŒœ¿ «“¡∆¶Àœ¿ Œ¡ “¶⁄ŒœÕ¡Œ¶‘Œ…» ¡–¡“¡‘Œ…» –Ã¡‘∆œ“Õ¡» ‘¡ ¬≈⁄
 Œ≈œ¬»¶ƒŒœ”‘¶ ⁄¡–’”À¡‘… ƒÃ— √ÿœ«œ X Window.
 
-%package -n kernel-video-svgalib_helper
+%package -n kernel%{k24}-video-svgalib_helper
 Summary:	svgalib's helper kernel module
 Summary(de):	Svgalibs Helferkernmodul
 Summary(es):	Bibliotecas de desarrollo y archivos de inclusiÛn para gr·ficos [S]VGA
@@ -220,15 +229,15 @@ Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}-%{release}
 Obsoletes:	svgalib-helper
 
-%description -n kernel-video-svgalib_helper
+%description -n kernel%{k24}-video-svgalib_helper
 This package contains the kernel module necessary to run svgalib-based
 programs.
 
-%description -n kernel-video-svgalib_helper -l pl
+%description -n kernel%{k24}-video-svgalib_helper -l pl
 Ten pakiet zawiera modu≥ j±dra potrzebny do uruchamiania programÛw
 opartych na svgalib.
 
-%package -n kernel-smp-video-svgalib_helper
+%package -n kernel%{k24}-smp-video-svgalib_helper
 Summary:	svgalib's helper kernel module for SMP
 Summary(pl):	Pomoczniczy modu≥ j±dra svgalib dla SMP
 Group:		Base/Kernel
@@ -238,11 +247,11 @@ Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}-%{release}
 Obsoletes:	svgalib-helper
 
-%description -n kernel-smp-video-svgalib_helper
+%description -n kernel%{k24}-smp-video-svgalib_helper
 This package contains the kernel module necessary to run svgalib-based
 programs.
 
-%description -n kernel-smp-video-svgalib_helper -l pl
+%description -n kernel%{k24}-smp-video-svgalib_helper -l pl
 Ten pakiet zawiera modu≥ j±dra potrzebny do uruchamiania programÛw
 opartych na svgalib.
 
@@ -376,16 +385,16 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%post	-n kernel-video-svgalib_helper
+%post	-n kernel%{k24}-video-svgalib_helper
 %depmod %{_kernel_ver}
 
-%postun -n kernel-video-svgalib_helper
+%postun -n kernel%{k24}-video-svgalib_helper
 %depmod %{_kernel_ver}
 
-%post	-n kernel-smp-video-svgalib_helper
+%post	-n kernel%{k24}-smp-video-svgalib_helper
 %depmod %{_kernel_ver}smp
 
-%postun -n kernel-smp-video-svgalib_helper
+%postun -n kernel%{k24}-smp-video-svgalib_helper
 %depmod %{_kernel_ver}smp
 
 %if %{with userspace}
@@ -415,12 +424,12 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %if %{with kernel}
-%files -n kernel-video-svgalib_helper
+%files -n kernel%{k24}-video-svgalib_helper
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}*
 
 %if %{with smp}
-%files -n kernel-smp-video-svgalib_helper
+%files -n kernel%{k24}-smp-video-svgalib_helper
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}*
 %endif
