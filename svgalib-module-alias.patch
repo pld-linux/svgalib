@@ -1,23 +1,9 @@
---- svgalib-1.9.18/kernel/svgalib_helper/main.c.orig	2003-10-04 12:34:20.000000000 +0200
-+++ svgalib-1.9.18/kernel/svgalib_helper/main.c	2003-10-07 21:31:05.459714640 +0200
-@@ -38,6 +38,10 @@
- #include "i810.h"
- #include "interrupt.h"
- 
-+#ifdef KERNEL_2_6
-+#include <linux/vermagic.h>
-+#endif
-+
- int debug=0;
- static int all_devices=0;
- 
-@@ -648,5 +652,14 @@
+--- svgalib-1.9.19/kernel/svgalib_helper/main.c.orig	Fri May  7 11:10:22 2004
++++ svgalib-1.9.19/kernel/svgalib_helper/main.c	Tue May 18 13:26:33 2004
+@@ -694,5 +694,11 @@
  MODULE_LICENSE("GPL");
  #endif
  
-+#ifdef VERMAGIC_STRING
-+MODULE_INFO(vermagic, VERMAGIC_STRING);
-+#endif
 +#if defined(MODULE_ALIAS_CHARDEV_MAJOR)
 +MODULE_ALIAS_CHARDEV_MAJOR(SVGALIB_HELPER_MAJOR);
 +#elif defined(MODULE_ALIAS)
