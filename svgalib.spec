@@ -14,7 +14,7 @@ Summary(ru):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
-Version:	1.9.13
+Version:	1.9.14
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -22,9 +22,7 @@ Source0:	http://www.cs.bgu.ac.il/~zivav/svgalib/%{name}-%{version}.tar.gz
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
-Patch3:		%{name}-stderr.patch
-Patch4:		%{name}-smp.patch
-Patch5:		%{name}-banshee.patch
+Patch3:		%{name}-smp.patch
 URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 %{!?_without_dist_kernel:Buildrequires:		kernel-headers}
 Requires:	%{name}-helper = %{version}
@@ -231,8 +229,6 @@ Bibliotecas estАticas para desenvolvimento com SVGAlib.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*

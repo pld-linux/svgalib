@@ -1,7 +1,7 @@
-diff -Nur svgalib-1.9.13.orig/Makefile svgalib-1.9.13/Makefile
---- svgalib-1.9.13.orig/Makefile	Wed Jan 30 11:14:31 2002
-+++ svgalib-1.9.13/Makefile	Mon Apr  8 23:30:44 2002
-@@ -113,49 +113,24 @@
+diff -Nur svgalib-1.9.14.orig/Makefile svgalib-1.9.14/Makefile
+--- svgalib-1.9.14.orig/Makefile	Sat Apr 27 18:03:17 2002
++++ svgalib-1.9.14/Makefile	Mon Apr 29 20:23:12 2002
+@@ -113,50 +113,22 @@
  .PHONY: indent-gnu configaout
  
  installheaders:
@@ -49,10 +49,8 @@ diff -Nur svgalib-1.9.13.orig/Makefile svgalib-1.9.13/Makefile
 -endif
 -	@echo Installing shared library image as \
 -		$(addprefix $(sharedlibdir)/,$(notdir $(SHAREDLIBS))).
-+	@echo Installing shared library image as in $(DESTDIR)$(libdir)
-+	@if [ ! -d $(DESTDIR)$(libdir) ]; then \
-+		install -d $(DESTDIR)$(libdir); \
-+	fi
++	@echo Installing shared library image in $(DESTDIR)$(libdir)
++	@install -d $(DESTDIR)$(libdir)
  	@for foo in $(notdir $(SHAREDLIBS)); do \
 -		$(INSTALL_SHLIB) sharedlib/$$foo $(sharedlibdir)/$$foo; \
 -		(cd $(sharedlibdir); \
@@ -60,11 +58,12 @@ diff -Nur svgalib-1.9.13.orig/Makefile svgalib-1.9.13/Makefile
 +		(cd $(DESTDIR)$(libdir); \
  		 ln -sf $$foo `echo $$foo | sed 's/\.so\..*/.so/'` ); \
  	done
+-	@./fixldsoconf
 -	@ldconfig
  
  ifdef INSTALLAOUTDIR
  
-@@ -181,83 +156,57 @@
+@@ -183,83 +155,57 @@
  endif
  
  installstaticlib: static
@@ -186,18 +185,20 @@ diff -Nur svgalib-1.9.13.orig/Makefile svgalib-1.9.13/Makefile
  	fi
  
  installman:
-@@ -269,7 +218,7 @@
+@@ -274,8 +220,8 @@
  lib3dkit-install:
  	(cd threeDKit/; $(MAKE) install)
  	 
 -install: uninstall $(INSTALLAOUTLIB) installheaders $(INSTALLSHAREDLIB) installconfig \
+-	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) installmodule $(INSTALLDEV) \
 +install: $(INSTALLAOUTLIB) installheaders $(INSTALLSHAREDLIB) installconfig \
- 	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) installmodule lib3dkit-install
++	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) installmodule \
+ 	lib3dkit-install
  	@echo
  	@echo
-diff -Nur svgalib-1.9.13.orig/doc/Makefile svgalib-1.9.13/doc/Makefile
---- svgalib-1.9.13.orig/doc/Makefile	Fri Jul  7 14:43:58 2000
-+++ svgalib-1.9.13/doc/Makefile	Mon Apr  8 23:29:57 2002
+diff -Nur svgalib-1.9.14.orig/doc/Makefile svgalib-1.9.14/doc/Makefile
+--- svgalib-1.9.14.orig/doc/Makefile	Fri Jul  7 14:43:58 2000
++++ svgalib-1.9.14/doc/Makefile	Mon Apr 29 20:16:56 2002
 @@ -65,26 +65,15 @@
  	cat $(VGAGL) | grep -v '^\.so ' | troff -man -T$@ > vgagl.$@
  	cat $(THREED) | grep -v '^\.so ' | troff -man -T$@ > 3d.$@
@@ -234,9 +235,9 @@ diff -Nur svgalib-1.9.13.orig/doc/Makefile svgalib-1.9.13/doc/Makefile
  
  uninstall:
  	@echo Removing all svgalib man pages.
-diff -Nur svgalib-1.9.13.orig/kernel/svgalib_helper/Makefile svgalib-1.9.13/kernel/svgalib_helper/Makefile
---- svgalib-1.9.13.orig/kernel/svgalib_helper/Makefile	Wed Apr  3 11:00:28 2002
-+++ svgalib-1.9.13/kernel/svgalib_helper/Makefile	Mon Apr  8 23:29:57 2002
+diff -Nur svgalib-1.9.14.orig/kernel/svgalib_helper/Makefile svgalib-1.9.14/kernel/svgalib_helper/Makefile
+--- svgalib-1.9.14.orig/kernel/svgalib_helper/Makefile	Sat Apr 27 18:02:22 2002
++++ svgalib-1.9.14/kernel/svgalib_helper/Makefile	Mon Apr 29 20:16:56 2002
 @@ -32,11 +32,11 @@
  $(TARGET).o: $(SRC:.c=.o)
  	$(LD) -r $^ -o $@
@@ -252,9 +253,9 @@ diff -Nur svgalib-1.9.13.orig/kernel/svgalib_helper/Makefile svgalib-1.9.13/kern
  
  device:
  	rm -f /dev/svgalib_helper* /dev/svga /dev/svga?
-diff -Nur svgalib-1.9.13.orig/lrmi-0.6m/Makefile svgalib-1.9.13/lrmi-0.6m/Makefile
---- svgalib-1.9.13.orig/lrmi-0.6m/Makefile	Sun Apr 16 16:05:09 2000
-+++ svgalib-1.9.13/lrmi-0.6m/Makefile	Mon Apr  8 23:29:57 2002
+diff -Nur svgalib-1.9.14.orig/lrmi-0.6m/Makefile svgalib-1.9.14/lrmi-0.6m/Makefile
+--- svgalib-1.9.14.orig/lrmi-0.6m/Makefile	Sun Apr 16 16:05:09 2000
++++ svgalib-1.9.14/lrmi-0.6m/Makefile	Mon Apr 29 20:16:56 2002
 @@ -25,8 +25,8 @@
  	$(CC) $(CFLAGS) -o $@ $^
  
@@ -266,9 +267,9 @@ diff -Nur svgalib-1.9.13.orig/lrmi-0.6m/Makefile svgalib-1.9.13/lrmi-0.6m/Makefi
  
  .PHONY: clean
  clean:
-diff -Nur svgalib-1.9.13.orig/threeDKit/Makefile svgalib-1.9.13/threeDKit/Makefile
---- svgalib-1.9.13.orig/threeDKit/Makefile	Wed Apr  3 09:57:18 2002
-+++ svgalib-1.9.13/threeDKit/Makefile	Mon Apr  8 23:32:22 2002
+diff -Nur svgalib-1.9.14.orig/threeDKit/Makefile svgalib-1.9.14/threeDKit/Makefile
+--- svgalib-1.9.14.orig/threeDKit/Makefile	Wed Apr  3 09:57:18 2002
++++ svgalib-1.9.14/threeDKit/Makefile	Mon Apr 29 20:16:56 2002
 @@ -55,18 +55,17 @@
  	$(CC) -shared -Wl,-soname,lib3dkit.so.$(MAJOR_VER) \
  	  -o lib3dkit.so.$(VERSION) $(OBJECTS) -lm
