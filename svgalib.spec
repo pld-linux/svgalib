@@ -1,5 +1,7 @@
 %define		_kernel_ver	%(grep UTS_RELEASE /usr/src/linux/include/linux/version.h 2>/dev/null | cut -d'"' -f2)
 %define		_kernel24	%(echo %{_kernel_ver} | grep -q '2\.[012]\.' ; echo $?)
+%define		smpstr		%{?_with_smp:smp}%{!?_with_smp:up}
+%define		smp		%{?_with_smp:1}%{!?_with_smp:0}
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -8,7 +10,7 @@ Summary(pl):	Biblioteki dla pe³noekranowej grafiki [S]VGA
 Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Name:		svgalib
 Version:	1.9.11
-Release:	1@%{_kernel_ver}
+Release:	1
 License:	Distributable
 Group:		Libraries
 Group(de):	Libraries
@@ -25,6 +27,7 @@ URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
 Prereq:		modutils
 Prereq:		/sbin/depmod
 Prereq:		/sbin/ldconfig
+Requires:	svgalib-helper = %{version}
 Conflicts:	kernel < %{_kernel_ver}, kernel > %{_kernel_ver}
 %{!?no_dist_kernel:Buildrequires:	kernel-headers}
 Exclusivearch:	%{ix86} alpha
@@ -61,6 +64,24 @@ SVGAlib, deðiþik donaným platformlarý üzerinde, uygulamalarýn tam
 ekran çizim kullanmalarýný saðlayan bir kitaplýktýr. Az bellekli
 makinalar için X Windows'tan daha uygun olmasýnýn yanýsýra, pek çok
 oyun ve yardýmcý programlar çizim eriþimi için bu kitaplýðý kullanýr.
+
+%package helper-%{smpstr}
+Summary:	svgalib's helper kernel module
+Summary(de):	Svgalibs Helferkernmodul
+Summary(pl):	Pomocniczy modu³ j±dra svgaliba
+Group:		Base/Kernel
+Group(de):	Grundsätzlich/Kern
+Group(pl):	Podstawowe/J±dro
+Release:	%{release}@%{_kernel_ver}
+Provides:	svgalib-helper = %{version}
+
+%description helper-%{smpstr}
+This package contains the kernel module necessary to run svgalib-based
+programs.
+
+%description helper-%{smpstr} -l pl
+Ten pakiet zawiera modu³ j±dra potrzebny do uruchamiania programów
+opartych na svgalib.
 
 %package devel
 Summary:	Development libraries and include files for [S]VGA graphics
@@ -140,6 +161,9 @@ ln -sf libvga.so.%{version} sharedlib/libvga.so
 
 %{__make} OPTIMIZE="$MOPT" NO_ASM="$NOASM" static
 
+%if %{smp}
+MOPT="$MOPT -D__KERNEL_SMP=1"
+%endif
 %{__make} DEBFLAGS="$MOPT" -C kernel/svgalib_helper
 
 %install
@@ -163,12 +187,14 @@ cp -rf demos threeDKit $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
 gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
 
-%post
-/sbin/ldconfig
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+%post helper-%{smpstr}
 /sbin/depmod -a
 
-%postun
-/sbin/ldconfig
+%postun helper-%{smpstr}
 /sbin/depmod -a
 
 %clean
@@ -183,12 +209,15 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
+%{_mandir}/man[1567]/*
+
+%files helper-%{smpstr}
+%defattr(644,root,root,755)
 %if %{_kernel24}
 %attr(600,root,root) /lib/modules/*/kernel/drivers/char/*.o
 %else
 %attr(600,root,root) /lib/modules/*/misc/*.o
 %endif
-%{_mandir}/man[1567]/*
 
 %files devel
 %defattr(644,root,root,755)
