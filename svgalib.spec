@@ -31,11 +31,11 @@ Patch6:		%{name}-link.patch
 Patch7:		%{name}-module-alias.patch
 Patch8:		%{name}-linux26-minor.patch
 URL:		http://www.arava.co.il/matan/svgalib/
-ExclusiveArch:	%{ix86} alpha
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel-headers
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.118
+ExclusiveArch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
