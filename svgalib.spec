@@ -1,5 +1,5 @@
 #
-# conditional build
+# Conditional build:
 # _without_dist_kernel		without distribution kernel
 #
 Summary:	Library for full screen [S]VGA graphics
@@ -103,8 +103,8 @@ Summary(pl):	Pomocniczy modu³ j±dra svgaliba
 Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
 Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
-Prereq:		/sbin/depmod
 %{!?_without_dist_kernel:%requires_releq_kernel_up}
+Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}
 Obsoletes:	svgalib-helper
 
@@ -121,8 +121,8 @@ Summary:	svgalib's helper kernel module for SMP
 Summary(pl):	Pomoczniczy modu³ j±dra svgalib dla SMP
 Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
-Prereq:		/sbin/depmod
 %{!?_without_dist_kernel:%requires_releq_kernel_smp}
+Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}
 Obsoletes:	svgalib-helper
 
@@ -292,17 +292,17 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%post -n kernel-video-svgalib_helper
-/sbin/depmod -a
+%post	-n kernel-video-svgalib_helper
+/sbin/depmod -a -F /boot/System.map-%{_kernel_ver} %{_kernel_ver}
 
 %postun -n kernel-video-svgalib_helper
-/sbin/depmod -a
+/sbin/depmod -a -F /boot/System.map-%{_kernel_ver} %{_kernel_ver}
 
-%post -n kernel-smp-video-svgalib_helper
-/sbin/depmod -a
+%post	-n kernel-smp-video-svgalib_helper
+/sbin/depmod -a -F /boot/System.map-%{_kernel_ver}smp %{_kernel_ver}smp
 
 %postun -n kernel-smp-video-svgalib_helper
-/sbin/depmod -a
+/sbin/depmod -a -F /boot/System.map-%{_kernel_ver}smp %{_kernel_ver}smp
 
 %files
 %defattr(644,root,root,755)
