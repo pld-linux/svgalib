@@ -277,8 +277,6 @@ install threeDKit/lib3dkit.a $RPM_BUILD_ROOT/%{_libdir}/
 install kernel/svgalib_helper/svgalib_helper-up.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.o
 install kernel/svgalib_helper/svgalib_helper.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.o
 
-gzip -9nf doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -299,7 +297,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc doc/*.gz 0-README.gz
+%doc doc/{CHANGES*,DESIGN,READ*,TODO} 0-README
 
 %dir %{_sysconfdir}
 %dir /var/lib/svgalib
