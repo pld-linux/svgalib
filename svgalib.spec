@@ -17,7 +17,7 @@ Version:	1.9.17
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
-Source0:	http://www.cs.bgu.ac.il/~zivav/svgalib/%{name}-%{version}.tar.gz
+Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
@@ -25,7 +25,7 @@ Patch3:		%{name}-smp.patch
 Patch4:		%{name}-threeDKit-make.patch
 Patch5:		%{name}-nolrmi.patch
 Patch6:		%{name}-alpha.patch
-URL:		http://www.cs.bgu.ac.il/~zivav/svgalib/
+URL:		http://www.arava.co.il/matan/svgalib/
 ExclusiveArch:	%{ix86} alpha
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
