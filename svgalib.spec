@@ -211,7 +211,7 @@ Static [S]VGA graphics librarires.
 %description static -l pl
 Biblioteki statyczne [S]VGA.
 
-%description satic -l pt_BR
+%description static -l pt_BR
 Bibliotecas estáticas para desenvolvimento com SVGAlib.
 
 %description static -l ru
