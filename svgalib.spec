@@ -362,7 +362,7 @@ install -d $RPM_BUILD_ROOT/var/lib/svgalib \
 
 %if %{with userspace}
 %{__make} installheaders installsharedlib installconfig installstaticlib \
-	  installutils installman lib3dkit-install \
+	installutils installman lib3dkit-install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	libdir=%{_libdir} \
 	sharedlibdir=%{_libdir}
