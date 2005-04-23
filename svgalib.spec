@@ -25,13 +25,13 @@ Summary(ru):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
-Version:	1.9.20
-%define _rel	3
+Version:	1.9.21
+%define _rel	1
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
-# Source0-md5:	53213da842c4fa451e4046ed6d8a5ac0
+# Source0-md5:	1bd8892ee38481051e4b4d85008c86be
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
@@ -42,8 +42,7 @@ Patch6:		%{name}-link.patch
 Patch7:		%{name}-module-alias.patch
 Patch8:		%{name}-sparc.patch
 Patch9:		%{name}-depend.patch
-Patch10:	%{name}-asm_fix.patch
-Patch11:	%{name}-linux26.patch
+Patch10:	%{name}-linux26.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel-headers >= 2.4.0
@@ -270,7 +269,6 @@ opartych na svgalib.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-%patch11 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
