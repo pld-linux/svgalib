@@ -26,7 +26,7 @@ Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
 Version:	1.9.21
-%define _rel	2
+%define _rel	3
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -58,6 +58,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
 %define		specflags	-fomit-frame-pointer
+# linux sources have asm-x86_64 dir, not asm-amd64
+%define __arch	%(echo %{_arch} | sed 's/amd64/x86_64/')
 
 %if %{kernel26}
 %define	kmodext	ko
@@ -320,7 +322,7 @@ cd kernel/svgalib_helper
 ln -sf %{_kernelsrcdir}/config-up .config
 install -d include/{linux,config}
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-up.h include/linux/autoconf.h
-ln -sf %{_kernelsrcdir}/include/asm-%{_arch} include/asm
+ln -sf %{_kernelsrcdir}/include/asm-%{__arch} include/asm
 touch include/config/MARKER
 %{__make} -C %{_kernelsrcdir} modules \
 	SUBDIRS=`pwd` \
@@ -344,7 +346,7 @@ cd kernel/svgalib_helper
 ln -sf %{_kernelsrcdir}/config-smp .config
 install -d include/{linux,config}
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-smp.h include/linux/autoconf.h
-ln -sf %{_kernelsrcdir}/include/asm-%{_arch} include/asm
+ln -sf %{_kernelsrcdir}/include/asm-%{__arch} include/asm
 touch include/config/MARKER
 %{__make} -C %{_kernelsrcdir} modules \
 	SUBDIRS=`pwd` \
