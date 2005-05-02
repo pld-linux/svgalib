@@ -1,0 +1,12 @@
+--- svgalib-1.9.21/src/ppcmemset.h.orig	2005-05-02 16:18:20.320431616 +0000
++++ svgalib-1.9.21/src/ppcmemset.h	2005-05-02 16:20:18.261501848 +0000
+@@ -1,7 +1,8 @@
+ #ifdef __PPC
+ 
+ #undef memset
+-static inline void memset(void *a, int c, int s)
++#define memset __internalmemset
++static inline void __internalmemset(void *a, int c, int s)
+ {
+    int i;
+    for(i=0;i<s;i++) *((unsigned char *)a + i) = c;
