@@ -43,6 +43,7 @@ Patch7:		%{name}-module-alias.patch
 Patch8:		%{name}-sparc.patch
 Patch9:		%{name}-depend.patch
 Patch10:	%{name}-linux26.patch
+Patch11:	%{name}-ppc_memset.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel-headers >= 2.4.0
@@ -269,6 +270,7 @@ opartych na svgalib.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
