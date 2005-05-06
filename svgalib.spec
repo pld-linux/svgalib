@@ -51,15 +51,13 @@ BuildRequires:	kernel-headers >= 2.4.0
 BuildRequires:	kernel-module-build >= 2.6.0
 %endif
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.118
+BuildRequires:	rpmbuild(macros) >= 1.153
 # no sparc64 yet acc. to changelog
 ExclusiveArch:	%{ix86} alpha amd64 arm hppa ia64 m68k mips ppc sparc sparcv9
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
 %define		specflags	-fomit-frame-pointer
-# linux sources have asm-x86_64 dir, not asm-amd64
-%define __arch	%(echo %{_arch} | sed 's/amd64/x86_64/')
 
 %if %{kernel26}
 %define	kmodext	ko
@@ -322,7 +320,7 @@ cd kernel/svgalib_helper
 ln -sf %{_kernelsrcdir}/config-up .config
 install -d include/{linux,config}
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-up.h include/linux/autoconf.h
-ln -sf %{_kernelsrcdir}/include/asm-%{__arch} include/asm
+ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
 touch include/config/MARKER
 %{__make} -C %{_kernelsrcdir} modules \
 	SUBDIRS=`pwd` \
@@ -346,7 +344,7 @@ cd kernel/svgalib_helper
 ln -sf %{_kernelsrcdir}/config-smp .config
 install -d include/{linux,config}
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-smp.h include/linux/autoconf.h
-ln -sf %{_kernelsrcdir}/include/asm-%{__arch} include/asm
+ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
 touch include/config/MARKER
 %{__make} -C %{_kernelsrcdir} modules \
 	SUBDIRS=`pwd` \
