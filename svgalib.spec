@@ -9,7 +9,7 @@
 %if %{with kernel24}
 %define		_kernelsrcdir	/usr/src/linux-2.4
 %endif
-%define kernel26 %(echo %{_kernel_ver} | grep -q '2\.[0-4]\.' ; echo $?)
+%define	kernel26 %(echo %{_kernel_ver} | grep -q '2\.[0-4]\.' ; echo $?)
 %if %{kernel26}
 %define	k24	%{nil}
 %else
@@ -26,7 +26,7 @@ Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
 Version:	1.9.21
-%define _rel	4
+%define	_rel	4
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -62,7 +62,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %if %{kernel26}
 %define	kmodext	ko
 %else
-%define kmodext	o
+%define	kmodext	o
 %endif
 
 %description
