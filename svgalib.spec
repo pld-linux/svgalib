@@ -321,6 +321,7 @@ ln -sf %{_kernelsrcdir}/config-up .config
 install -d include/{linux,config}
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-up.h include/linux/autoconf.h
 ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
+ln -sf %{_kernelsrcdir}/Module.symvers-up Module.symvers
 touch include/config/MARKER
 %{__make} -C %{_kernelsrcdir} modules \
 	SUBDIRS=`pwd` \
@@ -345,6 +346,7 @@ ln -sf %{_kernelsrcdir}/config-smp .config
 install -d include/{linux,config}
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-smp.h include/linux/autoconf.h
 ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
+ln -sf %{_kernelsrcdir}/Module.symvers-smp Module.symvers
 touch include/config/MARKER
 %{__make} -C %{_kernelsrcdir} modules \
 	SUBDIRS=`pwd` \
