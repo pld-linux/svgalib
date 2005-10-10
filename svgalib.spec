@@ -25,13 +25,13 @@ Summary(ru):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
-Version:	1.9.21
-%define	_rel	5
+Version:	1.9.23
+%define	_rel	1
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
-# Source0-md5:	1bd8892ee38481051e4b4d85008c86be
+# Source0-md5:	b51f7c791f0a64a856beec283bcdc0ba
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
@@ -42,8 +42,7 @@ Patch6:		%{name}-link.patch
 Patch7:		%{name}-module-alias.patch
 Patch8:		%{name}-sparc.patch
 Patch9:		%{name}-depend.patch
-Patch10:	%{name}-linux26.patch
-Patch11:	%{name}-ppc_memset.patch
+Patch10:	%{name}-ppc_memset.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel-headers >= 2.4.0
@@ -270,7 +269,6 @@ opartych na svgalib.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-%patch11 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -375,6 +373,11 @@ install -d $RPM_BUILD_ROOT/var/lib/svgalib \
 	sharedlibdir=%{_libdir}
 
 install threeDKit/lib3dkit.a $RPM_BUILD_ROOT%{_libdir}
+
+%ifarch %{ix86}
+# omitted by main Makefile
+install lrmi-0.6m/vga_reset $RPM_BUILD_ROOT%{_bindir}
+%endif
 %endif
 
 %if %{with kernel}
@@ -417,6 +420,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man[1567]/*
 %ifarch %{ix86}
 %{_mandir}/man8/mode3.8*
+%{_mandir}/man8/vga_reset.8*
 %endif
 
 %files devel
