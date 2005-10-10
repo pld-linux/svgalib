@@ -1,5 +1,5 @@
---- svgalib-1.9.20/Makefile.cfg.orig	2005-02-03 12:29:22.000000000 +0100
-+++ svgalib-1.9.20/Makefile.cfg	2005-03-21 23:13:48.717311992 +0100
+--- svgalib-1.9.23/Makefile.cfg.orig	2005-09-24 09:34:51.000000000 +0200
++++ svgalib-1.9.23/Makefile.cfg	2005-10-10 13:39:32.000000000 +0200
 @@ -44,7 +44,7 @@
  # Common prefix for installation directories.
  # NOTE: This directory must exist when you start the install.
@@ -18,7 +18,7 @@
  
  # Target binary format.
  TARGET_FORMAT = elf
-@@ -97,7 +97,7 @@
+@@ -93,7 +93,7 @@
  # LIBC_MEMCPY = y
  
  # Uncomment this if you want to compile and install the static libs.
@@ -27,7 +27,16 @@
  
  # Comment this out if you don't want to install the shared libs.
  # If you do not install the shared nor the static libs, 'make static'
-@@ -315,10 +315,10 @@
+@@ -126,7 +126,7 @@
+ # MAKEWHATIS = makewhatis # Beware, this will really need a few minutes!
+ 
+ # Comment this out if you use devfs only and don't want to make svga nodes
+-INSTALLDEV = installdev
++# INSTALLDEV = installdev
+ 
+ # Select which makefile to use to install the module, or comment both out if
+ # you are going to install the kernel module manually
+@@ -311,10 +311,10 @@
  
  # Utilites used.
  AR	  = ar

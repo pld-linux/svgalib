@@ -1,5 +1,5 @@
---- svgalib-1.9.20/Makefile.orig	2005-03-18 14:49:10.000000000 +0100
-+++ svgalib-1.9.20/Makefile	2005-03-21 23:29:01.371567456 +0100
+--- svgalib-1.9.23/Makefile.orig	2005-05-10 14:53:08.000000000 +0200
++++ svgalib-1.9.23/Makefile	2005-10-10 13:36:06.000000000 +0200
 @@ -77,125 +77,70 @@
  .PHONY: indent-gnu 
  
@@ -168,53 +168,37 @@
  	fi
  
  installman:
-@@ -213,8 +158,8 @@
- lib3dkit-install:
- 	(cd threeDKit/; $(MAKE) install)
- 	 
--install: uninstall installheaders $(INSTALLSHAREDLIB) installconfig \
--	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) $(INSTALLMODULE) $(INSTALLDEV) \
-+install: installheaders $(INSTALLSHAREDLIB) installconfig \
-+	$(INSTALLSTATICLIB) $(INSTALLUTILS) $(INSTALLMAN) $(INSTALLMODULE) \
- 	lib3dkit-install
- 	@echo
- 	@echo
-diff -Nur svgalib-1.9.14.orig/doc/Makefile svgalib-1.9.14/doc/Makefile
---- svgalib-1.9.14.orig/doc/Makefile	Fri Jul  7 14:43:58 2000
-+++ svgalib-1.9.14/doc/Makefile	Mon Apr 29 20:16:56 2002
-@@ -65,26 +65,15 @@
+--- svgalib-1.9.23/doc/Makefile.orig	2005-07-02 18:21:57.000000000 +0200
++++ svgalib-1.9.23/doc/Makefile	2005-10-10 13:38:10.000000000 +0200
+@@ -26,7 +26,7 @@
+ SVGALIB=$(subst man,$(srcdir)/doc/man,$(SVGALIB1))
+ VGAGL=$(subst man,$(srcdir)/doc/man,$(VGAGL1))
+ THREED=$(subst man,$(srcdir)/doc/man,$(THREED1))
+-COMPMANPAGES=$(shell cd $(srcdir)/doc; find man? -name "*.gz" -type f -print)
++COMPMANPAGES=$(shell cd $(srcdir)/doc; find man? -name "*.[1-8]" -type f -print)
+ 
+ .PHONY: clean ascii dvi ps install gunzip gzip
+ 
+@@ -63,18 +63,12 @@
  	cat $(VGAGL) | grep -v '^\.so ' | troff -man -T$@ > vgagl.$@
  	cat $(THREED) | grep -v '^\.so ' | troff -man -T$@ > 3d.$@
  
 -install: gzip
 -	mkdir -p $(mandir)/man1 $(mandir)/man3 $(mandir)/man5 \
 -		 $(mandir)/man6 $(mandir)/man7 $(mandir)/man8
--	$(INSTALL_DATA) $(srcdir)/doc/man1/* $(mandir)/man1
--	$(INSTALL_DATA) $(srcdir)/doc/man3/* $(mandir)/man3
--	$(INSTALL_DATA) $(srcdir)/doc/man5/* $(mandir)/man5
--	$(INSTALL_DATA) $(srcdir)/doc/man6/* $(mandir)/man6
--	$(INSTALL_DATA) $(srcdir)/doc/man7/* $(mandir)/man7
--	$(INSTALL_DATA) $(srcdir)/doc/man8/* $(mandir)/man8
--	for dir in man? ; do \
--		echo gunzipping manpages in $$dir;\
--		for file in $$dir/*; do \
--			gunzip $$file; \
--		done; \
--	done
++install:
++	install -d $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man3 $(DESTDIR)$(mandir)/man5 \
++		 $(DESTDIR)$(mandir)/man6 $(DESTDIR)$(mandir)/man7 $(DESTDIR)$(mandir)/man8
+ 	for i in $(COMPMANPAGES); do\
+-		$(INSTALL_DATA) $(srcdir)/doc/$$i $(mandir)/$$i; \
++		$(INSTALL_DATA) $(srcdir)/doc/$$i $(DESTDIR)$(mandir)/$$i; \
+ 	done
+-	make gunzip
 -ifdef MAKEWHATIS
 -	@echo "Rebuilding the whatis database (this is slow!)"
 -	@echo "You can comment this out in Makefile.cfg!"
 -	$(MAKEWHATIS)
 -endif
-+install:
-+	install -d $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man3 $(DESTDIR)$(mandir)/man5\
-+		 $(DESTDIR)$(mandir)/man6 $(DESTDIR)$(mandir)/man7 $(DESTDIR)$(mandir)/man8
-+	$(INSTALL_DATA) $(srcdir)/doc/man1/* $(DESTDIR)$(mandir)/man1
-+	$(INSTALL_DATA) $(srcdir)/doc/man3/* $(DESTDIR)$(mandir)/man3
-+	$(INSTALL_DATA) $(srcdir)/doc/man5/* $(DESTDIR)$(mandir)/man5
-+	$(INSTALL_DATA) $(srcdir)/doc/man6/* $(DESTDIR)$(mandir)/man6
-+	$(INSTALL_DATA) $(srcdir)/doc/man7/* $(DESTDIR)$(mandir)/man7
-+	$(INSTALL_DATA) $(srcdir)/doc/man8/* $(DESTDIR)$(mandir)/man8
  
  uninstall:
  	@echo Removing all svgalib man pages.
@@ -261,9 +245,9 @@ diff -Nur svgalib-1.9.14.orig/lrmi-0.6m/Makefile svgalib-1.9.14/lrmi-0.6m/Makefi
  
  endif	  
  
---- svgalib-1.9.20/kernel/svgalib_helper/Makefile.orig	2005-03-18 11:58:21.000000000 +0100
-+++ svgalib-1.9.20/kernel/svgalib_helper/Makefile	2005-03-21 23:33:38.656413752 +0100
-@@ -50,9 +50,9 @@
+--- svgalib-1.9.23/kernel/svgalib_helper/Makefile.orig	2005-08-18 15:08:30.000000000 +0200
++++ svgalib-1.9.23/kernel/svgalib_helper/Makefile	2005-10-10 13:39:11.000000000 +0200
+@@ -56,10 +56,9 @@
  	mknod -m 666 /dev/svga3 c $(SVGALIB_HELPER_MAJOR) 3
  	mknod -m 666 /dev/svga4 c $(SVGALIB_HELPER_MAJOR) 4
  
@@ -273,6 +257,7 @@ diff -Nur svgalib-1.9.14.orig/lrmi-0.6m/Makefile svgalib-1.9.14/lrmi-0.6m/Makefi
  modules_install: $(MODNAME)
 -	mkdir -p /lib/modules/$(VER)/kernel/misc
 -	install -m 0644 -c $(TARGET).ko /lib/modules/$(VER)/kernel/misc ||	install -m 0644 -c $(TARGET).o /lib/modules/$(VER)/kernel/misc
+-	depmod -a $(VER)
 +	install -m 0755 -d $(DESTDIR)/lib/modules/$(VER)/kernel/misc
 +	install -m 0644 -c $(TARGET).ko $(DESTDIR)/lib/modules/$(VER)/kernel/misc ||	install -m 0644 -c $(TARGET).o $(DESTDIR)/lib/modules/$(VER)/kernel/misc
  
