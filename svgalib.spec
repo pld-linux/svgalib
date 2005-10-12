@@ -315,7 +315,7 @@ rm -f src/svgalib_helper.h
 %if %{with kernel}
 %if %{kernel26}
 cd kernel/svgalib_helper
-ln -sf %{_kernelsrcdir}/config-up .config
+ln -sf %{_kernelsrcdir}/config-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} .config
 install -d include/{linux,config}
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-up.h include/linux/autoconf.h
 ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
@@ -337,7 +337,7 @@ mv -f kernel/svgalib_helper/svgalib_helper.%{kmodext} \
 	 kernel/svgalib_helper-up.%{kmodext}
 rm -f kernel/svgalib_helper/*.*o
 
-%if %{with smp}
+%if %{with dist_kernel} && %{with smp}
 %if %{kernel26}
 cd kernel/svgalib_helper
 ln -sf %{_kernelsrcdir}/config-smp .config
@@ -362,10 +362,9 @@ cd -
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/var/lib/svgalib \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
 
 %if %{with userspace}
+install -d $RPM_BUILD_ROOT/var/lib/svgalib
 %{__make} installheaders installsharedlib installconfig installstaticlib \
 	installutils installman lib3dkit-install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -381,9 +380,11 @@ install lrmi-0.6m/vga_reset $RPM_BUILD_ROOT%{_bindir}
 %endif
 
 %if %{with kernel}
+install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
 install kernel/svgalib_helper-up.%{kmodext} \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}
-%if %{with smp}
+%if %{with dist_kernel} && %{with smp}
+install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc
 install kernel/svgalib_helper/svgalib_helper.%{kmodext} \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}
 %endif
@@ -439,7 +440,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}*
 
-%if %{with smp}
+%if %{with dist_kernel} && %{with smp}
 %files -n kernel%{k24}-smp-video-svgalib_helper
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}*
