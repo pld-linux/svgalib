@@ -321,7 +321,13 @@ ln -sf %{_kernelsrcdir}/include/linux/autoconf-up.h include/linux/autoconf.h
 ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
 ln -sf %{_kernelsrcdir}/Module.symvers-up Module.symvers
 touch include/config/MARKER
+if grep -q class_simple_create %{_kernelsrcdir}/include/linux/device.h ; then
+	CLF=-DCLASS_SIMPLE=1
+else
+	CLF=
+fi
 %{__make} -C %{_kernelsrcdir} modules \
+	CLASS_CFLAGS="$CLF" \
 	SUBDIRS=`pwd` \
 	O=`pwd` \
 	V=1
@@ -347,6 +353,7 @@ ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
 ln -sf %{_kernelsrcdir}/Module.symvers-smp Module.symvers
 touch include/config/MARKER
 %{__make} -C %{_kernelsrcdir} modules \
+	CLASS_CFLAGS="$CLF" \
 	SUBDIRS=`pwd` \
 	O=`pwd` \
 	V=1
