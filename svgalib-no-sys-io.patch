@@ -117,3 +117,41 @@
    {
      io_t iov;
      
+--- svgalib-1.9.23/src/vga.c.orig	2005-10-04 13:26:07.000000000 +0000
++++ svgalib-1.9.23/src/vga.c	2005-12-08 14:40:30.348012920 +0000
+@@ -12,6 +12,11 @@
+ 
+ /* The code is a bit of a mess; also note that the drawing functions */
+ /* are not speed optimized (the gl functions are much faster). */
++
++#if defined(__i386__) || defined(__x86_64__) || defined(__alpha__)
++#  define HAVE_SYS_IO
++#endif
++
+ #define _GNU_SOURCE
+ #include <stdlib.h>
+ #include <stdio.h>
+@@ -28,7 +33,9 @@
+ #include <sys/vt.h>
+ #include <sys/wait.h>
+ #include <sys/syslog.h>
++#ifdef HAVE_SYS_IO
+ #include <sys/io.h>
++#endif
+ 
+ #ifdef INCLUDE_VESA_DRIVER
+ #include <sys/vm86.h>
+@@ -830,11 +837,13 @@
+     }
+     else
+     {
++#ifdef HAVE_SYS_IO
+     if (__svgalib_nohelper)
+     {
+ 	iopl(3);
+ 	ioperm(0, 0x400, 1);
+     }
++#endif
+     
+     /* Open /dev/svga */
+     open_mem();
