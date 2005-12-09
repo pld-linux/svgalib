@@ -44,15 +44,19 @@ Patch8:		%{name}-sparc.patch
 Patch9:		%{name}-depend.patch
 Patch10:	%{name}-ppc_memset.patch
 Patch11:	%{name}-no-sys-io.patch
+Patch12:	%{name}-linux-2.4.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
-BuildRequires:	kernel-headers >= 2.4.0
 %if %{kernel26}
 BuildRequires:	kernel-module-build >= 2.6.0
+%else
+BuildRequires:	kernel24-headers >= 2.4.0
 %endif
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.153
 # no sparc64 yet acc. to changelog
+# kernel module requires at least sys32_ioctl translation function
+# (isnt's required for 32-bit userland on x86_64 too?)
 ExclusiveArch:	%{ix86} %{x8664} alpha arm hppa ia64 m68k mips ppc sparc sparcv9
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -271,6 +275,7 @@ opartych na svgalib.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -338,6 +343,9 @@ cd -
 %else
 %{__make} -C kernel/svgalib_helper -f Makefile.alt \
 	CC="%{kgcc}" \
+%ifarch sparc64
+	LD="ld -m elf64_sparc" \
+%endif
 	COPT="%{rpmcflags}" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 %endif
@@ -363,6 +371,9 @@ cd -
 %else
 %{__make} -C kernel/svgalib_helper -f Makefile.alt \
 	CC="%{kgcc}" \
+%ifarch sparc64
+	LD="ld -m elf64_sparc" \
+%endif
 	COPT="%{rpmcflags} -D__KERNEL_SMP" \
 	INCLUDEDIR=%{_kernelsrcdir}/include
 %endif
