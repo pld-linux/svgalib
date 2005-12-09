@@ -1,0 +1,10 @@
+--- svgalib-1.9.23/kernel/svgalib_helper/kernel26compat.h.orig	2005-12-09 11:43:29.000000000 +0100
++++ svgalib-1.9.23/kernel/svgalib_helper/kernel26compat.h	2005-12-09 12:04:16.000000000 +0100
+@@ -9,6 +9,7 @@
+ 
+ # define PCI_GET_CLASS pci_find_class
+ # define PCI_GET_DEVICE pci_find_device
++# define DEVFS_MK_SYMLINK(a,b,c,d,e,f) devfs_mk_symlink(a,b,c,d,e,f)
+ 
+ # if defined (PG_chainlock)
+ #  define my_io_remap_page_range(vma, start, ofs, len, prot) \
