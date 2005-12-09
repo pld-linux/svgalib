@@ -325,7 +325,15 @@ cd kernel/svgalib_helper
 ln -sf %{_kernelsrcdir}/config-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} .config
 install -d include/{linux,config}
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-up.h include/linux/autoconf.h
+%ifarch ppc ppc64
+install -d include/asm
+[ ! -d %{_kernelsrcdir}/include/asm-powerpc ] || ln -sf %{_kernelsrcdir}/include/asm-powerpc/* include/asm
+[ ! -d %{_kernelsrcdir}/include/asm-%{_target_base_arch} ] || ln -snf %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* include/asm
+# no longer exists in 2.6.14.x
+touch include/asm/segment.h
+%else
 ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
+%endif
 ln -sf %{_kernelsrcdir}/Module.symvers-up Module.symvers
 touch include/config/MARKER
 if grep -q class_simple_create %{_kernelsrcdir}/include/linux/device.h ; then
@@ -359,7 +367,15 @@ cd kernel/svgalib_helper
 ln -sf %{_kernelsrcdir}/config-smp .config
 install -d include/{linux,config}
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-smp.h include/linux/autoconf.h
+%ifarch ppc ppc64
+install -d include/asm
+[ ! -d %{_kernelsrcdir}/include/asm-powerpc ] || ln -sf %{_kernelsrcdir}/include/asm-powerpc/* include/asm
+[ ! -d %{_kernelsrcdir}/include/asm-%{_target_base_arch} ] || ln -snf %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* include/asm
+# no longer exists in 2.6.14.x
+touch include/asm/segment.h
+%else
 ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
+%endif
 ln -sf %{_kernelsrcdir}/Module.symvers-smp Module.symvers
 touch include/config/MARKER
 %{__make} -C %{_kernelsrcdir} modules \
