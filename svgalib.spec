@@ -451,7 +451,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %dir %{_sysconfdir}
 %dir /var/lib/svgalib
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %{_mandir}/man[1567]/*
