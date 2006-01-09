@@ -12,6 +12,9 @@
 %define	kernel26 %(echo %{_kernel_ver} | grep -q '2\.[0-4]\.' ; echo $?)
 %if %{kernel26}
 %define	k24	%{nil}
+%ifarch sparc
+%undefine	with_smp
+%endif
 %else
 %define	k24	24
 %endif
