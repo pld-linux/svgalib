@@ -6,6 +6,7 @@
 %bcond_without	smp		# don't build smp module
 %bcond_without	userspace	# don't build userspace packages
 #
+%if %{with kernel}
 %if %{with kernel24}
 %define		_kernelsrcdir	/usr/src/linux-2.4
 %endif
@@ -17,6 +18,11 @@
 %endif
 %else
 %define	k24	24
+%endif
+%else
+%define	kernel26 1
+%define	k24	%{nil}
+%undefine	with_dist_kernel
 %endif
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -48,6 +54,7 @@ Patch9:		%{name}-depend.patch
 Patch10:	%{name}-ppc_memset.patch
 Patch11:	%{name}-no-sys-io.patch
 Patch12:	%{name}-linux-2.4.patch
+Patch13:	%{name}-no-asm-segment.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 %if %{kernel26}
@@ -279,6 +286,7 @@ opartych na svgalib.
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -332,8 +340,6 @@ ln -sf %{_kernelsrcdir}/include/linux/autoconf-up.h include/linux/autoconf.h
 install -d include/asm
 [ ! -d %{_kernelsrcdir}/include/asm-powerpc ] || ln -sf %{_kernelsrcdir}/include/asm-powerpc/* include/asm
 [ ! -d %{_kernelsrcdir}/include/asm-%{_target_base_arch} ] || ln -snf %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* include/asm
-# no longer exists in 2.6.14.x
-touch include/asm/segment.h
 %else
 ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
 %endif
