@@ -34,13 +34,13 @@ Summary(ru):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
-Version:	1.9.23
+Version:	1.9.24
 %define	_rel	1
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
-# Source0-md5:	b51f7c791f0a64a856beec283bcdc0ba
+# Source0-md5:	3be376c08462caf88cfc150239481110
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
@@ -55,6 +55,7 @@ Patch10:	%{name}-ppc_memset.patch
 Patch11:	%{name}-no-sys-io.patch
 Patch12:	%{name}-linux-2.4.patch
 Patch13:	%{name}-no-asm-segment.patch
+Patch14:	%{name}-linux26.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 %if %{kernel26}
@@ -287,6 +288,7 @@ opartych na svgalib.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -335,7 +337,7 @@ rm -f src/svgalib_helper.h
 cd kernel/svgalib_helper
 ln -sf %{_kernelsrcdir}/config-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} .config
 install -d include/{linux,config}
-ln -sf %{_kernelsrcdir}/include/linux/autoconf-up.h include/linux/autoconf.h
+ln -sf %{_kernelsrcdir}/include/linux/autoconf-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.h include/linux/autoconf.h
 %ifarch ppc ppc64
 install -d include/asm
 [ ! -d %{_kernelsrcdir}/include/asm-powerpc ] || ln -sf %{_kernelsrcdir}/include/asm-powerpc/* include/asm
