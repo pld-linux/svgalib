@@ -21,7 +21,7 @@
  # else
  #  ifdef __alpha__ /* Is alpha really the issue here ??? */
  #   define my_io_remap_page_range(vma, start, ofs, len, prot) \
-@@ -48,12 +51,21 @@
+@@ -48,12 +51,22 @@
  #endif
  
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,13)
@@ -31,6 +31,7 @@
 +# else
  # define io_remap_page_range(vma, vaddr, paddr, size, prot) \
  	remap_pfn_range(vma, vaddr, (paddr) >> PAGE_SHIFT, size, prot)
++#endif
  #endif
  
 +# if defined(__sparc__) || defined(__sparc_v9__)
