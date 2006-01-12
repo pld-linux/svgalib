@@ -8,3 +8,13 @@
  
  # if defined (PG_chainlock)
  #  define my_io_remap_page_range(vma, start, ofs, len, prot) \
+--- svgalib-1.9.24/kernel/svgalib_helper/main.c.orig	2006-01-12 14:10:24.000000000 +0100
++++ svgalib-1.9.24/kernel/svgalib_helper/main.c	2006-01-12 14:12:39.000000000 +0100
+@@ -19,7 +19,6 @@
+ #include <linux/pci.h>
+ #include <linux/devfs_fs_kernel.h>
+ #include <linux/mm.h>
+-#include <linux/thread_info.h>
+ #include <linux/smp.h>
+ #include <linux/smp_lock.h>
+ 
