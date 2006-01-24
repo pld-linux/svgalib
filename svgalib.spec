@@ -67,7 +67,7 @@ BuildRequires:	kernel24-headers >= 2.4.0
 BuildRequires:	rpmbuild(macros) >= 1.153
 # no sparc64 yet acc. to changelog
 # kernel module requires at least sys32_ioctl translation function
-# (isnt's required for 32-bit userland on x86_64 too?)
+# (isn't required for 32-bit userland on x86_64 too?)
 ExclusiveArch:	%{ix86} %{x8664} alpha arm hppa ia64 m68k mips ppc sparc sparcv9
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
