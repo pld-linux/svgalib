@@ -35,7 +35,7 @@ Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
 Version:	1.9.24
-%define	_rel	2
+%define	_rel	3
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -335,18 +335,11 @@ rm -f src/svgalib_helper.h
 %if %{with kernel}
 %if %{kernel26}
 cd kernel/svgalib_helper
-ln -sf %{_kernelsrcdir}/config-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} .config
-install -d include/{linux,config}
-ln -sf %{_kernelsrcdir}/include/linux/autoconf-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.h include/linux/autoconf.h
-%ifarch ppc ppc64
-install -d include/asm
-[ ! -d %{_kernelsrcdir}/include/asm-powerpc ] || ln -sf %{_kernelsrcdir}/include/asm-powerpc/* include/asm
-[ ! -d %{_kernelsrcdir}/include/asm-%{_target_base_arch} ] || ln -snf %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* include/asm
-%else
-ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-%endif
-ln -sf %{_kernelsrcdir}/Module.symvers-up Module.symvers
-touch include/config/MARKER
+install -d o/include/linux
+ln -sf %{_kernelsrcdir}/config-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} o/.config
+ln -sf %{_kernelsrcdir}/Module.symvers-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} o/Module.symvers
+ln -sf %{_kernelsrcdir}/include/linux/autoconf-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.h o/include/linux/autoconf.h
+%{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
 if grep -q class_simple_create %{_kernelsrcdir}/include/linux/device.h ; then
 	CLF=-DCLASS_SIMPLE=1
 else
@@ -355,7 +348,7 @@ fi
 %{__make} -C %{_kernelsrcdir} modules \
 	CLASS_CFLAGS="$CLF" \
 	SUBDIRS=`pwd` \
-	O=`pwd` \
+	O=`pwd`/o \
 	V=1
 rm -rf .*.cmd include include2 scripts arch
 cd -
@@ -375,24 +368,17 @@ rm -f kernel/svgalib_helper/*.*o
 %if %{with dist_kernel} && %{with smp}
 %if %{kernel26}
 cd kernel/svgalib_helper
-ln -sf %{_kernelsrcdir}/config-smp .config
-install -d include/{linux,config}
-ln -sf %{_kernelsrcdir}/include/linux/autoconf-smp.h include/linux/autoconf.h
-%ifarch ppc ppc64
-install -d include/asm
-[ ! -d %{_kernelsrcdir}/include/asm-powerpc ] || ln -sf %{_kernelsrcdir}/include/asm-powerpc/* include/asm
-[ ! -d %{_kernelsrcdir}/include/asm-%{_target_base_arch} ] || ln -snf %{_kernelsrcdir}/include/asm-%{_target_base_arch}/* include/asm
-# no longer exists in 2.6.14.x
-touch include/asm/segment.h
-%else
-ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-%endif
+install -d o/include/linux
+ln -sf %{_kernelsrcdir}/config-smp o/.config
+ln -sf %{_kernelsrcdir}/include/linux/autoconf-smp.h o/include/linux/autoconf.h
 ln -sf %{_kernelsrcdir}/Module.symvers-smp Module.symvers
-touch include/config/MARKER
+%{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
+# no longer exists in 2.6.14.x
+touch o/include/asm/segment.h
 %{__make} -C %{_kernelsrcdir} modules \
 	CLASS_CFLAGS="$CLF" \
 	SUBDIRS=`pwd` \
-	O=`pwd` \
+	O=`pwd`/o \
 	V=1
 cd -
 %else
