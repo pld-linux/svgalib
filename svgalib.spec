@@ -340,6 +340,10 @@ ln -sf %{_kernelsrcdir}/config-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondi
 ln -sf %{_kernelsrcdir}/Module.symvers-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} o/Module.symvers
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.h o/include/linux/autoconf.h
 %{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
+%ifarch ppc ppc64
+# no longer exists in 2.6.14.x
+touch o/include/asm/segment.h
+%endif
 if grep -q class_simple_create %{_kernelsrcdir}/include/linux/device.h ; then
 	CLF=-DCLASS_SIMPLE=1
 else
@@ -373,8 +377,10 @@ ln -sf %{_kernelsrcdir}/config-smp o/.config
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-smp.h o/include/linux/autoconf.h
 ln -sf %{_kernelsrcdir}/Module.symvers-smp Module.symvers
 %{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
+%ifarch ppc ppc64
 # no longer exists in 2.6.14.x
 touch o/include/asm/segment.h
+%endif
 %{__make} -C %{_kernelsrcdir} modules \
 	CLASS_CFLAGS="$CLF" \
 	SUBDIRS=`pwd` \
