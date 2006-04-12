@@ -24,6 +24,7 @@
 %define	k24	%{nil}
 %undefine	with_dist_kernel
 %endif
+%define	_rel	4
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -35,7 +36,6 @@ Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplýðý
 Summary(uk):	îÉÚØËÏÒ¦×ÎÅ×Á Â¦ÂÌ¦ÏÔÅËÁ ÐÏ×ÎÏÅËÒÁÎÎÏ§ SVGA ÇÒÁÆ¦ËÉ
 Name:		svgalib
 Version:	1.9.24
-%define	_rel	4
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
@@ -59,7 +59,7 @@ Patch14:	%{name}-linux26.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 %if %{kernel26}
-BuildRequires:	kernel-module-build >= 2.6.0
+BuildRequires:	kernel-module-build >= 3:2.6.0
 %else
 BuildRequires:	kernel24-headers >= 2.4.0
 %endif
@@ -239,8 +239,8 @@ Summary(de):	Svgalibs Helferkernmodul
 Summary(es):	Bibliotecas de desarrollo y archivos de inclusión para gráficos [S]VGA
 Summary(pl):	Pomocniczy modu³ j±dra svgaliba
 Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
-Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}-%{release}
@@ -257,8 +257,8 @@ opartych na svgalib.
 %package -n kernel%{k24}-smp-video-svgalib_helper
 Summary:	svgalib's helper kernel module for SMP
 Summary(pl):	Pomoczniczy modu³ j±dra svgalib dla SMP
-Group:		Base/Kernel
 Release:	%{_rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
 Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}-%{release}
