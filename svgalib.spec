@@ -2,7 +2,7 @@
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	kernel		# don't build kernel modules
-%bcond_without	kernel24	# force using kernel24 headers
+%bcond_with	kernel24	# force using kernel24 headers
 %bcond_without	smp		# don't build smp module
 %bcond_without	userspace	# don't build userspace packages
 #
