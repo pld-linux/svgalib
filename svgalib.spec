@@ -2,7 +2,7 @@
 # Conditional build:
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	kernel		# don't build kernel modules
-%bcond_with	kernel24	# force using kernel24 headers
+%bcond_without	kernel24	# force using kernel24 headers
 %bcond_without	smp		# don't build smp module
 %bcond_without	userspace	# don't build userspace packages
 #
@@ -24,7 +24,7 @@
 %define	k24	%{nil}
 %undefine	with_dist_kernel
 %endif
-%define	_rel	4
+%define	_rel	5
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para gráficos en pantalla llena [S]VGA
