@@ -24,7 +24,7 @@
 %define	k24	%{nil}
 %undefine	with_dist_kernel
 %endif
-%define	_rel	5
+%define	_rel	1
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library fЭr Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para grАficos en pantalla llena [S]VGA
@@ -35,12 +35,12 @@ Summary(ru):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		svgalib
-Version:	1.9.24
+Version:	1.9.25
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
-# Source0-md5:	3be376c08462caf88cfc150239481110
+# Source0-md5:	4dda7e779e550b7404cfe118f1d74222
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
@@ -55,7 +55,6 @@ Patch10:	%{name}-ppc_memset.patch
 Patch11:	%{name}-no-sys-io.patch
 Patch12:	%{name}-linux-2.4.patch
 Patch13:	%{name}-no-asm-segment.patch
-Patch14:	%{name}-linux26.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 %if %{kernel26}
@@ -288,7 +287,6 @@ opartych na svgalib.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
