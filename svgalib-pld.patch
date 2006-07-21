@@ -1,5 +1,5 @@
---- svgalib-1.9.23/Makefile.cfg.orig	2005-09-24 09:34:51.000000000 +0200
-+++ svgalib-1.9.23/Makefile.cfg	2005-10-10 13:39:32.000000000 +0200
+--- svgalib-1.9.25/Makefile.cfg.orig	2006-07-14 13:38:58.000000000 +0200
++++ svgalib-1.9.25/Makefile.cfg	2006-07-21 09:38:54.084440000 +0200
 @@ -44,7 +44,7 @@
  # Common prefix for installation directories.
  # NOTE: This directory must exist when you start the install.
@@ -9,17 +9,8 @@
  exec_prefix = $(prefix)
  
  # Directory where the shared stubs and static library will be installed.
-@@ -63,7 +63,7 @@
- includedir = $(prefix)/include
- 
- # Directory where the man files will be installed.
--mandir = $(prefix)/man
-+mandir = $(prefix)/share/man
- 
- # Target binary format.
- TARGET_FORMAT = elf
-@@ -93,7 +93,7 @@
- # LIBC_MEMCPY = y
+@@ -96,7 +96,7 @@
+ LIBC_MEMCPY = y
  
  # Uncomment this if you want to compile and install the static libs.
 -# INSTALLSTATICLIB = installstaticlib
@@ -27,27 +18,12 @@
  
  # Comment this out if you don't want to install the shared libs.
  # If you do not install the shared nor the static libs, 'make static'
-@@ -126,7 +126,7 @@
- # MAKEWHATIS = makewhatis # Beware, this will really need a few minutes!
- 
- # Comment this out if you use devfs only and don't want to make svga nodes
--INSTALLDEV = installdev
-+# INSTALLDEV = installdev
- 
- # Select which makefile to use to install the module, or comment both out if
- # you are going to install the kernel module manually
-@@ -311,10 +311,10 @@
+@@ -320,7 +320,7 @@
  
  # Utilites used.
  AR	  = ar
--INSTALL_PROGRAM	= install -c -s -m 755 -o root -g bin
--INSTALL_SCRIPT	= install -c -m 755 -o root -g bin
--INSTALL_SHLIB	= install -c -m 755 -o root -g root
--INSTALL_DATA	= install -c -m 644 -o root -g root
-+INSTALL_PROGRAM	= install -c -m 755
-+INSTALL_SCRIPT	= install -c -m 755
-+INSTALL_SHLIB	= install -c -m 755
-+INSTALL_DATA	= install -c -m 644
- 
- ifneq ($(ARCH),i386)
- 	NO_ASM = y
+-INSTALL_PROGRAM	= install -sm755
++INSTALL_PROGRAM	= install -m755
+ INSTALL_SCRIPT	= install -m755
+ INSTALL_SHLIB	= install -m755
+ INSTALL_DATA	= install -m644
