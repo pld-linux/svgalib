@@ -337,7 +337,7 @@ install -d o/include/linux
 ln -sf %{_kernelsrcdir}/config-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} o/.config
 ln -sf %{_kernelsrcdir}/Module.symvers-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} o/Module.symvers
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.h o/include/linux/autoconf.h
-%{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
+%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
 %ifarch ppc ppc64
 # no longer exists in 2.6.14.x
 touch o/include/asm/segment.h
@@ -374,7 +374,7 @@ install -d o/include/linux
 ln -sf %{_kernelsrcdir}/config-smp o/.config
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-smp.h o/include/linux/autoconf.h
 ln -sf %{_kernelsrcdir}/Module.symvers-smp Module.symvers
-%{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
+%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
 %ifarch ppc ppc64
 # no longer exists in 2.6.14.x
 touch o/include/asm/segment.h
