@@ -29,7 +29,7 @@
 %define	k24	%{nil}
 %undefine	with_dist_kernel
 %endif
-%define	_rel	2
+%define	_rel	3
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para gráficos en pantalla llena [S]VGA
