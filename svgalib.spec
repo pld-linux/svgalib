@@ -31,14 +31,14 @@
 %endif
 %define	_rel	3
 Summary:	Library for full screen [S]VGA graphics
-Summary(de.UTF-8):   Library für Vollbildschirm-[S]VGA-Grafiken
-Summary(es.UTF-8):   Biblioteca para gráficos en pantalla llena [S]VGA
-Summary(fr.UTF-8):   Une librairie graphique SVGA plein ecran de bas niveau
-Summary(pl.UTF-8):   Biblioteki dla pełnoekranowej grafiki [S]VGA
-Summary(pt_BR.UTF-8):   Biblioteca para gráficos em tela cheia [S]VGA
-Summary(ru.UTF-8):   Низкоуровневая библиотека полноэкранной SVGA графики
-Summary(tr.UTF-8):   Tam-ekran [S]VGA çizimleri kitaplığı
-Summary(uk.UTF-8):   Низькорівнева бібліотека повноекранної SVGA графіки
+Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
+Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
+Summary(fr.UTF-8):	Une librairie graphique SVGA plein ecran de bas niveau
+Summary(pl.UTF-8):	Biblioteki dla pełnoekranowej grafiki [S]VGA
+Summary(pt_BR.UTF-8):	Biblioteca para gráficos em tela cheia [S]VGA
+Summary(ru.UTF-8):	Низкоуровневая библиотека полноэкранной SVGA графики
+Summary(tr.UTF-8):	Tam-ekran [S]VGA çizimleri kitaplığı
+Summary(uk.UTF-8):	Низькорівнева бібліотека повноекранної SVGA графіки
 Name:		svgalib
 Version:	1.9.25
 Release:	%{_rel}
@@ -149,14 +149,14 @@ oyun ve yardımcı programlar çizim erişimi için bu kitaplığı kullanır.
 
 %package devel
 Summary:	Development libraries and include files for [S]VGA graphics
-Summary(de.UTF-8):   Entwicklungs-Libraries und INCLUDE-Dateien für (S)VGA-Grafik
-Summary(es.UTF-8):   Bibliotecas de desarrollo y archivos de inclusión para gráficos [S]VGA
-Summary(fr.UTF-8):   Outils pour développer des programmes utilisant SVGAlib
-Summary(pl.UTF-8):   Pliki nagłówkowe i dokumentacja dla [S]VGA
-Summary(pt_BR.UTF-8):   Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
-Summary(ru.UTF-8):   Файлы для построения программ, использующих SVGAlib
-Summary(tr.UTF-8):   [S]VGA grafikleri için geliştirme kitaplıkları ve başlık dosyaları
-Summary(uk.UTF-8):   Файли для побудови програм, що використовують SVGAlib
+Summary(de.UTF-8):	Entwicklungs-Libraries und INCLUDE-Dateien für (S)VGA-Grafik
+Summary(es.UTF-8):	Bibliotecas de desarrollo y archivos de inclusión para gráficos [S]VGA
+Summary(fr.UTF-8):	Outils pour développer des programmes utilisant SVGAlib
+Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja dla [S]VGA
+Summary(pt_BR.UTF-8):	Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
+Summary(ru.UTF-8):	Файлы для построения программ, использующих SVGAlib
+Summary(tr.UTF-8):	[S]VGA grafikleri için geliştirme kitaplıkları ve başlık dosyaları
+Summary(uk.UTF-8):	Файли для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -209,10 +209,10 @@ gereken başlık dosyalarını ve statik kitaplıkları içerir.
 
 %package static
 Summary:	Static [S]VGA graphics librarires
-Summary(pl.UTF-8):   Biblioteki statyczne [S]VGA
-Summary(pt_BR.UTF-8):   Bibliotecas estáticas para desenvolvimento com SVGAlib
-Summary(ru.UTF-8):   Статические библиотеки для построения программ, использующих SVGAlib
-Summary(uk.UTF-8):   Статичні бібліотеки для побудови програм, що використовують SVGAlib
+Summary(pl.UTF-8):	Biblioteki statyczne [S]VGA
+Summary(pt_BR.UTF-8):	Bibliotecas estáticas para desenvolvimento com SVGAlib
+Summary(ru.UTF-8):	Статические библиотеки для построения программ, использующих SVGAlib
+Summary(uk.UTF-8):	Статичні бібліотеки для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -239,10 +239,10 @@ Bibliotecas estáticas para desenvolvimento com SVGAlib.
 
 %package -n kernel%{k24}%{_alt_kernel}-video-svgalib_helper
 Summary:	svgalib's helper kernel module
-Summary(de.UTF-8):   Svgalibs Helferkernmodul
-Summary(es.UTF-8):   Bibliotecas de desarrollo y archivos de inclusión para gráficos [S]VGA
-Summary(pl.UTF-8):   Pomocniczy moduł jądra svgaliba
-Summary(pt_BR.UTF-8):   Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
+Summary(de.UTF-8):	Svgalibs Helferkernmodul
+Summary(es.UTF-8):	Bibliotecas de desarrollo y archivos de inclusión para gráficos [S]VGA
+Summary(pl.UTF-8):	Pomocniczy moduł jądra svgaliba
+Summary(pt_BR.UTF-8):	Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_up}
@@ -260,7 +260,7 @@ opartych na svgalib.
 
 %package -n kernel%{k24}%{_alt_kernel}-smp-video-svgalib_helper
 Summary:	svgalib's helper kernel module for SMP
-Summary(pl.UTF-8):   Pomoczniczy moduł jądra svgalib dla SMP
+Summary(pl.UTF-8):	Pomoczniczy moduł jądra svgalib dla SMP
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
