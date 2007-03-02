@@ -60,6 +60,7 @@ Patch10:	%{name}-ppc_memset.patch
 Patch11:	%{name}-no-sys-io.patch
 Patch12:	%{name}-linux-2.4.patch
 Patch13:	%{name}-no-asm-segment.patch
+Patch14:	%{name}-no-devfs.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 %if %{kernel26}
@@ -292,6 +293,7 @@ opartych na svgalib.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
