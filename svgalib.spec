@@ -29,7 +29,7 @@
 %define	k24	%{nil}
 %undefine	with_dist_kernel
 %endif
-%define	_rel	3
+%define	_rel	4
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -433,6 +433,9 @@ install kernel/svgalib_helper/svgalib_helper.%{kmodext} \
 	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}
 %endif
 %endif
+
+# hack to kill wrong symlink to README.lrmi
+mv -f lrmi-0.6m/README doc/README.lrmi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
