@@ -325,33 +325,6 @@ mv -f kernel/svgalib_helper/svgalib_helper.ko \
 	 kernel/svgalib_helper-dist.ko
 rm -f kernel/svgalib_helper/*.*o
 
-%if %{with dist_kernel}
-cd kernel/svgalib_helper
-install -d o/include/linux
-ln -sf %{_kernelsrcdir}/config-dist o/.config
-ln -sf %{_kernelsrcdir}/include/linux/autoconf-dist.h o/include/linux/autoconf.h
-ln -sf %{_kernelsrcdir}/Module.symvers-dist o/Module.symvers
-%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
-%ifarch ppc ppc64
-# no longer exists in 2.6.14.x
-touch o/include/asm/segment.h
-%endif
-%{__make} -C %{_kernelsrcdir} modules \
-	CLASS_CFLAGS="$CLF" \
-	SUBDIRS=`pwd` \
-	O=`pwd`/o \
-	V=1
-cd -
-%else
-%{__make} -C kernel/svgalib_helper -f Makefile.alt \
-	CC="%{kgcc}" \
-%ifarch sparc64
-	LD="ld -m elf64_sparc" \
-%endif
-	COPT="%{rpmcflags}" \
-	INCLUDEDIR=%{_kernelsrcdir}/include
-%endif
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
