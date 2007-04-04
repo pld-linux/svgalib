@@ -299,7 +299,7 @@ ln -sf %{_kernelsrcdir}/include/linux/autoconf-%{?with_dist_kernel:dist}%{!?with
 %ifarch ppc ppc64
 # no longer exists in 2.6.14.x
 touch o/include/asm/segment.h
-LDFLAGS="--as-needed"; export $LDFLAGS
+LDFLAGS="--as-needed"; export LDFLAGS
 %endif
 if grep -q class_simple_create %{_kernelsrcdir}/include/linux/device.h ; then
 	CLF=-DCLASS_SIMPLE=1
