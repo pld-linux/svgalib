@@ -307,6 +307,9 @@ else
 fi
 %{__make} -C %{_kernelsrcdir} modules \
 	CLASS_CFLAGS="$CLF" \
+%ifarch ppc
+	LD="ld -m elf32ppc --as-needed" \
+%endif
 	SUBDIRS=`pwd` \
 	O=`pwd`/o \
 	V=1
