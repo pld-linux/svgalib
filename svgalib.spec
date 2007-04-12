@@ -43,7 +43,7 @@ Patch13:	%{name}-no-asm-segment.patch
 Patch14:	%{name}-no-devfs.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
-BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.0
+BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.379
 # no sparc64 yet acc. to changelog
