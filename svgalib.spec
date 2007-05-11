@@ -3,8 +3,14 @@
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	kernel		# don't build kernel modules
 %bcond_with	kernel24	# force using kernel24 headers
-%bcond_without	smp		# don't build smp module
+%bcond_without	up		# don't build UP module
+%bcond_without	smp		# don't build SMP module
 %bcond_without	userspace	# don't build userspace packages
+%bcond_with	grsec_kernel	# build for kernel-grsecurity
+#
+%if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
+%define	alt_kernel	grsecurity
+%endif
 #
 %if %{with kernel}
 %if %{with kernel24}
@@ -24,7 +30,7 @@
 %define	k24	%{nil}
 %undefine	with_dist_kernel
 %endif
-%define	_rel	5
+%define	_rel	51
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library f¸r Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para gr·ficos en pantalla llena [S]VGA
@@ -35,12 +41,12 @@ Summary(ru):	Ó…⁄Àœ’“œ◊Œ≈◊¡— ¬…¬Ã…œ‘≈À¡ –œÃŒœ‹À“¡ŒŒœ  SVGA «“¡∆…À…
 Summary(tr):	Tam-ekran [S]VGA Áizimleri kitapl˝˝
 Summary(uk):	Ó…⁄ÿÀœ“¶◊Œ≈◊¡ ¬¶¬Ã¶œ‘≈À¡ –œ◊Œœ≈À“¡ŒŒœß SVGA «“¡∆¶À…
 Name:		svgalib
-Version:	1.9.24
+Version:	1.9.25
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
-# Source0-md5:	3be376c08462caf88cfc150239481110
+# Source0-md5:	4dda7e779e550b7404cfe118f1d74222
 Patch0:		%{name}-pld.patch
 Patch1:		%{name}-tmp2TMPDIR.patch
 Patch2:		%{name}-DESTDIR.patch
@@ -55,16 +61,15 @@ Patch10:	%{name}-ppc_memset.patch
 Patch11:	%{name}-no-sys-io.patch
 Patch12:	%{name}-linux-2.4.patch
 Patch13:	%{name}-no-asm-segment.patch
-Patch14:	%{name}-linux26.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 %if %{kernel26}
-BuildRequires:	kernel-module-build >= 3:2.6.0
+BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.0
 %else
 BuildRequires:	kernel24-headers >= 2.4.0
 %endif
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.153
+BuildRequires:	rpmbuild(macros) >= 1.308
 # no sparc64 yet acc. to changelog
 # kernel module requires at least sys32_ioctl translation function
 # (isn't required for 32-bit userland on x86_64 too?)
@@ -233,7 +238,7 @@ Bibliotecas est·ticas para desenvolvimento com SVGAlib.
 –œ◊Œœ≈À“¡ŒŒœ¿ «“¡∆¶Àœ¿ Œ¡ “¶⁄ŒœÕ¡Œ¶‘Œ…» ¡–¡“¡‘Œ…» –Ã¡‘∆œ“Õ¡» ‘¡ ¬≈⁄
 Œ≈œ¬»¶ƒŒœ”‘¶ ⁄¡–’”À¡‘… ƒÃ— √ÿœ«œ X Window.
 
-%package -n kernel%{k24}-video-svgalib_helper
+%package -n kernel%{k24}%{_alt_kernel}-video-svgalib_helper
 Summary:	svgalib's helper kernel module
 Summary(de):	Svgalibs Helferkernmodul
 Summary(es):	Bibliotecas de desarrollo y archivos de inclusiÛn para gr·ficos [S]VGA
@@ -246,15 +251,15 @@ Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}-%{release}
 Obsoletes:	svgalib-helper
 
-%description -n kernel%{k24}-video-svgalib_helper
+%description -n kernel%{k24}%{_alt_kernel}-video-svgalib_helper
 This package contains the kernel module necessary to run svgalib-based
 programs.
 
-%description -n kernel%{k24}-video-svgalib_helper -l pl
+%description -n kernel%{k24}%{_alt_kernel}-video-svgalib_helper -l pl
 Ten pakiet zawiera modu≥ j±dra potrzebny do uruchamiania programÛw
 opartych na svgalib.
 
-%package -n kernel%{k24}-smp-video-svgalib_helper
+%package -n kernel%{k24}%{_alt_kernel}-smp-video-svgalib_helper
 Summary:	svgalib's helper kernel module for SMP
 Summary(pl):	Pomoczniczy modu≥ j±dra svgalib dla SMP
 Release:	%{_rel}@%{_kernel_ver_str}
@@ -264,11 +269,11 @@ Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}-%{release}
 Obsoletes:	svgalib-helper
 
-%description -n kernel%{k24}-smp-video-svgalib_helper
+%description -n kernel%{k24}%{_alt_kernel}-smp-video-svgalib_helper
 This package contains the kernel module necessary to run svgalib-based
 programs.
 
-%description -n kernel%{k24}-smp-video-svgalib_helper -l pl
+%description -n kernel%{k24}%{_alt_kernel}-smp-video-svgalib_helper -l pl
 Ten pakiet zawiera modu≥ j±dra potrzebny do uruchamiania programÛw
 opartych na svgalib.
 
@@ -288,7 +293,6 @@ opartych na svgalib.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -339,7 +343,7 @@ install -d o/include/linux
 ln -sf %{_kernelsrcdir}/config-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} o/.config
 ln -sf %{_kernelsrcdir}/Module.symvers-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist} o/Module.symvers
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.h o/include/linux/autoconf.h
-%{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
+%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
 %ifarch ppc ppc64
 # no longer exists in 2.6.14.x
 touch o/include/asm/segment.h
@@ -376,7 +380,7 @@ install -d o/include/linux
 ln -sf %{_kernelsrcdir}/config-smp o/.config
 ln -sf %{_kernelsrcdir}/include/linux/autoconf-smp.h o/include/linux/autoconf.h
 ln -sf %{_kernelsrcdir}/Module.symvers-smp Module.symvers
-%{__make} -C %{_kernelsrcdir} O=$PWD/o prepare scripts
+%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
 %ifarch ppc ppc64
 # no longer exists in 2.6.14.x
 touch o/include/asm/segment.h
@@ -435,16 +439,16 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%post	-n kernel%{k24}-video-svgalib_helper
+%post	-n kernel%{k24}%{_alt_kernel}-video-svgalib_helper
 %depmod %{_kernel_ver}
 
-%postun -n kernel%{k24}-video-svgalib_helper
+%postun -n kernel%{k24}%{_alt_kernel}-video-svgalib_helper
 %depmod %{_kernel_ver}
 
-%post	-n kernel%{k24}-smp-video-svgalib_helper
+%post	-n kernel%{k24}%{_alt_kernel}-smp-video-svgalib_helper
 %depmod %{_kernel_ver}smp
 
-%postun -n kernel%{k24}-smp-video-svgalib_helper
+%postun -n kernel%{k24}%{_alt_kernel}-smp-video-svgalib_helper
 %depmod %{_kernel_ver}smp
 
 %if %{with userspace}
@@ -475,12 +479,14 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %if %{with kernel}
-%files -n kernel%{k24}-video-svgalib_helper
+%if %{with up} || %{without dist_kernel}
+%files -n kernel%{k24}%{_alt_kernel}-video-svgalib_helper
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}/misc/svgalib_helper.%{kmodext}*
+%endif
 
 %if %{with dist_kernel} && %{with smp}
-%files -n kernel%{k24}-smp-video-svgalib_helper
+%files -n kernel%{k24}%{_alt_kernel}-smp-video-svgalib_helper
 %defattr(644,root,root,755)
 /lib/modules/%{_kernel_ver}smp/misc/svgalib_helper.%{kmodext}*
 %endif
