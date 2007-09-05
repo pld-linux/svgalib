@@ -9,7 +9,7 @@
 %define	alt_kernel	grsecurity
 %endif
 #
-%define	_rel	7
+%define	_rel	8
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -290,31 +290,7 @@ rm -f src/svgalib_helper.h
 %endif
 
 %if %{with kernel}
-cd kernel/svgalib_helper
-install -d o/include/linux
-ln -sf %{_kernelsrcdir}/config-%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist} o/.config
-ln -sf %{_kernelsrcdir}/Module.symvers-%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist} o/Module.symvers
-ln -sf %{_kernelsrcdir}/include/linux/autoconf-%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist}.h o/include/linux/autoconf.h
-%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
-%ifarch ppc ppc64
-# no longer exists in 2.6.14.x
-touch o/include/asm/segment.h
-%endif
-if grep -q class_simple_create %{_kernelsrcdir}/include/linux/device.h ; then
-	CLF=-DCLASS_SIMPLE=1
-else
-	CLF=
-fi
-%{__make} -C %{_kernelsrcdir} modules \
-	CLASS_CFLAGS="$CLF" \
-	SUBDIRS=`pwd` \
-	O=`pwd`/o \
-	V=1
-rm -rf .*.cmd include include2 scripts arch
-cd -
-mv -f kernel/svgalib_helper/svgalib_helper.ko \
-	 kernel/svgalib_helper-dist.ko
-rm -f kernel/svgalib_helper/*.*o
+%build_kernel_modules -C kernel/svgalib_helper -m svgalib_helper
 %endif
 
 %install
@@ -337,9 +313,7 @@ install lrmi-0.6m/vga_reset $RPM_BUILD_ROOT%{_bindir}
 %endif
 
 %if %{with kernel}
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
-install kernel/svgalib_helper-dist.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.ko
+%install_kernel_modules -m kernel/svgalib_helper/svgalib_helper -d misc
 %endif
 
 # hack to kill wrong symlink to README.lrmi
