@@ -251,6 +251,10 @@ opartych na svgalib.
 rm -f doc/man7/svgalib.7?*
 
 %build
+%if %{with kernel}
+%build_kernel_modules -C kernel/svgalib_helper -m svgalib_helper
+%endif
+
 %if %{with userspace}
 %ifarch %{ix86}
 NOASM=n
@@ -287,10 +291,6 @@ rm -f src/svgalib_helper.h
 %{__make} -C threeDKit lib3dkit.a \
 	CC="%{__cc} $MOPT" \
 	ALLOBJS="\$(OBJECTS)"
-%endif
-
-%if %{with kernel}
-%build_kernel_modules -C kernel/svgalib_helper -m svgalib_helper
 %endif
 
 %install
