@@ -9,7 +9,7 @@
 %define	alt_kernel	grsecurity
 %endif
 #
-%define	_rel	9
+%define	_rel	10
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -130,7 +130,7 @@ Summary(ru.UTF-8):	Файлы для построения программ, ис
 Summary(tr.UTF-8):	[S]VGA grafikleri için geliştirme kitaplıkları ve başlık dosyaları
 Summary(uk.UTF-8):	Файли для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description devel
 The svgalib-devel package contains the libraries and header files
@@ -186,7 +186,7 @@ Summary(pt_BR.UTF-8):	Bibliotecas estáticas para desenvolvimento com SVGAlib
 Summary(ru.UTF-8):	Статические библиотеки для построения программ, использующих SVGAlib
 Summary(uk.UTF-8):	Статичні бібліотеки для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 Static [S]VGA graphics librarires.
@@ -219,7 +219,7 @@ Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel}
 Requires(post,postun):	/sbin/depmod
-Provides:	svgalib-helper = %{version}-%{release}
+Provides:	svgalib-helper = %{epoch}:%{version}-%{release}
 Obsoletes:	svgalib-helper
 
 %description -n kernel%{_alt_kernel}-video-svgalib_helper
