@@ -22,6 +22,7 @@ Summary(uk.UTF-8):	Низькорівнева бібліотека повное�
 Name:		svgalib
 Version:	1.9.25
 Release:	%{_rel}
+Epoch:		1
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
