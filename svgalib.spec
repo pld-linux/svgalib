@@ -8,10 +8,6 @@
 %bcond_without	userspace	# don't build userspace packages
 %bcond_with	grsec_kernel	# build for kernel-grsecurity
 #
-%if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
-%define	alt_kernel	grsecurity
-%endif
-#
 %if %{with kernel}
 %if %{with kernel24}
 %define		_kernelsrcdir	/usr/src/linux-2.4
@@ -30,6 +26,15 @@
 %define	k24	%{nil}
 %undefine	with_dist_kernel
 %endif
+
+%if %{without kernel}
+%undefine	with_dist_kernel
+%endif
+#
+%if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
+%define	alt_kernel	grsecurity
+%endif
+
 %define		_rel	55
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
