@@ -7,7 +7,7 @@
 %bcond_without	smp		# don't build SMP module
 %bcond_without	userspace	# don't build userspace packages
 %bcond_with	grsec_kernel	# build for kernel-grsecurity
-#
+
 %if %{with kernel}
 %if %{with kernel24}
 %define		_kernelsrcdir	/usr/src/linux-2.4
@@ -30,9 +30,11 @@
 %if %{without kernel}
 %undefine	with_dist_kernel
 %endif
-#
 %if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
 %define	alt_kernel	grsecurity
+%endif
+%if "%{_alt_kernel}" != "%{nil}"
+%undefine	with_userspace
 %endif
 
 %define		_rel	55
