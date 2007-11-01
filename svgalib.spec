@@ -37,7 +37,7 @@
 %undefine	with_userspace
 %endif
 
-%define		_rel	55
+%define		_rel	56
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para gráficos en pantalla llena [S]VGA
