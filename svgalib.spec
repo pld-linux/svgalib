@@ -38,6 +38,7 @@
 %endif
 
 %define		_rel	56
+%define		pname	svgalib
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library fЭr Vollbildschirm-[S]VGA-Grafiken
 Summary(es):	Biblioteca para grАficos en pantalla llena [S]VGA
@@ -47,27 +48,27 @@ Summary(pt_BR):	Biblioteca para grАficos em tela cheia [S]VGA
 Summary(ru):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
-Name:		svgalib
+Name:		%{pname}%{_alt_kernel}
 Version:	1.9.25
 Release:	%{_rel}
 License:	distributable
 Group:		Libraries
-Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
+Source0:	http://www.arava.co.il/matan/svgalib/%{pname}-%{version}.tar.gz
 # Source0-md5:	4dda7e779e550b7404cfe118f1d74222
-Patch0:		%{name}-pld.patch
-Patch1:		%{name}-tmp2TMPDIR.patch
-Patch2:		%{name}-DESTDIR.patch
-Patch3:		%{name}-smp.patch
-Patch4:		%{name}-threeDKit-make.patch
-Patch5:		%{name}-svgalib_helper_Makefile.patch
-Patch6:		%{name}-link.patch
-Patch7:		%{name}-module-alias.patch
-Patch8:		%{name}-sparc.patch
-Patch9:		%{name}-depend.patch
-Patch10:	%{name}-ppc_memset.patch
-Patch11:	%{name}-no-sys-io.patch
-Patch12:	%{name}-linux-2.4.patch
-Patch13:	%{name}-no-asm-segment.patch
+Patch0:		%{pname}-pld.patch
+Patch1:		%{pname}-tmp2TMPDIR.patch
+Patch2:		%{pname}-DESTDIR.patch
+Patch3:		%{pname}-smp.patch
+Patch4:		%{pname}-threeDKit-make.patch
+Patch5:		%{pname}-svgalib_helper_Makefile.patch
+Patch6:		%{pname}-link.patch
+Patch7:		%{pname}-module-alias.patch
+Patch8:		%{pname}-sparc.patch
+Patch9:		%{pname}-depend.patch
+Patch10:	%{pname}-ppc_memset.patch
+Patch11:	%{pname}-no-sys-io.patch
+Patch12:	%{pname}-linux-2.4.patch
+Patch13:	%{pname}-no-asm-segment.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 %if %{kernel26}
@@ -166,7 +167,7 @@ Summary(ru):	Файлы для построения программ, использующих SVGAlib
 Summary(tr):	[S]VGA grafikleri iГin geliЧtirme kitaplЩklarЩ ve baЧlЩk dosyalarЩ
 Summary(uk):	Файли для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{pname} = %{version}-%{release}
 
 %description devel
 The svgalib-devel package contains the libraries and header files
@@ -222,7 +223,7 @@ Summary(pt_BR):	Bibliotecas estАticas para desenvolvimento com SVGAlib
 Summary(ru):	Статические библиотеки для построения программ, использующих SVGAlib
 Summary(uk):	Статичн╕ б╕бл╕отеки для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{pname}-devel = %{version}-%{release}
 
 %description static
 Static [S]VGA graphics librarires.
@@ -285,7 +286,7 @@ Ten pakiet zawiera moduЁ j╠dra potrzebny do uruchamiania programСw
 opartych na svgalib.
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
