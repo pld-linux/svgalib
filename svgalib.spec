@@ -232,7 +232,7 @@ Ten pakiet zawiera moduł jądra potrzebny do uruchamiania programów
 opartych na svgalib.
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
