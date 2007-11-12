@@ -3,13 +3,14 @@
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	kernel		# don't build kernel modules
 %bcond_without	userspace	# don't build userspace packages
-%bcond_with	grsec_kernel	# build for kernel-grsecurity
-#
-%if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
-%define	alt_kernel	grsecurity
+
+%if "%{_alt_kernel}" != "%{nil}"
+%undefine	with_userspace
 %endif
-#
-%define	_rel	6
+
+%define pname	svgalib
+%define	_rel	12
+
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -19,28 +20,29 @@ Summary(pt_BR.UTF-8):	Biblioteca para gráficos em tela cheia [S]VGA
 Summary(ru.UTF-8):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr.UTF-8):	Tam-ekran [S]VGA çizimleri kitaplığı
 Summary(uk.UTF-8):	Низькорівнева бібліотека повноекранної SVGA графіки
-Name:		svgalib
+Name:		%{pname}%{_alt_kernel}
 Version:	1.9.25
 Release:	%{_rel}
+Epoch:		1
 License:	distributable
 Group:		Libraries
-Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
+Source0:	http://www.arava.co.il/matan/svgalib/%{pname}-%{version}.tar.gz
 # Source0-md5:	4dda7e779e550b7404cfe118f1d74222
-Patch0:		%{name}-pld.patch
-Patch1:		%{name}-tmp2TMPDIR.patch
-Patch2:		%{name}-DESTDIR.patch
-Patch3:		%{name}-smp.patch
-Patch4:		%{name}-threeDKit-make.patch
-Patch5:		%{name}-svgalib_helper_Makefile.patch
-Patch6:		%{name}-link.patch
-Patch7:		%{name}-module-alias.patch
-Patch8:		%{name}-sparc.patch
-Patch9:		%{name}-depend.patch
-Patch10:	%{name}-ppc_memset.patch
-Patch11:	%{name}-no-sys-io.patch
-Patch12:	%{name}-linux-2.4.patch
-Patch13:	%{name}-no-asm-segment.patch
-Patch14:	%{name}-no-devfs.patch
+Patch0:		%{pname}-pld.patch
+Patch1:		%{pname}-tmp2TMPDIR.patch
+Patch2:		%{pname}-DESTDIR.patch
+Patch3:		%{pname}-smp.patch
+Patch4:		%{pname}-threeDKit-make.patch
+Patch5:		%{pname}-svgalib_helper_Makefile.patch
+Patch6:		%{pname}-link.patch
+Patch7:		%{pname}-module-alias.patch
+Patch8:		%{pname}-sparc.patch
+Patch9:		%{pname}-depend.patch
+Patch10:	%{pname}-ppc_memset.patch
+Patch11:	%{pname}-no-sys-io.patch
+Patch12:	%{pname}-linux-2.4.patch
+Patch13:	%{pname}-no-asm-segment.patch
+Patch14:	%{pname}-no-devfs.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2
@@ -129,7 +131,7 @@ Summary(ru.UTF-8):	Файлы для построения программ, ис
 Summary(tr.UTF-8):	[S]VGA grafikleri için geliştirme kitaplıkları ve başlık dosyaları
 Summary(uk.UTF-8):	Файли для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{pname} = %{epoch}:%{version}-%{release}
 
 %description devel
 The svgalib-devel package contains the libraries and header files
@@ -185,7 +187,7 @@ Summary(pt_BR.UTF-8):	Bibliotecas estáticas para desenvolvimento com SVGAlib
 Summary(ru.UTF-8):	Статические библиотеки для построения программ, использующих SVGAlib
 Summary(uk.UTF-8):	Статичні бібліотеки для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{pname}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 Static [S]VGA graphics librarires.
@@ -218,7 +220,7 @@ Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel}
 Requires(post,postun):	/sbin/depmod
-Provides:	svgalib-helper = %{version}-%{release}
+Provides:	svgalib-helper = %{epoch}:%{version}-%{release}
 Obsoletes:	svgalib-helper
 
 %description -n kernel%{_alt_kernel}-video-svgalib_helper
@@ -230,7 +232,7 @@ Ten pakiet zawiera moduł jądra potrzebny do uruchamiania programów
 opartych na svgalib.
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -251,6 +253,10 @@ opartych na svgalib.
 rm -f doc/man7/svgalib.7?*
 
 %build
+%if %{with kernel}
+%build_kernel_modules -C kernel/svgalib_helper -m svgalib_helper
+%endif
+
 %if %{with userspace}
 %ifarch %{ix86}
 NOASM=n
@@ -289,34 +295,6 @@ rm -f src/svgalib_helper.h
 	ALLOBJS="\$(OBJECTS)"
 %endif
 
-%if %{with kernel}
-cd kernel/svgalib_helper
-install -d o/include/linux
-ln -sf %{_kernelsrcdir}/config-%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist} o/.config
-ln -sf %{_kernelsrcdir}/Module.symvers-%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist} o/Module.symvers
-ln -sf %{_kernelsrcdir}/include/linux/autoconf-%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist}.h o/include/linux/autoconf.h
-%{__make} -j1 -C %{_kernelsrcdir} O=$PWD/o prepare scripts
-%ifarch ppc ppc64
-# no longer exists in 2.6.14.x
-touch o/include/asm/segment.h
-%endif
-if grep -q class_simple_create %{_kernelsrcdir}/include/linux/device.h ; then
-	CLF=-DCLASS_SIMPLE=1
-else
-	CLF=
-fi
-%{__make} -C %{_kernelsrcdir} modules \
-	CLASS_CFLAGS="$CLF" \
-	SUBDIRS=`pwd` \
-	O=`pwd`/o \
-	V=1
-rm -rf .*.cmd include include2 scripts arch
-cd -
-mv -f kernel/svgalib_helper/svgalib_helper.ko \
-	 kernel/svgalib_helper-dist.ko
-rm -f kernel/svgalib_helper/*.*o
-%endif
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
@@ -337,9 +315,7 @@ install lrmi-0.6m/vga_reset $RPM_BUILD_ROOT%{_bindir}
 %endif
 
 %if %{with kernel}
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
-install kernel/svgalib_helper-dist.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/svgalib_helper.ko
+%install_kernel_modules -m kernel/svgalib_helper/svgalib_helper -d misc
 %endif
 
 # hack to kill wrong symlink to README.lrmi
