@@ -9,7 +9,7 @@
 %define	alt_kernel	grsecurity
 %endif
 #
-%define	_rel	12
+%define	_rel	13
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
