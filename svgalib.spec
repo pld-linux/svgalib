@@ -265,7 +265,7 @@ NOASM=y
 MOPT="%{rpmcflags} -pipe"
 LDFLAGS="%{rpmldflags}"; export LDFLAGS
 
-%{__make} shared \
+%{__make} -j1 shared \
 	CC="%{__cc}" \
 	OPTIMIZE="$MOPT" \
 	NO_ASM="$NOASM"
@@ -299,7 +299,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{with userspace}
 install -d $RPM_BUILD_ROOT/var/lib/svgalib
-%{__make} installheaders installsharedlib installconfig installstaticlib \
+%{__make} -j1 installheaders installsharedlib installconfig installstaticlib \
 	installutils installman lib3dkit-install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	libdir=%{_libdir} \
