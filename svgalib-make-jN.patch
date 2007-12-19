@@ -1,0 +1,21 @@
+--- svgalib-1.9.25/threeDKit/Makefile.orig	2007-12-19 00:28:04.459238103 +0100
++++ svgalib-1.9.25/threeDKit/Makefile	2007-12-19 00:29:02.950314921 +0100
+@@ -57,6 +57,7 @@
+ 	ln -sf lib3dkit.so.$(VERSION) lib3dkit.so
+ 
+ $(DESTDIR)$(sharedlibdir)/lib3dkit.so.$(VERSION): lib3dkit.so.$(VERSION)
++	install -d $(DESTDIR)$(sharedlibdir)
+ 	$(INSTALL_SHLIB) $< $(DESTDIR)$(sharedlibdir)/$<
+ 	(cd $(DESTDIR)$(sharedlibdir); ln -sf lib3dkit.so.$(VERSION) `echo lib3dkit.so.$(VERSION) | sed 's/\.so\..*/.so/'` )
+ 
+--- svgalib-1.9.25/gl/Makefile.orig	2007-12-19 00:49:19.264758527 +0100
++++ svgalib-1.9.25/gl/Makefile	2007-12-19 00:49:47.260487604 +0100
+@@ -28,7 +28,7 @@
+ all:	libvgagl.a
+ .PHONY: all clean dep
+ 
+-libvgagl.so.$(VERSION): $(MODULES)
++libvgagl.so.$(VERSION): $(MODULES) ../sharedlib/libvga.so
+ 	$(CC) -shared -Wl,-soname,libvgagl.so.$(MAJOR_VER) -o libvgagl.so.$(VERSION) \
+ 	  $(MODULES) -L. -lvga
+ 	ln -sf libvgagl.so.$(VERSION) libvgagl.so
