@@ -42,6 +42,7 @@ Patch11:	%{name}-no-sys-io.patch
 Patch12:	%{name}-linux-2.4.patch
 Patch13:	%{name}-no-asm-segment.patch
 Patch14:	%{name}-no-devfs.patch
+Patch15:	%{name}-make-jN.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2
@@ -247,6 +248,7 @@ opartych na svgalib.
 #%patch12 -p1
 %patch13 -p1
 %patch14 -p1
+%patch15 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
@@ -265,7 +267,7 @@ NOASM=y
 MOPT="%{rpmcflags} -pipe"
 LDFLAGS="%{rpmldflags}"; export LDFLAGS
 
-%{__make} -j1 shared \
+%{__make} shared \
 	CC="%{__cc}" \
 	OPTIMIZE="$MOPT" \
 	NO_ASM="$NOASM"
@@ -299,7 +301,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{with userspace}
 install -d $RPM_BUILD_ROOT/var/lib/svgalib
-%{__make} -j1 installheaders installsharedlib installconfig installstaticlib \
+%{__make} installheaders installsharedlib installconfig installstaticlib \
 	installutils installman lib3dkit-install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	libdir=%{_libdir} \
