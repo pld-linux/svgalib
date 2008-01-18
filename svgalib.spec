@@ -37,7 +37,7 @@
 %undefine	with_userspace
 %endif
 
-%define		_rel	57
+%define		_rel	58
 %define		pname	svgalib
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
