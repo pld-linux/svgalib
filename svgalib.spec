@@ -8,8 +8,8 @@
 %if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
 %define	alt_kernel	grsecurity
 %endif
-#
-%define	_rel	16
+
+%define		rel	17
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -21,7 +21,7 @@ Summary(tr.UTF-8):	Tam-ekran [S]VGA çizimleri kitaplığı
 Summary(uk.UTF-8):	Низькорівнева бібліотека повноекранної SVGA графіки
 Name:		svgalib
 Version:	1.9.25
-Release:	%{_rel}
+Release:	%{rel}
 Epoch:		1
 License:	distributable
 Group:		Libraries
@@ -216,7 +216,7 @@ Summary(de.UTF-8):	Svgalibs Helferkernmodul
 Summary(es.UTF-8):	Bibliotecas de desarrollo y archivos de inclusión para gráficos [S]VGA
 Summary(pl.UTF-8):	Pomocniczy moduł jądra svgaliba
 Summary(pt_BR.UTF-8):	Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
-Release:	%{_rel}@%{_kernel_ver_str}
+Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel}
 Requires(post,postun):	/sbin/depmod
