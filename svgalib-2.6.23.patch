@@ -1,0 +1,34 @@
+*** ./svgalib-1.9.25/kernel/svgalib_helper/kernel26compat.h.orig	Fri Oct 12 22:14:40 2007
+--- ./svgalib-1.9.25/kernel/svgalib_helper/kernel26compat.h	Fri Oct 12 22:43:17 2007
+***************
+*** 70,75 ****
+--- 70,76 ----
+  
+  /* These are also not present in 2.6 kernels ... */
+  #if (!defined _LINUX_DEVFS_FS_KERNEL_H) || (defined KERNEL_2_6)
++ #include <linux/fs.h>
+  static inline int devfs_register_chrdev (unsigned int major, const char *name,
+                                           struct file_operations *fops)
+  {
+***************
+*** 77,83 ****
+  }
+  static inline int devfs_unregister_chrdev (unsigned int major,const char *name)
+  {
+!     return unregister_chrdev (major, name);
+  }
+  #endif
+  
+--- 78,89 ----
+  }
+  static inline int devfs_unregister_chrdev (unsigned int major,const char *name)
+  {
+! #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,23)    
+!    return unregister_chrdev (major, name);
+! #else
+!     unregister_chrdev (major, name);
+!     return 0;
+! #endif
+  }
+  #endif
+  
