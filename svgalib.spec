@@ -9,7 +9,7 @@
 %endif
 
 %define pname	svgalib
-%define	_rel	12
+%define	rel	18
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -22,7 +22,7 @@ Summary(tr.UTF-8):	Tam-ekran [S]VGA çizimleri kitaplığı
 Summary(uk.UTF-8):	Низькорівнева бібліотека повноекранної SVGA графіки
 Name:		%{pname}%{_alt_kernel}
 Version:	1.9.25
-Release:	%{_rel}
+Release:	%{rel}
 Epoch:		1
 License:	distributable
 Group:		Libraries
@@ -43,6 +43,7 @@ Patch11:	%{pname}-no-sys-io.patch
 Patch12:	%{pname}-linux-2.4.patch
 Patch13:	%{pname}-no-asm-segment.patch
 Patch14:	%{pname}-no-devfs.patch
+Patch15:	%{pname}-make-jN.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2
@@ -216,7 +217,7 @@ Summary(de.UTF-8):	Svgalibs Helferkernmodul
 Summary(es.UTF-8):	Bibliotecas de desarrollo y archivos de inclusión para gráficos [S]VGA
 Summary(pl.UTF-8):	Pomocniczy moduł jądra svgaliba
 Summary(pt_BR.UTF-8):	Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
-Release:	%{_rel}@%{_kernel_ver_str}
+Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel}
 Requires(post,postun):	/sbin/depmod
@@ -248,6 +249,7 @@ opartych na svgalib.
 #%patch12 -p1
 %patch13 -p1
 %patch14 -p1
+%patch15 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
