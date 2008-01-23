@@ -3,13 +3,14 @@
 %bcond_without	dist_kernel	# without distribution kernel
 %bcond_without	kernel		# don't build kernel modules
 %bcond_without	userspace	# don't build userspace packages
-%bcond_with	grsec_kernel	# build for kernel-grsecurity
-#
-%if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
-%define	alt_kernel	grsecurity
+
+%if "%{_alt_kernel}" != "%{nil}"
+%undefine	with_userspace
 %endif
 
-%define		rel	17
+%define	pname	svgalib
+%define	rel	19
+
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -19,30 +20,31 @@ Summary(pt_BR.UTF-8):	Biblioteca para gráficos em tela cheia [S]VGA
 Summary(ru.UTF-8):	Низкоуровневая библиотека полноэкранной SVGA графики
 Summary(tr.UTF-8):	Tam-ekran [S]VGA çizimleri kitaplığı
 Summary(uk.UTF-8):	Низькорівнева бібліотека повноекранної SVGA графіки
-Name:		svgalib
+Name:		%{pname}%{_alt_kernel}
 Version:	1.9.25
 Release:	%{rel}
 Epoch:		1
 License:	distributable
 Group:		Libraries
-Source0:	http://www.arava.co.il/matan/svgalib/%{name}-%{version}.tar.gz
+Source0:	http://www.arava.co.il/matan/svgalib/%{pname}-%{version}.tar.gz
 # Source0-md5:	4dda7e779e550b7404cfe118f1d74222
-Patch0:		%{name}-pld.patch
-Patch1:		%{name}-tmp2TMPDIR.patch
-Patch2:		%{name}-DESTDIR.patch
-Patch3:		%{name}-smp.patch
-Patch4:		%{name}-threeDKit-make.patch
-Patch5:		%{name}-svgalib_helper_Makefile.patch
-Patch6:		%{name}-link.patch
-Patch7:		%{name}-module-alias.patch
-Patch8:		%{name}-sparc.patch
-Patch9:		%{name}-depend.patch
-Patch10:	%{name}-ppc_memset.patch
-Patch11:	%{name}-no-sys-io.patch
-Patch12:	%{name}-linux-2.4.patch
-Patch13:	%{name}-no-asm-segment.patch
-Patch14:	%{name}-no-devfs.patch
-Patch15:	%{name}-make-jN.patch
+Patch0:		%{pname}-pld.patch
+Patch1:		%{pname}-tmp2TMPDIR.patch
+Patch2:		%{pname}-DESTDIR.patch
+Patch3:		%{pname}-smp.patch
+Patch4:		%{pname}-threeDKit-make.patch
+Patch5:		%{pname}-svgalib_helper_Makefile.patch
+Patch6:		%{pname}-link.patch
+Patch7:		%{pname}-module-alias.patch
+Patch8:		%{pname}-sparc.patch
+Patch9:		%{pname}-depend.patch
+Patch10:	%{pname}-ppc_memset.patch
+Patch11:	%{pname}-no-sys-io.patch
+Patch12:	%{pname}-linux-2.4.patch
+Patch13:	%{pname}-no-asm-segment.patch
+Patch14:	%{pname}-no-devfs.patch
+Patch15:	%{pname}-make-jN.patch
+Patch16:	%{pname}-2.6.23.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2
@@ -131,7 +133,7 @@ Summary(ru.UTF-8):	Файлы для построения программ, ис
 Summary(tr.UTF-8):	[S]VGA grafikleri için geliştirme kitaplıkları ve başlık dosyaları
 Summary(uk.UTF-8):	Файли для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{pname} = %{epoch}:%{version}-%{release}
 
 %description devel
 The svgalib-devel package contains the libraries and header files
@@ -187,7 +189,7 @@ Summary(pt_BR.UTF-8):	Bibliotecas estáticas para desenvolvimento com SVGAlib
 Summary(ru.UTF-8):	Статические библиотеки для построения программ, использующих SVGAlib
 Summary(uk.UTF-8):	Статичні бібліотеки для побудови програм, що використовують SVGAlib
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
+Requires:	%{pname}-devel = %{epoch}:%{version}-%{release}
 
 %description static
 Static [S]VGA graphics librarires.
@@ -232,7 +234,7 @@ Ten pakiet zawiera moduł jądra potrzebny do uruchamiania programów
 opartych na svgalib.
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -249,6 +251,7 @@ opartych na svgalib.
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
+%patch16 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
