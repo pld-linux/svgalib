@@ -1,0 +1,27 @@
+diff -ur svgalib-1.9.25.orig/kernel/svgalib_helper/main.c svgalib-1.9.25/kernel/svgalib_helper/main.c
+--- svgalib-1.9.25.orig/kernel/svgalib_helper/main.c	2008-02-02 09:19:46.000000000 +0100
++++ svgalib-1.9.25/kernel/svgalib_helper/main.c	2008-02-02 09:24:44.352923987 +0100
+@@ -358,7 +358,11 @@
+                 vsync=1;
+                 i=0;
+                 while(irqs[i]!=-1)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
+                     request_irq(irqs[i++], vsync_interrupt, SA_SHIRQ, "svgalib_helper", sdev_id);
++#else
++                    request_irq(irqs[i++], vsync_interrupt, IRQF_SHARED, "svgalib_helper", sdev_id);
++#endif
+                 vga_enable_vsync((void *)sdev_id);
+ 				wait_event_interruptible(vsync_wait, !vsync);
+                 i=0;
+@@ -446,7 +450,11 @@
+ 		int i=sh_pci_devs[minor]->dev->irq;
+ 		sh_pci_devs[minor]->opencount++;
+ 		if(sh_pci_devs[minor]->opencount==1 && i!=0 && i!=-1 && i!=255)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
+ 			request_irq(i, vsync_interrupt, SA_SHIRQ, "svgalib_helper", sh_pci_devs[minor]);
++#else
++			request_irq(i, vsync_interrupt, IRQF_SHARED, "svgalib_helper", sh_pci_devs[minor]);
++#endif
+ 	}
+ 
+ #ifndef KERNEL_2_6
