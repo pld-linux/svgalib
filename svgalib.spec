@@ -9,7 +9,7 @@
 %endif
 
 %define	pname	svgalib
-%define	rel	22
+%define	rel	23
 
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
