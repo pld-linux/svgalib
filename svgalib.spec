@@ -6,7 +6,6 @@
 %bcond_without	up		# don't build UP module
 %bcond_without	smp		# don't build SMP module
 %bcond_without	userspace	# don't build userspace packages
-%bcond_with	grsec_kernel	# build for kernel-grsecurity
 
 %if %{with kernel}
 %if %{with kernel24}
@@ -30,14 +29,10 @@
 %if %{without kernel}
 %undefine	with_dist_kernel
 %endif
-%if %{with kernel} && %{with dist_kernel} && %{with grsec_kernel}
-%define	alt_kernel	grsecurity
-%endif
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
 %endif
 
-%define		_rel	61
 %define		pname	svgalib
 Summary:	Library for full screen [S]VGA graphics
 Summary(de):	Library für Vollbildschirm-[S]VGA-Grafiken
@@ -50,7 +45,7 @@ Summary(tr):	Tam-ekran [S]VGA çizimleri kitaplığı
 Summary(uk):	îÉÚØËÏÒ¦×ÎÅ×Á Â¦ÂÌ¦ÏÔÅËÁ ĞÏ×ÎÏÅËÒÁÎÎÏ§ SVGA ÇÒÁÆ¦ËÉ
 Name:		%{pname}%{_alt_kernel}
 Version:	1.9.25
-Release:	%{_rel}
+Release:	62
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{pname}-%{version}.tar.gz
@@ -252,9 +247,8 @@ Summary(de):	Svgalibs Helferkernmodul
 Summary(es):	Bibliotecas de desarrollo y archivos de inclusión para gráficos [S]VGA
 Summary(pl):	Pomocniczy modu³ j±dra svgaliba
 Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
-Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-%{?with_dist_kernel:%requires_releq_kernel_up}
+%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}-%{release}
 Obsoletes:	svgalib-helper
@@ -270,9 +264,8 @@ opartych na svgalib.
 %package -n kernel%{k24}%{_alt_kernel}-smp-video-svgalib_helper
 Summary:	svgalib's helper kernel module for SMP
 Summary(pl):	Pomoczniczy modu³ j±dra svgalib dla SMP
-Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
-%{?with_dist_kernel:%requires_releq_kernel_smp}
+%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}-smp(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
 Provides:	svgalib-helper = %{version}-%{release}
 Obsoletes:	svgalib-helper
