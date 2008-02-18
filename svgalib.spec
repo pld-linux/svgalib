@@ -45,7 +45,7 @@ Summary(tr):	Tam-ekran [S]VGA Гizimleri kitaplЩПЩ
 Summary(uk):	Низькор╕внева б╕бл╕отека повноекранно╖ SVGA граф╕ки
 Name:		%{pname}%{_alt_kernel}
 Version:	1.9.25
-Release:	62
+Release:	63
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{pname}-%{version}.tar.gz
@@ -81,6 +81,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/vga
 %define		specflags	-fomit-frame-pointer
+%define		filterout_ld	-Wl,--as-needed
 
 %if %{kernel26}
 %define	kmodext	ko
