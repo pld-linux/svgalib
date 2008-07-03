@@ -16,7 +16,7 @@
 %endif
 
 %define		pname	svgalib
-%define		rel		34
+%define		rel		64
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -56,7 +56,7 @@ URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.379
+BuildRequires:	rpmbuild(macros) >= 1.453
 # no sparc64 yet acc. to changelog
 # kernel module requires at least sys32_ioctl translation function
 # (isn't required for 32-bit userland on x86_64 too?)
@@ -225,11 +225,11 @@ Summary(de.UTF-8):	Svgalibs Helferkernmodul
 Summary(es.UTF-8):	Bibliotecas de desarrollo y archivos de inclusión para gráficos [S]VGA
 Summary(pl.UTF-8):	Pomocniczy moduł jądra svgaliba
 Summary(pt_BR.UTF-8):	Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
-Release:	%{rel}@%{_kernel_ver_str}
+Release:	%{rel}@%{_kernel_vermagic}
 Group:		Base/Kernel
-%{?with_dist_kernel:%requires_releq_kernel}
 Requires(post,postun):	/sbin/depmod
-Provides:	svgalib-helper = %{epoch}:%{version}-%{release}
+%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
+Obsoletes:	kernel%{_alt_kernel}-smp-video-svgalib_helper
 Obsoletes:	svgalib-helper
 
 %description -n kernel%{_alt_kernel}-video-svgalib_helper
