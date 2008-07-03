@@ -1,0 +1,43 @@
+--- svgalib-1.9.24/kernel/svgalib_helper/kernel26compat.h.orig	2006-01-11 21:34:04.049302080 +0100
++++ svgalib-1.9.24/kernel/svgalib_helper/kernel26compat.h	2006-01-11 21:34:44.388169640 +0100
+@@ -93,6 +93,19 @@
+ #  define SLH_SYSFS_REGISTER                                            \
+      svgalib_helper_class = class_create(THIS_MODULE, "svgalib_helper");
+ 
++# if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,15)
++
++#  define SLH_SYSFS_ADD_CONTROL                                         \
++     class_device_create(svgalib_helper_class, NULL,                	\
++                             MKDEV(SVGALIB_HELPER_MAJOR, 0),            \
++                             NULL, "svga");
++
++#  define SLH_SYSFS_ADD_DEVICE(_name, _minor)                           \
++     class_device_create(svgalib_helper_class, NULL,                	\
++                             MKDEV(SVGALIB_HELPER_MAJOR, _minor),       \
++                             &sh_pci_devs[_minor]->dev->dev, _name);
++
++# else
+ #  define SLH_SYSFS_ADD_CONTROL                                         \
+      class_device_create(svgalib_helper_class,                      	\
+                              MKDEV(SVGALIB_HELPER_MAJOR, 0),            \
+@@ -102,6 +115,7 @@
+      class_device_create(svgalib_helper_class,                      	\
+                              MKDEV(SVGALIB_HELPER_MAJOR, _minor),       \
+                              &sh_pci_devs[_minor]->dev->dev, _name);
++# endif
+ 
+ #  define SLH_SYSFS_REMOVE_DEVICE(i)                                    \
+      class_destroy(svgalib_helper_class);
+--- svgalib-1.9.24/kernel/svgalib_helper/interrupt.c.orig	2005-03-13 16:05:58.000000000 +0100
++++ svgalib-1.9.24/kernel/svgalib_helper/interrupt.c	2006-01-11 21:43:04.608124648 +0100
+@@ -4,6 +4,10 @@
+ #include "kernel26compat.h"
+ #include "svgalib_helper.h"
+ 
++#ifndef PCI_VENDOR_ID_RENDITION
++#  define PCI_VENDOR_ID_RENDITION 0x1163
++#endif
++
+ int vga_test_vsync(struct sh_pci_device *dev) {
+      return inb(0x3c2)&0x80;
+ }
