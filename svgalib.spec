@@ -4,13 +4,19 @@
 %bcond_without	kernel		# don't build kernel modules
 %bcond_without	userspace	# don't build userspace packages
 
+%if %{without kernel}
+%undefine	with_dist_kernel
+%endif
 %if "%{_alt_kernel}" != "%{nil}"
 %undefine	with_userspace
 %endif
+%if %{without userspace}
+# nothing to be placed to debuginfo package
+%define		_enable_debug_packages	0
+%endif
 
-%define	pname	svgalib
-%define	rel	34
-
+%define		pname	svgalib
+%define		rel		34
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
