@@ -1,0 +1,4 @@
+- -helper-{smp,up} subpackage renamed to -helper
+- using %_kernelsrcdir
+- release 2
+- STB
