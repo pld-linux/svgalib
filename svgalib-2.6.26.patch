@@ -30,3 +30,71 @@
  
  #  define SLH_SYSFS_REMOVE_DEVICE(i)                                    \
       class_destroy(svgalib_helper_class);
+diff -ur svgalib-1.9.25.orig/src/lrmi.6.c svgalib-1.9.25/src/lrmi.6.c
+--- svgalib-1.9.25.orig/src/lrmi.6.c	2005-10-22 13:29:17.000000000 +0200
++++ svgalib-1.9.25/src/lrmi.6.c	2008-08-05 10:33:54.000000000 +0200
+@@ -169,6 +169,13 @@
+ 		}
+ 	}
+ 
++#ifndef TF_MASK
++#define TF_MASK X86_EFLAGS_TF
++#define IF_MASK X86_EFLAGS_IF
++#define IOPL_MASK X86_EFLAGS_IOPL
++#define VIF_MASK X86_EFLAGS_VIF
++#define VIP_MASK X86_EFLAGS_VIP
++#endif
+ 
+ #define DEFAULT_VM86_FLAGS 	(IF_MASK | IOPL_MASK)
+ #define DEFAULT_STACK_SIZE 	0x1000
+diff -ur svgalib-1.9.25.orig/src/lrmi.9.c svgalib-1.9.25/src/lrmi.9.c
+--- svgalib-1.9.25.orig/src/lrmi.9.c	2005-10-31 19:42:46.000000000 +0100
++++ svgalib-1.9.25/src/lrmi.9.c	2008-08-05 10:34:29.000000000 +0200
+@@ -206,6 +206,13 @@
+ 
+ 
+ #if defined(__linux__)
++#ifndef TF_MASK
++#define TF_MASK X86_EFLAGS_TF
++#define IF_MASK X86_EFLAGS_IF
++#define IOPL_MASK X86_EFLAGS_IOPL
++#define VIF_MASK X86_EFLAGS_VIF
++#define VIP_MASK X86_EFLAGS_VIP
++#endif
+ #define DEFAULT_VM86_FLAGS 	(IF_MASK | IOPL_MASK)
+ #elif defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__)
+ #define DEFAULT_VM86_FLAGS  (PSL_I | PSL_IOPL)
+diff -ur svgalib-1.9.25.orig/lrmi-0.6m/lrmi.c svgalib-1.9.25/lrmi-0.6m/lrmi.c
+--- svgalib-1.9.25.orig/lrmi-0.6m/lrmi.c	2005-10-22 13:29:17.000000000 +0200
++++ svgalib-1.9.25/lrmi-0.6m/lrmi.c	2008-08-05 10:33:54.000000000 +0200
+@@ -169,6 +169,13 @@
+ 		}
+ 	}
+ 
++#ifndef TF_MASK
++#define TF_MASK X86_EFLAGS_TF
++#define IF_MASK X86_EFLAGS_IF
++#define IOPL_MASK X86_EFLAGS_IOPL
++#define VIF_MASK X86_EFLAGS_VIF
++#define VIP_MASK X86_EFLAGS_VIP
++#endif
+ 
+ #define DEFAULT_VM86_FLAGS 	(IF_MASK | IOPL_MASK)
+ #define DEFAULT_STACK_SIZE 	0x1000
+diff -ur svgalib-1.9.25.orig/lrmi-0.9/lrmi.c svgalib-1.9.25/lrmi-0.9/lrmi.c
+--- svgalib-1.9.25.orig/lrmi-0.9/lrmi.c	2005-10-31 19:42:46.000000000 +0100
++++ svgalib-1.9.25/lrmi-0.9/lrmi.c	2008-08-05 10:34:29.000000000 +0200
+@@ -206,6 +206,13 @@
+ 
+ 
+ #if defined(__linux__)
++#ifndef TF_MASK
++#define TF_MASK X86_EFLAGS_TF
++#define IF_MASK X86_EFLAGS_IF
++#define IOPL_MASK X86_EFLAGS_IOPL
++#define VIF_MASK X86_EFLAGS_VIF
++#define VIP_MASK X86_EFLAGS_VIP
++#endif
+ #define DEFAULT_VM86_FLAGS 	(IF_MASK | IOPL_MASK)
+ #elif defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__)
+ #define DEFAULT_VM86_FLAGS  (PSL_I | PSL_IOPL)
