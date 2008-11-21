@@ -19,3 +19,14 @@
  	$(CC) -shared -Wl,-soname,libvgagl.so.$(MAJOR_VER) -o libvgagl.so.$(VERSION) \
  	  $(MODULES) -L. -lvga
  	ln -sf libvgagl.so.$(VERSION) libvgagl.so
+--- svgalib-1.9.25/Makefile.orig	2008-11-21 22:34:15.459021191 +0100
++++ svgalib-1.9.25/Makefile	2008-11-21 22:35:23.954313667 +0100
+@@ -237,6 +237,8 @@
+ 
+ .PHONY: sharedlib/libvga.so.$(VERSION) sharedlib/libvgagl.so.$(VERSION)
+ 
++sharedlib/libvgagl.so.$(VERSION): sharedlib/libvga.so.$(VERSION)
++
+ shared: $(SHAREDLIBS) $(SVGALIBSHAREDSTUBS)
+ 
+ sharedlib/libvga.so.$(VERSION): $(SHAREDDIRS)
