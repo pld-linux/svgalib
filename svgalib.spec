@@ -34,6 +34,7 @@
 %endif
 
 %define		pname	svgalib
+%define		rel		65
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -45,7 +46,7 @@ Summary(tr.UTF-8):	Tam-ekran [S]VGA çizimleri kitaplığı
 Summary(uk.UTF-8):	Низькорівнева бібліотека повноекранної SVGA графіки
 Name:		%{pname}%{_alt_kernel}
 Version:	1.9.25
-Release:	63
+Release:	%{rel}
 License:	distributable
 Group:		Libraries
 Source0:	http://www.arava.co.il/matan/svgalib/%{pname}-%{version}.tar.gz
@@ -248,9 +249,10 @@ Summary(de.UTF-8):	Svgalibs Helferkernmodul
 Summary(es.UTF-8):	Bibliotecas de desarrollo y archivos de inclusión para gráficos [S]VGA
 Summary(pl.UTF-8):	Pomocniczy moduł jądra svgaliba
 Summary(pt_BR.UTF-8):	Bibliotecas de desenvolvimento e arquivos de inclusão para gráficos [S]VGA
+Release:	%{rel}@%{_kernel_vermagic}
 Group:		Base/Kernel
-%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
+%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}(vermagic) = %{_kernel_ver}}
 Provides:	svgalib-helper = %{version}-%{release}
 Obsoletes:	svgalib-helper
 
@@ -265,9 +267,10 @@ opartych na svgalib.
 %package -n kernel%{k24}%{_alt_kernel}-smp-video-svgalib_helper
 Summary:	svgalib's helper kernel module for SMP
 Summary(pl.UTF-8):	Pomoczniczy moduł jądra svgalib dla SMP
+Release:	%{rel}@%{_kernel_vermagic}
 Group:		Base/Kernel
-%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}-smp(vermagic) = %{_kernel_ver}}
 Requires(post,postun):	/sbin/depmod
+%{?with_dist_kernel:Requires:	kernel%{_alt_kernel}-smp(vermagic) = %{_kernel_ver}}
 Provides:	svgalib-helper = %{version}-%{release}
 Obsoletes:	svgalib-helper
 
@@ -410,7 +413,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{with userspace}
 install -d $RPM_BUILD_ROOT/var/lib/svgalib
-%{__make} installheaders installsharedlib installconfig installstaticlib \
+%{__make} -j1 installheaders installsharedlib installconfig installstaticlib \
 	installutils installman lib3dkit-install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	libdir=%{_libdir} \
