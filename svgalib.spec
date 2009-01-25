@@ -54,6 +54,7 @@ Patch16:	%{pname}-2.6.23.patch
 Patch17:	%{pname}-2.6.24.patch
 Patch18:	%{pname}-2.6.26.patch
 Patch19:	%{pname}-2.6.27.patch
+Patch20:	%{pname}-2.6.28.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2
@@ -264,6 +265,7 @@ opartych na svgalib.
 %patch17 -p1
 %patch18 -p1
 %patch19 -p1
+%patch20 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
