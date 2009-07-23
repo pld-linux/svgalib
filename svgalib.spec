@@ -16,7 +16,7 @@
 %endif
 
 %define		pname	svgalib
-%define		rel		70
+%define		rel		71
 Summary:	Library for full screen [S]VGA graphics
 Summary(de.UTF-8):	Library für Vollbildschirm-[S]VGA-Grafiken
 Summary(es.UTF-8):	Biblioteca para gráficos en pantalla llena [S]VGA
@@ -55,6 +55,7 @@ Patch17:	%{pname}-2.6.24.patch
 Patch18:	%{pname}-2.6.26.patch
 Patch19:	%{pname}-2.6.27.patch
 Patch20:	%{pname}-2.6.28.patch
+Patch21:	%{pname}-build_fix.patch
 URL:		http://www.arava.co.il/matan/svgalib/
 %if %{with kernel} && %{with dist_kernel}
 BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20.2
@@ -266,6 +267,7 @@ opartych na svgalib.
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
+%patch21 -p1
 
 # remove backup of svgalib.7 - we don't want it in package
 rm -f doc/man7/svgalib.7?*
