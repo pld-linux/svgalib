@@ -1,0 +1,45 @@
+diff -Nru svgalib-1.9.25.old/kernel/svgalib_helper/main.c svgalib-1.9.25/kernel/svgalib_helper/main.c
+--- svgalib-1.9.25.old/kernel/svgalib_helper/main.c	2010-11-10 23:10:52.000000000 +0100
++++ svgalib-1.9.25/kernel/svgalib_helper/main.c	2010-11-10 23:22:44.000000000 +0100
+@@ -53,7 +53,7 @@
+ #include "displaystart.h"
+ 
+ int debug=0;
+-static int all_devices=0;
++int all_devices=0;
+ int num_devices=0;
+ 
+ static char *sdev_id="svgalib_helper";
+@@ -101,7 +101,7 @@
+ static volatile int vsync=0;
+ static wait_queue_head_t vsync_wait;
+ 
+-static irqreturn_t vsync_interrupt(int irq, void *dev_id, struct pt_regs *regs)
++static irqreturn_t vsync_interrupt(int irq, void *dev_id)
+ {
+     struct sh_pci_device *dev = (struct sh_pci_device *)dev_id;
+ 
+@@ -157,9 +157,9 @@
+ 	get_user(pciv.val, &user_pciv->val); 
+ #define PUT_PCIV \
+ 	put_user(pciv.val, &user_pciv->val); 
+-static int svgalib_helper_ioctl( struct inode *inode, struct file *filp, 
+-                          unsigned int cmd, unsigned long arg) {
++static int svgalib_helper_ioctl(struct file *filp, unsigned int cmd, unsigned long arg) {
+ 
++    struct inode *inode = filp->f_dentry->d_inode;
+     io_t iov, *user_iov=(io_t *)arg;
+     pcic_t pciv, *user_pciv=(pcic_t *)arg;
+     int minor = my_minor(inode->i_rdev);
+@@ -597,7 +597,11 @@
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,3,0)
+    .owner	= THIS_MODULE,
+ #endif
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36)
++   .unlocked_ioctl	= svgalib_helper_ioctl,
++#else
+    .ioctl	= svgalib_helper_ioctl,
++#endif
+    .mmap	= svgalib_helper_mmap,
+    .open	= svgalib_helper_open,
+    .release	= svgalib_helper_release,
