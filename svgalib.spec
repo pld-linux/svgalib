@@ -259,7 +259,7 @@ opartych na svgalib.
 %patch -P9 -p1
 %patch -P10 -p1
 %patch -P11 -p1
-#%patch12 -p1
+#%%patch12 -p1
 %patch -P13 -p1
 %patch -P14 -p1
 %patch -P15 -p1
